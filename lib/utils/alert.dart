@@ -22,7 +22,7 @@ class Alert {
             ),
             content: content != null
                 ? Text(
-                    title,
+                    content,
                     style: StyleProvider.of(context)
                         .font
                         .normal
