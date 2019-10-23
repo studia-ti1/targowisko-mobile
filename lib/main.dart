@@ -10,7 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StyleProvider(
-      appColors: AppColors(
+      colors: AppColors(
         primaryAccent: const Color(0xFFDE6589),
         primaryContent: Colors.white,
         secondaryAccent: const Color(0xFF69C0D3),

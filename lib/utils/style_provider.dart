@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
 
 class StyleProvider extends InheritedWidget {
-  final AppColors appColors;
+  final AppColors colors;
+  final _AppAssets asset;
   final _AppGradients gradient;
   final shadow = const _AppShadows();
   final _AppBorders border;
-  final font = const _AppFonts();
+  final _AppFonts font;
 
   StyleProvider({
     Widget child,
-    @required this.appColors,
-  })  : gradient = _AppGradients(appColors),
-        border = _AppBorders(appColors),
+    @required this.colors,
+  })  : gradient = _AppGradients(colors),
+        border = _AppBorders(colors),
+        asset = _AppAssets(),
+        font = _AppFonts(colors),
         super(child: child);
 
   @override
@@ -44,13 +47,15 @@ class AppColors {
 
   final Color primaryBackground;
   final Color secondaryBackground;
+
+  final facebook = const Color(0xFF1B76F3);
 }
 
 class _AppShadows {
   const _AppShadows();
 
   final mainShadow = const BoxShadow(
-    color: const Color.fromRGBO(0, 0, 0, 0.5),
+    color: const Color.fromRGBO(0, 0, 0, 0.25),
     offset: const Offset(1, 1),
     blurRadius: 10,
   );
@@ -65,7 +70,7 @@ class _AppInputBorders {
   final InputBorder primary;
   _AppInputBorders(AppColors colors)
       : primary = OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
+          borderRadius: BorderRadius.circular(10),
           borderSide: BorderSide(
             color: colors.content,
             width: 1,
@@ -74,27 +79,60 @@ class _AppInputBorders {
 }
 
 class _AppFonts {
-  const _AppFonts();
+  final TextStyle primaryNormal;
+  final TextStyle secondaryNormal;
+  final TextStyle normal;
+  final TextStyle primaryBold;
+  final TextStyle secondaryBold;
+  final TextStyle bold;
 
-  final primaryNormal = const TextStyle(
-    color: Colors.white,
-    fontSize: 14,
-  );
-  final primaryBold = const TextStyle(
-    color: Colors.white,
-    fontWeight: FontWeight.bold,
-    fontSize: 14,
-  );
-  final pacificoWhite = const TextStyle(
-    color: Colors.white,
-    fontFamily: 'pacifico',
-    fontSize: 14,
-  );
-  final pacificoBlack = const TextStyle(
-    color: Colors.black,
-    fontFamily: 'pacifico',
-    fontSize: 14,
-  );
+  final TextStyle pacificoPrimary;
+  final TextStyle pacificoSecondary;
+  final TextStyle pacifico;
+
+  _AppFonts(AppColors colors)
+      : primaryNormal = TextStyle(
+          color: colors.primaryContent,
+          fontSize: 14,
+        ),
+        secondaryNormal = TextStyle(
+          color: colors.secondaryContent,
+          fontSize: 14,
+        ),
+        normal = TextStyle(
+          color: colors.content,
+          fontSize: 14,
+        ),
+        primaryBold = TextStyle(
+          color: colors.primaryContent,
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+        ),
+        secondaryBold = TextStyle(
+          color: colors.secondaryContent,
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+        ),
+        bold = TextStyle(
+          color: colors.content,
+          fontWeight: FontWeight.bold,
+          fontSize: 14,
+        ),
+        pacificoPrimary = TextStyle(
+          color: colors.primaryContent,
+          fontFamily: 'pacifico',
+          fontSize: 14,
+        ),
+        pacificoSecondary = TextStyle(
+          color: colors.secondaryContent,
+          fontFamily: 'pacifico',
+          fontSize: 14,
+        ),
+        pacifico = TextStyle(
+          color: colors.content,
+          fontFamily: 'pacifico',
+          fontSize: 14,
+        );
 }
 
 class _AppGradients {
@@ -109,4 +147,9 @@ class _AppGradients {
             colors.secondaryBackground,
           ],
         );
+}
+
+class _AppAssets {
+  final facebookLogo = 'assets/svg/facebook.svg';
+  final appLogo = 'assets/logo.png';
 }
