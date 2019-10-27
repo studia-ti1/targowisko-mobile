@@ -26,6 +26,34 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	
+	<key>CFBundleURLTypes</key>
+<array>
+    <dict>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>fb2426372711022155</string>
+        </array>
+    </dict>
+</array>
+
+<key>FacebookAppID</key>
+
+<string>2426372711022155</string>
+<key>FacebookDisplayName</key>
+
+<!-- Replace "YOUR_APP_NAME" with your Facebook App name. -->
+<string>YOUR_APP_NAME</string>
+
+<key>LSApplicationQueriesSchemes</key>
+<array>
+    <string>fbapi</string>
+    <string>fb-messenger-share-api</string>
+    <string>fbauth2</string>
+    <string>fbshareextension</string>
+</array>
+
+
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>
