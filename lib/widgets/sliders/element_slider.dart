@@ -34,7 +34,8 @@ class ElementSlider<T> extends StatelessWidget {
           ),
           Expanded(
             child: ListView.separated(
-              physics: BouncingScrollPhysics(),
+              physics: BouncingScrollPhysics(
+                  parent: AlwaysScrollableScrollPhysics()),
               padding: const EdgeInsets.all(15),
               scrollDirection: Axis.horizontal,
               itemBuilder: (BuildContext context, int index) {
