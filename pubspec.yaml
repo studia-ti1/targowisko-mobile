@@ -34,6 +34,7 @@ flutter:
   assets:
     - assets/logo.png
     - assets/svg/facebook.svg
+    - assets/market_placeholder.jpg
 
   fonts:
     - family: pacifico

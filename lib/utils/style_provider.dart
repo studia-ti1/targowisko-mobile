@@ -152,4 +152,5 @@ class _AppGradients {
 class _AppAssets {
   final facebookLogo = 'assets/svg/facebook.svg';
   final appLogo = 'assets/logo.png';
+  final marketDefaultBackground = 'assets/market_placeholder.jpg';
 }
