@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:targowisko/screens/login/login.dart';
+import 'package:targowisko/screens/login/login_screen.dart';
 
 class Routes {
-  static const String home = '/';
-  static const String loginScreen = '/login';
+  static const String home = '/home';
+  static const String loginScreen = '/';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
