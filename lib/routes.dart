@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:targowisko/screens/home/home_screen.dart';
 import 'package:targowisko/screens/login/login_screen.dart';
 
 class Routes {
@@ -8,7 +9,7 @@ class Routes {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case home:
-        return MaterialPageRoute<void>(builder: (_) => LoginScreen());
+        return MaterialPageRoute<void>(builder: (_) => HomeScreen());
       case loginScreen:
         return MaterialPageRoute<void>(builder: (_) => LoginScreen());
       default:
