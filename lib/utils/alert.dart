@@ -9,6 +9,8 @@ class Alert {
     String content,
     VoidCallback onConfirm,
     VoidCallback onCancel,
+    String confirmLabel = "akceptuj",
+    String cancelLabel = "anuluj",
   }) {
     assert(title != null);
     return showDialog<void>(
@@ -32,7 +34,7 @@ class Alert {
             actions: <Widget>[
               FlatButton(
                 child: Text(
-                  "AKCEPTUJ",
+                  confirmLabel.toUpperCase(),
                   style: StyleProvider.of(context)
                       .font
                       .bold
@@ -43,7 +45,7 @@ class Alert {
               if (onCancel != null)
                 FlatButton(
                   child: Text(
-                    "ANULUJ",
+                    cancelLabel.toUpperCase(),
                     style: StyleProvider.of(context)
                         .font
                         .bold
