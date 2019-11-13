@@ -32,14 +32,14 @@
     <dict>
         <key>CFBundleURLSchemes</key>
         <array>
-            <string>fb2426372711022155</string>
+            <string>fb1369890016521424</string>
         </array>
     </dict>
 </array>
 
 <key>FacebookAppID</key>
 
-<string>2426372711022155</string>
+<string>1369890016521424</string>
 <key>FacebookDisplayName</key>
 
 <!-- Replace "YOUR_APP_NAME" with your Facebook App name. -->
