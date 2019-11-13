@@ -21,6 +21,13 @@ class _LoginScreenState extends State<LoginScreen>
   @override
   void initState() {
     super.initState();
+    FacebookLogin().currentAccessToken.then((facebookToken) {
+      if (facebookToken != null &&
+          facebookToken.expires.isAfter(DateTime.now())) {
+        _handleLogged(facebookToken.token);
+      }
+    });
+
     _controller = AnimationController(vsync: this, lowerBound: 0, upperBound: 1)
       ..value = 0
       ..repeat(min: 0, max: 1, period: Duration(seconds: 4), reverse: true);
@@ -42,13 +49,16 @@ class _LoginScreenState extends State<LoginScreen>
 
   Future<void> _handleLogin() async {
     final facebookLogin = FacebookLogin();
+    final token = (await facebookLogin.currentAccessToken)?.token;
+
+    if (token != null) return _handleLogged(token);
 
     _isLoading = true;
-    final result = await facebookLogin.logIn(['email']);
+    final result = await facebookLogin.logIn(['email', 'user_events']);
     _isLoading = false;
     switch (result.status) {
       case FacebookLoginStatus.loggedIn:
-        _handleLogged(result);
+        _handleLogged(result.accessToken.token);
 
         break;
 
@@ -67,9 +77,9 @@ class _LoginScreenState extends State<LoginScreen>
   Future<void> _handleLoginError(FacebookLoginResult result) =>
       Alert.open(context, title: "Wystąpił błąd", content: result.errorMessage);
 
-  Future<void> _handleLogged(FacebookLoginResult loginObject) async {
+  Future<void> _handleLogged(String token) async {
     // sets access token
-    Api.accesToken = loginObject.accessToken.token;
+    Api.accesToken = token;
 
     Navigator.pushReplacementNamed(context, Routes.home);
   }
