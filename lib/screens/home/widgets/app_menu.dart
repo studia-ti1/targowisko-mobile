@@ -1,32 +1,50 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_facebook_login/flutter_facebook_login.dart';
+import 'package:targowisko/routes.dart';
 import 'package:targowisko/utils/style_provider.dart';
 
 class AppMenu extends StatelessWidget {
+  Future<void> _logout(BuildContext context) async {
+    await FacebookLogin().logOut();
+    Navigator.pushReplacementNamed(context, Routes.loginScreen);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        _AppBarMenuHeader(),
-        _AppMenuElement(
-          title: "Produkty",
-          icon: Icons.shopping_basket,
-          onTap: () {},
+        Expanded(
+          child: Column(
+            children: <Widget>[
+              _AppBarMenuHeader(),
+              _AppMenuElement(
+                title: "Produkty",
+                icon: Icons.shopping_basket,
+                onTap: () {},
+              ),
+              _AppMenuElement(
+                title: "Targi",
+                icon: Icons.store,
+                onTap: () {},
+              ),
+              _AppMenuElement(
+                title: "Wystawcy",
+                icon: Icons.people,
+                onTap: () {},
+              ),
+              _AppMenuElement(
+                title: "Ja",
+                icon: Icons.person,
+                onTap: () {},
+              ),
+            ],
+          ),
         ),
         _AppMenuElement(
-          title: "Targi",
-          icon: Icons.store,
-          onTap: () {},
-        ),
-        _AppMenuElement(
-          title: "Wystawcy",
-          icon: Icons.people,
-          onTap: () {},
-        ),
-        _AppMenuElement(
-          title: "Ja",
-          icon: Icons.person,
-          onTap: () {},
+          title: "Wyloguj",
+          icon: Icons.vpn_key,
+          onTap: () => _logout(context),
         ),
       ],
     );
