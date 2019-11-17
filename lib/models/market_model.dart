@@ -1,5 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:targowisko/utils/api.dart';
+
 import 'location_model.dart';
 import 'owner_model.dart';
+
+import 'package:http/http.dart' as http;
 
 class MarketModel {
   final int id;
@@ -29,4 +36,47 @@ class MarketModel {
         imageUrl = json["image"] != null ? json["image"]["url"] : null,
         products = const <dynamic>[],
         marketRaitings = const <dynamic>[];
+
+  Future<MarketModel> update({
+    String name,
+    String description,
+    File avatar,
+    int category,
+    Map<String, dynamic> location,
+  }) async {
+    assert(id != null);
+
+    final result = await http.patch(
+      'https://targowisko.herokuapp.com/api/v1/markets/${this.id}',
+      body: <String, dynamic>{
+        "name": name,
+        "description": description,
+        "avatar": avatar,
+        "category": category,
+        "location": location,
+      },
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return MarketModel.fromJson(json.decode(result.body));
+  }
+
+  Future<bool> delete() async {
+    assert(id != null);
+
+    final result = await http.delete(
+      'https://targowisko.herokuapp.com/api/v1/markets/${this.id}',
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return json.decode(result.body)["success"] == true;
+  }
+
+  
 }
