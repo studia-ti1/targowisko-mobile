@@ -1,7 +1,6 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_facebook_login/flutter_facebook_login.dart';
 import 'package:http/http.dart' as http;
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/screens/home/widgets/market_card.dart';
@@ -10,8 +9,6 @@ import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/sliders/element_slider.dart';
-
-import '../../routes.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -34,10 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     http.Response result;
     try {
-      // result = await Api.getAllEventsFromFb();
-      // debugPrint(res.body);
       result = await Api.fetchMarkets();
-      // debugPrint(result.body);
     } on ApiException catch (err) {
       Alert.open(context, title: "Wystąpił błąd", content: err.message);
       return;
