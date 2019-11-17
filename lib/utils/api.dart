@@ -12,151 +12,8 @@ class Api {
 
   static String accesToken;
 
-  static Future<List<MarketModel>> fetchMarkets() async {
-    final result = await http.get(
-      'https://targowisko.herokuapp.com/api/v1/markets/',
-      headers: {
-        'access-token': Api.accesToken,
-      },
-    );
-
-    if (result.statusCode >= 300) throw ApiException(message: result.body);
-
-    final List jsonEventList = jsonDecode(result.body);
-    final markets = jsonEventList.map((dynamic market) {
-      return MarketModel.fromJson(market);
-    }).toList();
-
-    return markets;
-  }
-
-  static Future<MarketModel> updateMarket(
-    int marketId, {
-    String name,
-    String description,
-    File avatar,
-    int category,
-    Map<String, dynamic> location,
-  }) async {
-    final result = await http.patch(
-      'https://targowisko.herokuapp.com/api/v1/markets/${marketId}',
-      body: <String, dynamic>{
-        "name": name,
-        "description": description,
-        "avatar": avatar,
-        "category": category,
-        "location": location,
-      },
-      headers: {
-        'access-token': Api.accesToken,
-      },
-    );
-
-    if (result.statusCode >= 300) throw ApiException(message: result.body);
-    return MarketModel.fromJson(json.decode(result.body));
-  }
-
-  static Future<bool> deleteMarket(int marketId) async {
-    final result = await http.delete(
-      'https://targowisko.herokuapp.com/api/v1/markets/${marketId}',
-      headers: {
-        'access-token': Api.accesToken,
-      },
-    );
-
-    if (result.statusCode >= 300) throw ApiException(message: result.body);
-    return json.decode(result.body)["success"] == true;
-  }
-
-  static Future<bool> createMarkets(List<String> facebookEventIds) async {
-    final result = await http.post(
-      'https://targowisko.herokuapp.com/api/v1/create_markets',
-      body: <String, dynamic>{"facebook_event_ids": facebookEventIds},
-      headers: {
-        'access-token': Api.accesToken,
-      },
-    );
-
-    if (result.statusCode >= 300) throw ApiException(message: result.body);
-    return json.decode(result.body)["success"] == true;
-  }
-
-  static Future<ProductModel> createProduct({
-    String name,
-    File picture,
-    int price,
-    int category,
-    String description, // ?
-  }) async {
-    final result = await http.post(
-      'https://targowisko.herokuapp.com/api/v1/products',
-      body: <String, dynamic>{
-        "name": name,
-        "description": description,
-        "picture": picture,
-        "price": price,
-        "category": category,
-      },
-      headers: {
-        'access-token': Api.accesToken,
-      },
-    );
-
-    if (result.statusCode >= 300) throw ApiException(message: result.body);
-    return ProductModel.fromJson(json.decode(result.body));
-  }
-
-  static Future<List<ProductModel>> getMyProducts() async {
-    final result = await http.get(
-      'https://targowisko.herokuapp.com/api/v1/products',
-      headers: {
-        'access-token': Api.accesToken,
-      },
-    );
-
-    if (result.statusCode >= 300) throw ApiException(message: result.body);
-    return (json.decode(result.body) as List)
-        .map((dynamic product) => ProductModel.fromJson(product))
-        .toList();
-  }
-
-  static Future<ProductModel> getProduct(int productId) async {
-    final result = await http.get(
-      'https://targowisko.herokuapp.com/api/v1/products/${productId}',
-      headers: {
-        'access-token': Api.accesToken,
-      },
-    );
-
-    if (result.statusCode >= 300) throw ApiException(message: result.body);
-    return ProductModel.fromJson(json.decode(result.body));
-  }
-
-  static Future<ProductModel> updateProduct(
-    int productId, {
-    String name,
-    File picture,
-    int price,
-    int category,
-    String description, // ?
-  }) async {
-    final result = await http.patch(
-      'https://targowisko.herokuapp.com/api/v1/products/${productId}',
-      body: <String, dynamic>{
-        "name": name,
-        "description": description,
-        "picture": picture,
-        "price": price,
-        "category": category,
-      },
-      headers: {
-        'access-token': Api.accesToken,
-      },
-    );
-
-    if (result.statusCode >= 300) throw ApiException(message: result.body);
-    return ProductModel.fromJson(json.decode(result.body));
-  }
+  static _Market market = _Market._();
+  static _Product product = _Product._();
 
   static Future<ProductModel> addProductToMarket(
     int productId,
@@ -218,4 +75,94 @@ class ApiException implements Exception {
   final String message;
 
   ApiException({@required this.message});
+}
+
+class _Market {
+  const _Market._();
+
+  Future<List<MarketModel>> fetch() async {
+    final result = await http.get(
+      'https://targowisko.herokuapp.com/api/v1/markets/',
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+
+    final List jsonEventList = jsonDecode(result.body);
+    final markets = jsonEventList.map((dynamic market) {
+      return MarketModel.fromJson(market);
+    }).toList();
+
+    return markets;
+  }
+
+  Future<bool> create(List<String> facebookEventIds) async {
+    final result = await http.post(
+      'https://targowisko.herokuapp.com/api/v1/create_markets',
+      body: <String, dynamic>{"facebook_event_ids": facebookEventIds},
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return json.decode(result.body)["success"] == true;
+  }
+}
+
+class _Product {
+  const _Product._();
+
+  Future<ProductModel> create({
+    String name,
+    File picture,
+    int price,
+    int category,
+    String description, // ?
+  }) async {
+    final result = await http.post(
+      'https://targowisko.herokuapp.com/api/v1/products',
+      body: <String, dynamic>{
+        "name": name,
+        "description": description,
+        "picture": picture,
+        "price": price,
+        "category": category,
+      },
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return ProductModel.fromJson(json.decode(result.body));
+  }
+
+  Future<List<ProductModel>> getMyProducts() async {
+    final result = await http.get(
+      'https://targowisko.herokuapp.com/api/v1/products',
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return (json.decode(result.body) as List)
+        .map((dynamic product) => ProductModel.fromJson(product))
+        .toList();
+  }
+
+  Future<ProductModel> getOne(int productId) async {
+    final result = await http.get(
+      'https://targowisko.herokuapp.com/api/v1/products/${productId}',
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return ProductModel.fromJson(json.decode(result.body));
+  }
 }
