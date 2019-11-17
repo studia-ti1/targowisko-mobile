@@ -7,7 +7,7 @@ import 'package:targowisko/utils/style_provider.dart';
 class AppMenu extends StatelessWidget {
   Future<void> _logout(BuildContext context) async {
     await FacebookLogin().logOut();
-    Navigator.pushReplacementNamed(context, Routes.loginScreen);
+    Navigator.pushReplacementNamed(context, Routes.login);
   }
 
   @override
@@ -26,7 +26,9 @@ class AppMenu extends StatelessWidget {
               _AppMenuElement(
                 title: "Targi",
                 icon: Icons.store,
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.markets);
+                },
               ),
               _AppMenuElement(
                 title: "Wystawcy",
