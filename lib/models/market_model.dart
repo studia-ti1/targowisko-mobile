@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:targowisko/models/product_model.dart';
 import 'package:targowisko/utils/api.dart';
 
 import 'location_model.dart';
@@ -78,5 +79,45 @@ class MarketModel {
     return json.decode(result.body)["success"] == true;
   }
 
-  
+  Future<ProductModel> addProduct(
+    int productId,
+  ) async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com/api/v1",
+      "markets/${this.id}/add_product",
+      <String, String>{
+        "product_id": productId.toString(),
+      },
+    );
+    final result = await http.post(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return ProductModel.fromJson(json.decode(result.body));
+  }
+
+  Future<ProductModel> removeProduct(
+    int productId,
+  ) async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com/api/v1",
+      "markets/${this.id}/remove_product",
+      <String, String>{
+        "product_id": productId.toString(),
+      },
+    );
+    final result = await http.delete(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return ProductModel.fromJson(json.decode(result.body));
+  }
 }
