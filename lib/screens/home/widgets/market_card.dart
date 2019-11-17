@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/utils/style_provider.dart';
@@ -13,15 +14,13 @@ class MarketCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        Container(
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(market.imageUrl) ??
-                  AssetImage(
-                    StyleProvider.of(context).asset.marketDefaultBackground,
-                  ),
-            ),
+        FadeInImage(
+          width: double.infinity,
+          height: double.infinity,
+          fit: BoxFit.cover,
+          image: CachedNetworkImageProvider(market.imageUrl),
+          placeholder: AssetImage(
+            StyleProvider.of(context).asset.marketDefaultBackground,
           ),
         ),
         Container(
