@@ -17,9 +17,10 @@ class MarketCard extends StatelessWidget {
           decoration: BoxDecoration(
             image: DecorationImage(
               fit: BoxFit.cover,
-              image: AssetImage(
-                StyleProvider.of(context).asset.marketDefaultBackground,
-              ),
+              image: NetworkImage(market.imageUrl) ??
+                  AssetImage(
+                    StyleProvider.of(context).asset.marketDefaultBackground,
+                  ),
             ),
           ),
         ),
