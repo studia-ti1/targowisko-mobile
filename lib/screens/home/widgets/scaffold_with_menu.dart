@@ -73,7 +73,7 @@ class _HomeScreenState extends State<ScaffoldWithMenu>
               height: MediaQuery.of(context).size.height,
               width: halfWidth,
               child: SafeArea(
-                child: AppMenu(),
+                child: AppMenu(closeMenu: _closeMenu),
               ),
             ),
             AnimatedBuilder(

@@ -5,6 +5,10 @@ import 'package:targowisko/routes.dart';
 import 'package:targowisko/utils/style_provider.dart';
 
 class AppMenu extends StatelessWidget {
+  final VoidCallback closeMenu;
+
+  AppMenu({@required this.closeMenu}) : assert(closeMenu != null);
+
   Future<void> _logout(BuildContext context) async {
     await FacebookLogin().logOut();
     Navigator.pushReplacementNamed(context, Routes.login);
@@ -21,24 +25,32 @@ class AppMenu extends StatelessWidget {
               _AppMenuElement(
                 title: "Produkty",
                 icon: Icons.shopping_basket,
-                onTap: () {},
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.products);
+                  closeMenu();
+                },
               ),
               _AppMenuElement(
                 title: "Targi",
                 icon: Icons.store,
                 onTap: () {
                   Navigator.pushNamed(context, Routes.markets);
+                  closeMenu();
                 },
               ),
               _AppMenuElement(
                 title: "Wystawcy",
                 icon: Icons.people,
-                onTap: () {},
+                onTap: () {
+                  closeMenu();
+                },
               ),
               _AppMenuElement(
                 title: "Ja",
                 icon: Icons.person,
-                onTap: () {},
+                onTap: () {
+                  closeMenu();
+                },
               ),
             ],
           ),

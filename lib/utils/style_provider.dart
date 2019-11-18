@@ -59,6 +59,12 @@ class _AppShadows {
     offset: const Offset(1, 1),
     blurRadius: 10,
   );
+
+  final lightShadow = const BoxShadow(
+    color: const Color.fromRGBO(0, 0, 0, 0.05),
+    offset: const Offset(0, 0),
+    blurRadius: 5,
+  );
 }
 
 class _AppBorders {
@@ -159,4 +165,6 @@ class _AppAssets {
   final facebookLogo = 'assets/svg/facebook.svg';
   final appLogo = 'assets/logo.png';
   final marketDefaultBackground = 'assets/market_placeholder.jpg';
+  final targIcon = 'assets/targ_icon.png';
+  final productIcon = 'assets/product_icon.png';
 }
