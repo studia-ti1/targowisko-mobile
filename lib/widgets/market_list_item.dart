@@ -1,15 +1,14 @@
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/utils/style_provider.dart';
+import 'package:targowisko/widgets/raiting_coins.dart';
 
 class MarketListItem extends StatelessWidget {
   final MarketModel market;
+  final Widget child;
 
-  MarketListItem({
-    @required this.market,
-  }) : assert(market != null);
+  MarketListItem({@required this.market, @required this.child})
+      : assert(market != null);
 
   @override
   Widget build(BuildContext context) {
@@ -24,12 +23,7 @@ class MarketListItem extends StatelessWidget {
               decoration: BoxDecoration(
                 color: StyleProvider.of(context).colors.primaryAccent,
               ),
-              child: CachedNetworkImage(
-                fit: BoxFit.cover,
-                width: 110,
-                height: 110,
-                imageUrl: market.imageUrl,
-              ),
+              child: child,
             ),
           ),
           SizedBox(width: 15),
@@ -64,7 +58,10 @@ class MarketListItem extends StatelessWidget {
                 Container(
                   height: 20,
                   width: 200,
-                  color: Colors.red,
+                  child: RaitingCoins(
+                    value: 4.5,
+                    size: 20,
+                  ),
                 )
               ],
             ),

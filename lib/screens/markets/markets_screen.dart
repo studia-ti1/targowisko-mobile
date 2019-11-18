@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/utils/alert.dart';
@@ -50,7 +51,15 @@ class _MarketsScreenState extends State<MarketsScreen> {
         padding: const EdgeInsets.fromLTRB(15, 40, 15, 10),
         itemBuilder: (BuildContext context, int index) {
           final market = _markets[index];
-          return MarketListItem(market: market);
+          return MarketListItem(
+            market: market,
+            child: CachedNetworkImage(
+              fit: BoxFit.cover,
+              width: 110,
+              height: 110,
+              imageUrl: market.imageUrl,
+            ),
+          );
         },
         itemCount: _markets.length,
       ),
