@@ -13,7 +13,7 @@ class _MarketsScreenState extends State<MarketsScreen> {
     return ExtentListScaffold(
       title: "Targi",
       navChild: Image.asset(
-        StyleProvider.of(context).asset.targIcon,
+        StyleProvider.of(context).asset.marketIcon,
         width: 100,
         height: 100,
       ),

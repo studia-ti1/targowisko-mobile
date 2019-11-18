@@ -165,6 +165,6 @@ class _AppAssets {
   final facebookLogo = 'assets/svg/facebook.svg';
   final appLogo = 'assets/logo.png';
   final marketDefaultBackground = 'assets/market_placeholder.jpg';
-  final targIcon = 'assets/targ_icon.png';
+  final marketIcon = 'assets/market_icon.png';
   final productIcon = 'assets/product_icon.png';
 }
