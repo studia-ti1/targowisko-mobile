@@ -105,19 +105,46 @@ class _HomeScreenState extends State<ScaffoldWithMenu>
                 builder: (context, widget) {
                   final radius = _animationController.value * 30;
                   return Transform.translate(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          StyleProvider.of(context).shadow.mainShadow
-                        ],
-                        color:
-                            StyleProvider.of(context).colors.primaryBackground,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(radius),
-                          bottomLeft: Radius.circular(radius),
+                    child: Transform.scale(
+                      scale: _animationController
+                          .drive(Tween(begin: 1.0, end: 0.95))
+                          .value,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            StyleProvider.of(context).shadow.lightShadow
+                          ],
+                        ),
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(radius),
+                            bottomLeft: Radius.circular(radius),
+                          ),
+                          child: DecoratedBox(
+                            decoration: BoxDecoration(
+                              color: StyleProvider.of(context)
+                                  .colors
+                                  .primaryBackground,
+                            ),
+                            child: Stack(
+                              children: <Widget>[
+                                widget,
+                                if (_isMenuOpened)
+                                  Material(
+                                    color: Colors.transparent,
+                                    child: InkWell(
+                                      splashColor: StyleProvider.of(context)
+                                          .colors
+                                          .secondaryAccent
+                                          .withOpacity(0.2),
+                                      onTap: _closeMenu,
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          ),
                         ),
                       ),
-                      child: widget,
                     ),
                     offset: Offset(halfWidth * _animationController.value, 0),
                   );
