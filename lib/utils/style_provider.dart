@@ -50,6 +50,7 @@ class AppColors {
 
   final Color coin = const Color(0xFFEF8C17);
   final facebook = const Color(0xFF1B76F3);
+  final searchBackground = const Color(0xFFEEEEEE);
 }
 
 class _AppShadows {

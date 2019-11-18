@@ -7,6 +7,7 @@ import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 import 'package:targowisko/widgets/list_item/list_item.dart';
 import 'package:targowisko/widgets/list_item/widgets/list_item_picture.dart';
+import 'package:targowisko/widgets/search_input/search_input.dart';
 
 class ProductsScreen extends StatefulWidget {
   @override
@@ -65,6 +66,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
     });
   }
 
+  double _getTopPadding(BuildContext context) =>
+      MediaQuery.of(context).padding?.top ?? 0;
+
   @override
   Widget build(BuildContext context) {
     return ExtentListScaffold(
@@ -74,32 +78,44 @@ class _ProductsScreenState extends State<ProductsScreen> {
         width: 100,
         height: 100,
       ),
-      child: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(15, 40, 15, 10),
-        itemBuilder: (BuildContext context, int index) {
-          if (index == _products.length) {
-            _fetchNext();
-            return _loading
-                ? Container(
-                    alignment: Alignment.center,
-                    margin: const EdgeInsets.only(top: 15),
-                    child: CircularProgressIndicator())
-                : SizedBox();
-          }
+      child: CustomScrollView(
+        slivers: <Widget>[
+          SliverPersistentHeader(
+            pinned: true,
+            delegate: SearchInput(topPadding: _getTopPadding(context)),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  if (index == _products.length) {
+                    _fetchNext();
+                    return _loading
+                        ? Container(
+                            alignment: Alignment.center,
+                            margin: const EdgeInsets.only(top: 15),
+                            child: CircularProgressIndicator())
+                        : SizedBox();
+                  }
 
-          final product = _products[index];
-          return ListItem(
-            title: product.name,
-            description: product.description,
-            averageRating: product.averageRating,
-            // TODO:
-            onTap: () {},
-            child: ListItemPicture(
-              imageUrl: product.picture,
+                  final product = _products[0];
+                  return ListItem(
+                    title: product.name,
+                    description: product.description,
+                    averageRating: product.averageRating,
+                    // TODO:
+                    onTap: () {},
+                    child: ListItemPicture(
+                      imageUrl: product.picture,
+                    ),
+                  );
+                },
+                childCount: 100 ?? _products.length + 1,
+              ),
             ),
-          );
-        },
-        itemCount: _products.length + 1,
+          ),
+        ],
       ),
     );
   }
