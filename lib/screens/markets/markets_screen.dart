@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:targowisko/utils/style_provider.dart';
-import 'package:targowisko/widgets/nav_bar.dart';
+import 'package:targowisko/widgets/extent_list_scaffold.dart';
 
 class MarketsScreen extends StatefulWidget {
   @override
@@ -10,42 +10,23 @@ class MarketsScreen extends StatefulWidget {
 class _MarketsScreenState extends State<MarketsScreen> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: StyleProvider.of(context).colors.primaryBackground,
-      body: Stack(
-        children: <Widget>[
-          Container(
-            width: MediaQuery.of(context).size.width,
-            height: 400,
-            decoration: BoxDecoration(
-              gradient: StyleProvider.of(context).gradient.cardGradient2,
-            ),
-          ),
-          Column(
-            children: <Widget>[
-              NavBar(
-                title: "Targi",
-              ),
-              Expanded(
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                  child: Container(
-                    width: MediaQuery.of(context).size.width,
-                    decoration: BoxDecoration(
-                      color: StyleProvider.of(context).colors.primaryBackground,
-                    ),
-                    child: ListView(
-                      children: <Widget>[],
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          )
-        ],
+    return ExtentListScaffold(
+      title: "Targi",
+      navChild: Image.asset(
+        StyleProvider.of(context).asset.targIcon,
+        width: 100,
+        height: 100,
+      ),
+      child: ListView.builder(
+        itemBuilder: (BuildContext context, int index) {
+          return Text(
+            index.toString(),
+            style: StyleProvider.of(context)
+                .font
+                .pacifico
+                .copyWith(color: Colors.black),
+          );
+        },
       ),
     );
   }
