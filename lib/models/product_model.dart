@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
+import 'package:targowisko/models/rating_model.dart';
 import 'package:targowisko/utils/api.dart';
 
 import 'market_model.dart';
@@ -17,23 +19,32 @@ class ProductModel {
   final int userId;
   final OwnerModel owner;
   final List<MarketModel> markets;
-  final List<dynamic> productRatings;
+  final List<RatingModel> productRatings;
+  final double averageRating;
 
   ProductModel.fromJson(dynamic json)
       : id = json["id"],
         name = json["name"],
         description = json["description"],
-        price = json["price"],
+        // TODO: Backend for some reason returns int instead of double
+        price = double.tryParse(json["price"]?.toString() ?? ""),
         owner =
             json["owner"] != null ? OwnerModel.fromJson(json["owner"]) : null,
         userId = json["user"] != null ? json["user"]["id"] : null,
-        picture = json["picture"] != null ? json["picture"] : null,
+        picture = json["picture"] != null ? json["picture"]["url"] : null,
         markets = json["markets"] != null
             ? (json["markets"] as List)
                 .map((dynamic jsonMarket) => MarketModel.fromJson(jsonMarket))
                 .toList()
             : null,
-        productRatings = json["product_ratings"];
+        productRatings = json["product_ratings"] != null
+            ? (json["markets"] as List)
+                .map((dynamic jsonRating) => RatingModel.fromJson(jsonRating))
+                .toList()
+            : null,
+        averageRating = json["average_rating"] {
+    debugPrint(json.toString());
+  }
 
   Future<ProductModel> update({
     String name,
