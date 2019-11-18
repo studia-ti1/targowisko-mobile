@@ -167,4 +167,5 @@ class _AppAssets {
   final marketDefaultBackground = 'assets/market_placeholder.jpg';
   final marketIcon = 'assets/market_icon.png';
   final productIcon = 'assets/product_icon.png';
+  final sellerIcon = 'assets/seller_icon.png';
 }
