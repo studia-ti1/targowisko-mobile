@@ -37,6 +37,12 @@ class _ExtentListScaffoldState extends State<ExtentListScaffold>
   }
 
   @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     final topPadding = _getTopPadding(context);
     return Scaffold(
