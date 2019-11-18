@@ -48,6 +48,7 @@ class AppColors {
   final Color primaryBackground;
   final Color secondaryBackground;
 
+  final Color coin = const Color(0xFFEF8C17);
   final facebook = const Color(0xFF1B76F3);
 }
 
@@ -168,4 +169,5 @@ class _AppAssets {
   final marketIcon = 'assets/market_icon.png';
   final productIcon = 'assets/product_icon.png';
   final sellerIcon = 'assets/seller_icon.png';
+  final coin = 'assets/coin.png';
 }

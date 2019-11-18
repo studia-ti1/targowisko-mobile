@@ -38,6 +38,7 @@ flutter:
     - assets/market_placeholder.jpg
     - assets/product_icon.png
     - assets/seller_icon.png
+    - assets/coin.png
 
   fonts:
     - family: pacifico
