@@ -91,6 +91,11 @@ class _Market {
     if (result.statusCode >= 300) throw ApiException(message: result.body);
 
     final List jsonEventList = jsonDecode(result.body);
+    jsonEventList.first["place"] = null;
+    jsonEventList.first["owner"] = null;
+    jsonEventList.first["market_ratings"] = null;
+
+    debugPrint(jsonEventList.first.toString());
     final markets = jsonEventList.map((dynamic market) {
       return MarketModel.fromJson(market);
     }).toList();
@@ -164,5 +169,41 @@ class _Product {
 
     if (result.statusCode >= 300) throw ApiException(message: result.body);
     return ProductModel.fromJson(json.decode(result.body));
+  }
+
+  Future<List<ProductModel>> getAll({int perPage, int pageNumber}) async =>
+      fetch(perPage: perPage, pageNumber: pageNumber);
+
+  Future<List<ProductModel>> fetch({
+    int userId,
+    String searchValue,
+    int perPage,
+    int pageNumber,
+    int marketId,
+  }) async {
+    final params = <String, String>{};
+    if (userId != null) params["user_id"] = userId.toString();
+    if (searchValue != null) params["search_value"] = searchValue.toString();
+    if (perPage != null) params["items"] = perPage.toString();
+    if (pageNumber != null) params["page"] = pageNumber.toString();
+    if (marketId != null) params["market_id"] = marketId.toString();
+
+    final url = Uri.https(
+      "targowisko.herokuapp.com/api/v1",
+      "products",
+      params,
+    );
+
+    final result = await http.get(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return (json.decode(result.body) as List)
+        .map((dynamic product) => ProductModel.fromJson(product))
+        .toList();
   }
 }
