@@ -20,8 +20,8 @@ class Api {
     int marketId,
   ) async {
     final url = Uri.https(
-      "targowisko.herokuapp.com/api/v1",
-      "markets/${marketId}/add_product",
+      "targowisko.herokuapp.com",
+      "api/v1/markets/${marketId}/add_product",
       <String, String>{
         "product_id": productId.toString(),
       },
@@ -42,8 +42,8 @@ class Api {
     int marketId,
   ) async {
     final url = Uri.https(
-      "targowisko.herokuapp.com/api/v1",
-      "markets/${marketId}/remove_product",
+      "targowisko.herokuapp.com",
+      "api/v1/markets/${marketId}/remove_product",
       <String, String>{
         "product_id": productId.toString(),
       },
@@ -189,8 +189,8 @@ class _Product {
     if (marketId != null) params["market_id"] = marketId.toString();
 
     final url = Uri.https(
-      "targowisko.herokuapp.com/api/v1",
-      "products",
+      "targowisko.herokuapp.com",
+      "api/v1/products",
       params,
     );
 

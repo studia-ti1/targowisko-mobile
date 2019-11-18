@@ -12,10 +12,10 @@ class ListItem extends StatelessWidget {
   ListItem({
     @required this.child,
     @required this.title,
-    @required this.description,
+    this.description,
     this.averageRating,
     this.onTap,
-  }) : assert(title != null && description != null);
+  }) : assert(title != null);
 
   @override
   Widget build(BuildContext context) {
@@ -58,7 +58,7 @@ class ListItem extends StatelessWidget {
                         SizedBox(height: 5),
                         Expanded(
                           child: Text(
-                            description,
+                            description ?? "---",
                             maxLines: 3,
                             overflow: TextOverflow.ellipsis,
                             style: StyleProvider.of(context)
@@ -67,7 +67,6 @@ class ListItem extends StatelessWidget {
                                 .copyWith(fontSize: 12, height: 1.3),
                           ),
                         ),
-                        if (averageRating != null)
                           Container(
                             margin: const EdgeInsets.only(top: 5),
                             height: 20,

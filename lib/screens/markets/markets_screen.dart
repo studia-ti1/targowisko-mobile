@@ -5,7 +5,8 @@ import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
-import 'package:targowisko/widgets/list_item.dart';
+import 'package:targowisko/widgets/list_item/list_item.dart';
+import 'package:targowisko/widgets/list_item/widgets/list_item_picture.dart';
 
 class MarketsScreen extends StatefulWidget {
   @override
@@ -57,10 +58,7 @@ class _MarketsScreenState extends State<MarketsScreen> {
             averageRating: market.averageRating,
             // TODO;
             onTap: () {},
-            child: CachedNetworkImage(
-              fit: BoxFit.cover,
-              width: 110,
-              height: 110,
+            child: ListItemPicture(
               imageUrl: market.imageUrl,
             ),
           );

@@ -24,7 +24,7 @@ class RaitingCoins extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 5),
                 child: Coin(
                   size: size,
-                  value: (value - index).clamp(0.0, 1.0),
+                  value: ((value ?? 0.0) - index).clamp(0.0, 1.0),
                 ),
               );
             },
@@ -33,7 +33,7 @@ class RaitingCoins extends StatelessWidget {
           ),
           SizedBox(width: 5),
           Text(
-            value.toStringAsFixed(1),
+            value == null ? "-" : value.toStringAsFixed(1),
             style: StyleProvider.of(context).font.normal.copyWith(fontSize: 14),
           )
         ],
