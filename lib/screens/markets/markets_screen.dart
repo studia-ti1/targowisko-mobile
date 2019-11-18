@@ -5,7 +5,7 @@ import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
-import 'package:targowisko/widgets/market_list_item.dart';
+import 'package:targowisko/widgets/list_item.dart';
 
 class MarketsScreen extends StatefulWidget {
   @override
@@ -51,8 +51,12 @@ class _MarketsScreenState extends State<MarketsScreen> {
         padding: const EdgeInsets.fromLTRB(15, 40, 15, 10),
         itemBuilder: (BuildContext context, int index) {
           final market = _markets[index];
-          return MarketListItem(
-            market: market,
+          return ListItem(
+            description: market.description,
+            title: market.name,
+            averageRating: market.averageRating,
+            // TODO;
+            onTap: () {},
             child: CachedNetworkImage(
               fit: BoxFit.cover,
               width: 110,

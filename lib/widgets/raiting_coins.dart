@@ -31,9 +31,10 @@ class RaitingCoins extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             itemCount: 5,
           ),
+          SizedBox(width: 5),
           Text(
             value.toStringAsFixed(1),
-            style: StyleProvider.of(context).font.normal.copyWith(fontSize: 12),
+            style: StyleProvider.of(context).font.normal.copyWith(fontSize: 14),
           )
         ],
       ),

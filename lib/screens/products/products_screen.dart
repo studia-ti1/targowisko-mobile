@@ -9,6 +9,16 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen> {
   @override
+  void initState() {
+    super.initState();
+    fetchProducts();
+  }
+
+  Future<void> fetchProducts() async {
+    // Api.
+  }
+
+  @override
   Widget build(BuildContext context) {
     return ExtentListScaffold(
       title: "Produkty",
