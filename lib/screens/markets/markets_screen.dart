@@ -1,6 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
+import 'package:targowisko/routes.dart';
+import 'package:targowisko/screens/market/market_screen.dart';
 import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
@@ -39,6 +41,14 @@ class _MarketsScreenState extends State<MarketsScreen> {
     }
   }
 
+  Future<void> _openMarket(MarketModel market) async {
+    await Navigator.pushNamed(
+      context,
+      Routes.market,
+      arguments: MarketScreenArgs(market: market),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExtentListScaffold(
@@ -56,8 +66,7 @@ class _MarketsScreenState extends State<MarketsScreen> {
             description: market.description,
             title: market.name,
             averageRating: market.averageRating,
-            // TODO;
-            onTap: () {},
+            onTap: () => _openMarket(market),
             child: ListItemPicture(
               imageUrl: market.imageUrl,
             ),
