@@ -76,6 +76,7 @@ class _AppBorders {
 
 class _AppInputBorders {
   final InputBorder primary;
+  final InputBorder noBorder;
   _AppInputBorders(AppColors colors)
       : primary = OutlineInputBorder(
           borderRadius: BorderRadius.circular(10),
@@ -83,7 +84,8 @@ class _AppInputBorders {
             color: colors.content,
             width: 1,
           ),
-        );
+        ),
+        noBorder = OutlineInputBorder(borderSide: BorderSide.none);
 }
 
 class _AppFonts {

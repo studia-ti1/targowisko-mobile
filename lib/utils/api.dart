@@ -181,12 +181,16 @@ class _Product {
     int pageNumber,
     int marketId,
   }) async {
+
     final params = <String, String>{};
     if (userId != null) params["user_id"] = userId.toString();
     if (searchValue != null) params["search_value"] = searchValue.toString();
     if (perPage != null) params["items"] = perPage.toString();
     if (pageNumber != null) params["page"] = pageNumber.toString();
     if (marketId != null) params["market_id"] = marketId.toString();
+
+    print("Params");
+    print(params);
 
     final url = Uri.https(
       "targowisko.herokuapp.com",

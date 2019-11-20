@@ -22,17 +22,33 @@ class ListItem extends StatefulWidget {
   _ListItemState createState() => _ListItemState();
 }
 
-class _ListItemState extends State<ListItem>
-    with SingleTickerProviderStateMixin {
+class _ListItemState extends State<ListItem> with TickerProviderStateMixin {
   AnimationController _controller;
+  AnimationController _ratingController;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
         vsync: this, value: 0.0, lowerBound: 0.0, upperBound: 1.0);
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      _controller.animateTo(1.0, duration: const Duration(milliseconds: 300));
+    _ratingController = AnimationController(
+        vsync: this, value: 0.0, lowerBound: 0.0, upperBound: 5.0);
+
+    _beginAnimation();
+  }
+
+  Future<void> _beginAnimation() async {
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await _controller.animateTo(
+        1.0,
+        duration: const Duration(milliseconds: 300),
+      );
+      if (!mounted || widget.averageRating == null) return;
+      await _ratingController.animateTo(
+        widget.averageRating,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+      );
     });
   }
 
@@ -93,10 +109,16 @@ class _ListItemState extends State<ListItem>
                               margin: const EdgeInsets.only(top: 5),
                               height: 20,
                               width: 200,
-                              child: RaitingCoins(
-                                value: widget.averageRating,
-                                size: 20,
-                              ),
+                              child: AnimatedBuilder(
+                                  animation: _ratingController,
+                                  builder: (context, snapshot) {
+                                    return RaitingCoins(
+                                      value: widget.averageRating == null
+                                          ? null
+                                          : _ratingController.value,
+                                      size: 20,
+                                    );
+                                  }),
                             )
                           ],
                         ),
@@ -126,6 +148,7 @@ class _ListItemState extends State<ListItem>
   @override
   void dispose() {
     _controller.dispose();
+    _ratingController.dispose();
     super.dispose();
   }
 }

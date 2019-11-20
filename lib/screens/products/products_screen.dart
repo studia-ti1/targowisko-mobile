@@ -20,8 +20,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
   int _currentPage = _initialPageNumber;
   bool _canFetch = true;
   bool _loading = false;
+  final ScrollController _scrollController = ScrollController();
 
-  final List<ProductModel> _products = [];
+  List<ProductModel> _products = [];
+  final TextEditingController _controller = TextEditingController();
 
   @override
   void initState() {
@@ -29,11 +31,19 @@ class _ProductsScreenState extends State<ProductsScreen> {
     _fetchProducts(pageNumber: _initialPageNumber, perPage: _perPage);
   }
 
+  @override
+  void dispose() {
+    _controller.dispose();
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   Future<void> _fetchProducts({
     @required int pageNumber,
     @required int perPage,
+    String searchPhrase,
   }) async {
-    if (_loading || !_canFetch) return;
+    if (_loading) return;
     try {
       setState(() {
         _loading = true;
@@ -41,12 +51,17 @@ class _ProductsScreenState extends State<ProductsScreen> {
       final products = await Api.product.fetch(
         pageNumber: pageNumber,
         perPage: perPage,
+        searchValue: searchPhrase,
       );
       setState(() {
         _loading = false;
         _currentPage = pageNumber;
         _canFetch = perPage == products.length;
-        _products.addAll(products);
+        if (pageNumber == _initialPageNumber) {
+          _products = products;
+        } else {
+          _products.addAll(products);
+        }
       });
     } on ApiException catch (err) {
       Alert.open(
@@ -66,6 +81,20 @@ class _ProductsScreenState extends State<ProductsScreen> {
     });
   }
 
+  Future<void> _onSearch() async {
+    print("SEA: ${_controller.text}");
+    await _scrollController.animateTo(
+      0.0,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 300),
+    );
+    await _fetchProducts(
+      pageNumber: _initialPageNumber,
+      perPage: _perPage,
+      searchPhrase: _controller.text,
+    );
+  }
+
   double _getTopPadding(BuildContext context) =>
       MediaQuery.of(context).padding?.top ?? 0;
 
@@ -79,10 +108,16 @@ class _ProductsScreenState extends State<ProductsScreen> {
         height: 100,
       ),
       child: CustomScrollView(
+        controller: _scrollController,
         slivers: <Widget>[
           SliverPersistentHeader(
             pinned: true,
-            delegate: SearchInput(topPadding: _getTopPadding(context)),
+            delegate: SearchInput(
+              controller: _controller,
+              topPadding: _getTopPadding(context),
+              // TODO:
+              onSearch: _onSearch,
+            ),
           ),
           SliverPadding(
             padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
@@ -99,7 +134,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         : SizedBox();
                   }
 
-                  final product = _products[0];
+                  final product = _products[index];
                   return ListItem(
                     title: product.name,
                     description: product.description,
@@ -111,7 +146,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ),
                   );
                 },
-                childCount: 100 ?? _products.length + 1,
+                childCount: _products.length + 1,
               ),
             ),
           ),
