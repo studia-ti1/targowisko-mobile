@@ -17,7 +17,7 @@ class ExtentListScaffold extends StatefulWidget {
     this.navChild,
     this.onLikePress,
     this.liked = false,
-  }) : assert(title != null && child != null);
+  }) : assert(title != null);
 
   @override
   _ExtentListScaffoldState createState() => _ExtentListScaffoldState();

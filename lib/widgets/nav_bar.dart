@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/utils/style_provider.dart';
 
@@ -39,11 +40,13 @@ class NavBar extends StatelessWidget {
           Transform.translate(
             offset: Offset(0, maxExtent - shrinkOffset - 10),
             child: Align(
-              alignment: Alignment(-(shrinkOffset / maxExtent), 1),
+              alignment: Alignment(-(shrinkOffset / maxExtent), 0.5),
               child: Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 55),
-                child: Text(
+                child: AutoSizeText(
                   title,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: StyleProvider.of(context)
                       .font
                       .pacificoPrimary
