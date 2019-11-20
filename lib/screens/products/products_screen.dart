@@ -20,7 +20,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
   int _currentPage = _initialPageNumber;
   bool _canFetch = true;
   bool _loading = false;
-  final ScrollController _scrollController = ScrollController();
 
   List<ProductModel> _products = [];
   final TextEditingController _controller = TextEditingController();
@@ -34,7 +33,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
   @override
   void dispose() {
     _controller.dispose();
-    _scrollController.dispose();
     super.dispose();
   }
 
@@ -82,12 +80,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   Future<void> _onSearch() async {
-    print("SEA: ${_controller.text}");
-    await _scrollController.animateTo(
-      0.0,
-      curve: Curves.easeOut,
-      duration: const Duration(milliseconds: 300),
-    );
     await _fetchProducts(
       pageNumber: _initialPageNumber,
       perPage: _perPage,
@@ -108,7 +100,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
         height: 100,
       ),
       child: CustomScrollView(
-        controller: _scrollController,
         slivers: <Widget>[
           SliverPersistentHeader(
             pinned: true,
@@ -134,7 +125,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         : SizedBox();
                   }
 
-                  final product = _products[index];
+                  final product = _products[0];
                   return ListItem(
                     title: product.name,
                     description: product.description,
@@ -146,7 +137,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ),
                   );
                 },
-                childCount: _products.length + 1,
+                childCount:
+                    _products.isNotEmpty ? 100 ?? _products.length + 1 : 0,
               ),
             ),
           ),
