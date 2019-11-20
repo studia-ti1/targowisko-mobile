@@ -110,38 +110,13 @@ class _ExtentListScaffoldState extends State<ExtentListScaffold>
                 ),
                 if (widget.onLikePress != null)
                   Transform.translate(
-                    offset: Offset(0, 65),
+                    offset: Offset(0, 75),
                     child: Container(
                       margin: const EdgeInsets.only(right: 40),
                       alignment: Alignment.topRight,
-                      child: Container(
-                        width: 55,
-                        height: 55,
-                        decoration: BoxDecoration(
-                          boxShadow: [
-                            StyleProvider.of(context).shadow.mainShadow
-                          ],
-                          shape: BoxShape.circle,
-                        ),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(50),
-                          child: Material(
-                            color: StyleProvider.of(context)
-                                .colors
-                                .primaryBackground,
-                            child: InkWell(
-                              child: widget.liked
-                                  ? Icon(
-                                      Icons.favorite,
-                                      color: StyleProvider.of(context)
-                                          .colors
-                                          .primaryAccent,
-                                    )
-                                  : const Icon(Icons.favorite_border),
-                              onTap: widget.onLikePress,
-                            ),
-                          ),
-                        ),
+                      child: _LikeButton(
+                        liked: widget.liked,
+                        onLikePress: widget.onLikePress,
                       ),
                     ),
                   )
@@ -164,6 +139,76 @@ class _ExtentListScaffoldState extends State<ExtentListScaffold>
         ],
       ),
     );
+  }
+}
+
+class _LikeButton extends StatefulWidget {
+  const _LikeButton({
+    Key key,
+    @required this.onLikePress,
+    @required this.liked,
+  }) : super(key: key);
+
+  final VoidCallback onLikePress;
+  final bool liked;
+
+  @override
+  __LikeButtonState createState() => __LikeButtonState();
+}
+
+class __LikeButtonState extends State<_LikeButton>
+    with SingleTickerProviderStateMixin {
+  AnimationController _controller;
+
+  @override
+  void initState() {
+    _controller = AnimationController(vsync: this, value: 0.0);
+    _beginAnimation();
+    super.initState();
+  }
+
+  Future<void> _beginAnimation() async {
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    await _controller.animateTo(
+      1.0,
+      curve: Curves.easeOut,
+      duration: const Duration(milliseconds: 300),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+        animation: _controller,
+        child: Container(
+          width: 55,
+          height: 55,
+          decoration: BoxDecoration(
+            boxShadow: [StyleProvider.of(context).shadow.mainShadow],
+            shape: BoxShape.circle,
+          ),
+          child: ClipRRect(
+            borderRadius: BorderRadius.circular(50),
+            child: Material(
+              color: StyleProvider.of(context).colors.primaryBackground,
+              child: InkWell(
+                child: widget.liked
+                    ? Icon(
+                        Icons.favorite,
+                        color: StyleProvider.of(context).colors.primaryAccent,
+                      )
+                    : const Icon(Icons.favorite_border),
+                onTap: widget.onLikePress,
+              ),
+            ),
+          ),
+        ),
+        builder: (context, child) {
+          return Transform.scale(
+            scale: _controller.value,
+            child: child,
+          );
+        });
   }
 }
 
