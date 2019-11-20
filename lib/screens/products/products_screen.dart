@@ -125,7 +125,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                         : SizedBox();
                   }
 
-                  final product = _products[0];
+                  final product = _products[index];
                   return ListItem(
                     title: product.name,
                     description: product.description,
@@ -137,8 +137,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                     ),
                   );
                 },
-                childCount:
-                    _products.isNotEmpty ? 100 ?? _products.length + 1 : 0,
+                childCount: _products.length + 1,
               ),
             ),
           ),

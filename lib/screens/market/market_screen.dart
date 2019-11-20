@@ -1,5 +1,5 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:targowisko/screens/market/widgets/organiser_section.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/widgets/extent_list_scaffold_image_nav_child.dart';
@@ -26,12 +26,21 @@ class _MarketScreenState extends State<MarketScreen> {
   Widget build(BuildContext context) {
     final market = widget.args.market;
     return ExtentListScaffold(
-      // TODO: 
+      // TODO:
       liked: false,
-      // TODO: 
+      // TODO:
       onLikePress: () {},
       title: market.name,
-      navChild: ExtentListScaffoldImageNavChild(imageUrl: market.imageUrl),
+      navChild: ExtentListScaffoldImageNavChild(
+        imageUrl: market.imageUrl,
+      ),
+      child: ListView(
+        children: <Widget>[
+          OrganiserSection(
+            market: market,
+          ),
+        ],
+      ),
     );
   }
 }
