@@ -1,6 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 import 'package:targowisko/models/market_model.dart';
+import 'package:targowisko/widgets/extent_list_scaffold_image_nav_child.dart';
 
 class MarketScreenArgs {
   MarketModel market;
@@ -22,8 +24,10 @@ class MarketScreen extends StatefulWidget {
 class _MarketScreenState extends State<MarketScreen> {
   @override
   Widget build(BuildContext context) {
+    final market = widget.args.market;
     return ExtentListScaffold(
-      title: widget.args.market.name,
+      title: market.name,
+      navChild: ExtentListScaffoldImageNavChild(imageUrl: market.imageUrl),
     );
   }
 }

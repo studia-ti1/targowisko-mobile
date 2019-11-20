@@ -52,30 +52,34 @@ class _ExtentListScaffoldState extends State<ExtentListScaffold>
           Container(
             width: MediaQuery.of(context).size.width,
             height: 400,
+            alignment: Alignment.topCenter,
             decoration: BoxDecoration(
               gradient: StyleProvider.of(context).gradient.cardGradient2,
             ),
-            child: AnimatedBuilder(
-                animation: _controller,
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  alignment: Alignment.topCenter,
-                  margin: EdgeInsets.only(top: topPadding + 50),
-                  child: widget.navChild,
-                ),
-                builder: (context, child) {
-                  return Transform.scale(
-                    scale: _controller
-                        .drive(Tween(begin: 0.8, end: 1.0))
-                        .drive(CurveTween(curve: Curves.easeOut))
-                        .value,
-                    child: Opacity(
-                      opacity: _controller.value,
-                      child: child,
-                    ),
-                  );
-                }),
+            child: SizedBox(
+              height: 280,
+              width: MediaQuery.of(context).size.width,
+              child: AnimatedBuilder(
+                  animation: _controller,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    // margin: EdgeInsets.only(top: topPadding + 50),
+                    children: [widget.navChild],
+                  ),
+                  builder: (context, child) {
+                    return Transform.scale(
+                      scale: _controller
+                          .drive(Tween(begin: 0.8, end: 1.0))
+                          .drive(CurveTween(curve: Curves.easeOut))
+                          .value,
+                      child: Opacity(
+                        opacity: _controller.value,
+                        child: child,
+                      ),
+                    );
+                  }),
+            ),
           ),
           NestedScrollView(
             body: Stack(
