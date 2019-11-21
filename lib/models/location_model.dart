@@ -26,4 +26,6 @@ class LocationDetails {
         country = json["country"],
         latitude = json["latitude"],
         longitude = json["longitude"];
+
+  String get locationString => "${street}, ${zip} ${city}";
 }

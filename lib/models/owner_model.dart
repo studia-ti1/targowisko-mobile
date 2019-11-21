@@ -11,12 +11,14 @@ class OwnerModel {
 
   OwnerModel.fromJson(dynamic json)
       : id = json["id"],
-        lastName = json["lastName"],
-        firstName = json["firstName"],
+        lastName = json["last_name"],
+        firstName = json["first_name"],
         email = json["email"],
         password = json["password"],
-        phoneNumber = json["phoneNumber"],
+        phoneNumber = json["phone_number"],
         role = json["role"],
         createdAt = DateTime.tryParse(json["created_at"] ?? ""),
         updatedAt = DateTime.tryParse(json["updated_at"] ?? "");
+
+  String get fullName => "${firstName} ${lastName}";
 }
