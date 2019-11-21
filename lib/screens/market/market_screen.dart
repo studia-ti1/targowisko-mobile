@@ -35,6 +35,7 @@ class _MarketScreenState extends State<MarketScreen> {
         imageUrl: market.imageUrl,
       ),
       child: ListView(
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 50),
         children: <Widget>[
           OrganiserSection(
             market: market,
