@@ -26,9 +26,7 @@ class _MarketScreenState extends State<MarketScreen> {
   Widget build(BuildContext context) {
     final market = widget.args.market;
     return ExtentListScaffold(
-      // TODO:
       liked: false,
-      // TODO:
       onLikePress: () {},
       title: market.name,
       navChild: ExtentListScaffoldImageNavChild(
