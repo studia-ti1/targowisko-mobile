@@ -21,7 +21,6 @@ class Input extends StatelessWidget {
     return TextField(
       maxLines: 1,
       minLines: 1,
-      
       enabled: enabled,
       controller: controller,
       obscureText: obscureText,

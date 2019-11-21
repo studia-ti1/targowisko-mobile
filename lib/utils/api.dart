@@ -181,7 +181,6 @@ class _Product {
     int pageNumber,
     int marketId,
   }) async {
-
     final params = <String, String>{};
     if (userId != null) params["user_id"] = userId.toString();
     if (searchValue != null) params["search_value"] = searchValue.toString();

@@ -40,13 +40,12 @@ class OrganiserSection extends StatelessWidget {
                   overflow: TextOverflow.ellipsis,
                 ),
                 Text(
-                  
                   market.description,
                   style: StyleProvider.of(context)
                       .font
                       .normal
                       .copyWith(fontSize: 13),
-                      maxLines: 5,
+                  maxLines: 5,
                 )
               ],
             ),

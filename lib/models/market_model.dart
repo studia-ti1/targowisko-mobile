@@ -130,5 +130,3 @@ class MarketModel {
     return ProductModel.fromJson(json.decode(result.body));
   }
 }
-
-
