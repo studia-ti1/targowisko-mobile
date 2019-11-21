@@ -148,6 +148,7 @@ class _AppFonts {
 class _AppGradients {
   LinearGradient primary;
   LinearGradient cardGradient2;
+  LinearGradient cardGradient3;
 
   _AppGradients(AppColors colors)
       : primary = LinearGradient(
@@ -162,6 +163,14 @@ class _AppGradients {
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [colors.primaryAccent, colors.secondaryAccent],
+        ),
+        cardGradient3 = LinearGradient(
+          begin: Alignment.bottomRight,
+          end: Alignment.topLeft,
+          colors: [
+            Color(0xFF82A5D5),
+            Color(0xFF6AC0D3),
+          ],
         );
 }
 

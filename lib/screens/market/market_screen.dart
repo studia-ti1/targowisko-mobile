@@ -3,6 +3,7 @@ import 'package:targowisko/screens/market/widgets/icon_section.dart';
 import 'package:targowisko/screens/market/widgets/organiser_section.dart';
 import 'package:targowisko/screens/market/widgets/section.dart';
 import 'package:targowisko/utils/style_provider.dart';
+import 'package:targowisko/widgets/card_slider.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/widgets/extent_list_scaffold_image_nav_child.dart';
@@ -39,42 +40,54 @@ class _MarketScreenState extends State<MarketScreen> {
         imageUrl: market.imageUrl,
       ),
       child: ListView(
-        padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
+        padding: const EdgeInsets.fromLTRB(0, 30, 0, 15),
         children: <Widget>[
-          OrganiserSection(
-            market: market,
-          ),
-          SizedBox(height: 15),
-          RaitingCoins(
-            size: 35,
-            value: market.averageRating,
-          ),
-          SizedBox(height: 15),
-          IconSection(
-            icon: Icons.calendar_today,
-            // TODO: missing data from /market endpoint
-            title: "14 Stycznia 2019",
-            content: "2h",
-          ),
-          SizedBox(height: 15),
-          IconSection(
-            icon: Icons.location_on,
-            title: market.place?.name ?? "Brak informacji o lokalizacji",
-            content: market.place?.location?.locationString ?? "-",
-          ),
-          SizedBox(height: 15),
-          Section(
-            title: "O wydarzeniu",
-            child: Text(
-              market.description,
-              style: StyleProvider.of(context).font.normal.copyWith(
-                    fontSize: 13,
-                    height: 1,
-                  ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+            child: OrganiserSection(
+              market: market,
             ),
           ),
-          SizedBox(height: 15),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+            child: RaitingCoins(
+              size: 35,
+              value: market.averageRating,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+            child: IconSection(
+              icon: Icons.calendar_today,
+              // TODO: missing data from /market endpoint
+              title: "14 Stycznia 2019",
+              content: "2h",
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+            child: IconSection(
+              icon: Icons.location_on,
+              title: market.place?.name ?? "Brak informacji o lokalizacji",
+              content: market.place?.location?.locationString ?? "-",
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+            child: Section(
+              title: "O wydarzeniu",
+              child: Text(
+                market.description,
+                style: StyleProvider.of(context).font.normal.copyWith(
+                      fontSize: 13,
+                      height: 1,
+                    ),
+              ),
+            ),
+          ),
           Section(
+            titlePadding:
+                const EdgeInsets.only(bottom: 15, left: 15, right: 15),
             title: "Wystawcy",
             // TODO:
             child: Container(
