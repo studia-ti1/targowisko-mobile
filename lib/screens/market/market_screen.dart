@@ -90,10 +90,7 @@ class _MarketScreenState extends State<MarketScreen> {
                 const EdgeInsets.only(bottom: 15, left: 15, right: 15),
             title: "Wystawcy",
             // TODO:
-            child: Container(
-              height: 200,
-              color: Colors.red,
-            ),
+            child: CardSlider(),
           )
         ],
       ),
