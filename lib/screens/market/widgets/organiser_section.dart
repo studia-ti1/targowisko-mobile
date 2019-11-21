@@ -14,23 +14,26 @@ class OrganiserSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 120,
       child: Row(
         children: <Widget>[
-          Align(
-            alignment: Alignment.topCenter,
-            child: Avatar(
-              // TODO:
-              imageUrl: null,
-              size: 60,
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Avatar(
+                // TODO:
+                imageUrl: null,
+                size: 60,
+              ),
             ),
           ),
-          SizedBox(width: 15),
+          SizedBox(width: 10),
           Expanded(
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 AutoSizeText(
-                  market.name,
+                  market.owner?.fullName ?? "Nieznany",
                   style: StyleProvider.of(context)
                       .font
                       .pacifico
@@ -39,13 +42,14 @@ class OrganiserSection extends StatelessWidget {
                   minFontSize: 15,
                   overflow: TextOverflow.ellipsis,
                 ),
+                SizedBox(height: 5),
                 Text(
-                  market.description,
+                  "Organizator",
                   style: StyleProvider.of(context)
                       .font
                       .normal
-                      .copyWith(fontSize: 13),
-                  maxLines: 5,
+                      .copyWith(fontSize: 14),
+                  maxLines: 1,
                 )
               ],
             ),
