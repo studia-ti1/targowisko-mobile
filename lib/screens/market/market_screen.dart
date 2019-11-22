@@ -5,13 +5,13 @@ import 'package:targowisko/screens/market/widgets/icon_section.dart';
 import 'package:targowisko/screens/market/widgets/organiser_section.dart';
 import 'package:targowisko/screens/market/widgets/section.dart';
 import 'package:targowisko/utils/style_provider.dart';
+import 'package:targowisko/widgets/animated/animated_rating_coins.dart';
 import 'package:targowisko/widgets/avatar.dart';
 import 'package:targowisko/widgets/cards_slider/cards_slider.dart';
 import 'package:targowisko/widgets/cards_slider/widget/card_slider_card.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/widgets/extent_list_scaffold_image_nav_child.dart';
-import 'package:targowisko/widgets/raiting_coins.dart';
 
 class MarketScreenArgs {
   MarketModel market;
@@ -63,9 +63,9 @@ class _MarketScreenState extends State<MarketScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
-            child: RaitingCoins(
-              size: 35,
-              value: market.averageRating,
+            child: AnimatedRatingCoins(
+              raiting: market.averageRating,
+              delay: const Duration(milliseconds: 300),
             ),
           ),
           Padding(
