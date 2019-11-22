@@ -13,24 +13,26 @@ class Avatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(size),
-      child: Container(
-        width: 60,
-        height: 60,
-        decoration: BoxDecoration(
-          color: StyleProvider.of(context).colors.primaryAccent,
-        ),
-        child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
-          child: imageUrl == null
-              ? null
-              : CachedNetworkImage(
-                  imageUrl: imageUrl,
-                  height: size,
-                  width: size,
-                  fit: BoxFit.cover,
-                ),
+    return Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(size),
+        child: Container(
+          width: size,
+          height: size,
+          decoration: BoxDecoration(
+            color: StyleProvider.of(context).colors.primaryAccent,
+          ),
+          child: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 300),
+            child: imageUrl == null
+                ? null
+                : CachedNetworkImage(
+                    imageUrl: imageUrl,
+                    height: size,
+                    width: size,
+                    fit: BoxFit.cover,
+                  ),
+          ),
         ),
       ),
     );

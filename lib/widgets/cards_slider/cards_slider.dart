@@ -1,14 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:targowisko/utils/style_provider.dart';
 
-class CardSlider extends StatefulWidget {
+class CardsSlider extends StatefulWidget {
+  final Widget child;
+
+  CardsSlider({
+    @required this.child,
+  }) : assert(child != null);
+
   @override
-  _CardSliderState createState() => _CardSliderState();
+  _CardsSliderState createState() => _CardsSliderState();
 }
 
-class _CardSliderState extends State<CardSlider> {
+class _CardsSliderState extends State<CardsSlider> {
   static const _cardWidthFactor = 0.8;
-  PageController _controller = PageController(
+  final PageController _controller = PageController(
     viewportFraction: _cardWidthFactor,
     keepPage: true,
   );
@@ -27,15 +32,18 @@ class _CardSliderState extends State<CardSlider> {
           itemBuilder: (BuildContext context, int index) {
             return AnimatedBuilder(
               animation: _controller,
-              builder: (context, snapshot) {
+              builder: (context, widget) {
                 final cardWidth = constraints.maxWidth * _cardWidthFactor;
-                final value =
+                final cardFocusFactor =
                     ((index * cardWidth - _controller.offset).abs() / cardWidth)
                         .clamp(0.0, 1.0);
 
-                final scale = Tween(begin: 1.0, end: .85).transform(value);
-                final opacity = Tween(begin: .25, end: .15).transform(value);
-                final offset = Tween(begin: 4.0, end: 0.0).transform(value);
+                final scale =
+                    Tween(begin: 1.0, end: .85).transform(cardFocusFactor);
+                final opacity =
+                    Tween(begin: .25, end: .15).transform(cardFocusFactor);
+                final shadowOffset =
+                    Tween(begin: 4.0, end: 0.0).transform(cardFocusFactor);
 
                 return Center(
                   child: Transform.scale(
@@ -46,26 +54,22 @@ class _CardSliderState extends State<CardSlider> {
                           boxShadow: [
                             BoxShadow(
                               color: Color.fromRGBO(0, 0, 0, opacity),
-                              offset: Offset(offset, offset),
+                              offset: Offset(shadowOffset, shadowOffset),
                               blurRadius: 6,
                             ),
                           ]),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Container(
-                          // width: cardWidth,
-                          decoration: BoxDecoration(
-                            gradient: StyleProvider.of(context)
-                                .gradient
-                                .cardGradient3,
-                          ),
-                          height: 150,
-                        ),
-                      ),
+                      child: widget,
                     ),
                   ),
                 );
               },
+              child: ClipRRect(
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+                child: SizedBox(
+                  height: 150,
+                  child: widget.child,
+                ),
+              ),
             );
           },
         );
