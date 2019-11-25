@@ -190,14 +190,17 @@ class __LikeButtonState extends State<_LikeButton>
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
             child: Material(
-              color: StyleProvider.of(context).colors.primaryBackground,
+              color: widget.liked
+                  ? StyleProvider.of(context).colors.primaryAccent
+                  : StyleProvider.of(context).colors.primaryBackground,
               child: InkWell(
                 child: widget.liked
                     ? Icon(
-                        Icons.favorite,
-                        color: StyleProvider.of(context).colors.primaryAccent,
+                        Icons.directions_walk,
+                        color:
+                            StyleProvider.of(context).colors.primaryBackground,
                       )
-                    : const Icon(Icons.favorite_border),
+                    : const Icon(Icons.directions_walk),
                 onTap: widget.onLikePress,
               ),
             ),
