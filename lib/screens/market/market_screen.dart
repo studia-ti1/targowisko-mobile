@@ -1,6 +1,8 @@
 import 'package:auto_size_text/auto_size_text.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
+import 'package:targowisko/models/product_model.dart';
 import 'package:targowisko/screens/market/widgets/icon_section.dart';
 import 'package:targowisko/screens/market/widgets/organiser_section.dart';
 import 'package:targowisko/screens/market/widgets/section.dart';
@@ -12,6 +14,7 @@ import 'package:targowisko/widgets/cards_slider/widget/card_slider_card.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/widgets/extent_list_scaffold_image_nav_child.dart';
+import 'package:targowisko/widgets/sliders/square_slider.dart';
 
 class MarketScreenArgs {
   MarketModel market;
@@ -103,6 +106,8 @@ class _MarketScreenState extends State<MarketScreen> {
                 const EdgeInsets.only(bottom: 15, left: 15, right: 15),
             title: "Wystawcy",
             // TODO:
+            onMorePress: () {},
+            // TODO:
             child: CardsSlider(
               child: CardsSliderCard(
                 onCardPress: _openSellerScreen,
@@ -117,8 +122,100 @@ class _MarketScreenState extends State<MarketScreen> {
                 ),
               ),
             ),
-          )
+          ),
+          Section(
+              titlePadding:
+                  const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+              title: "Produkty",
+              // TODO:
+              onMorePress: () {},
+              // TODO:
+              child: market.products.isEmpty
+                  ? Center(
+                      child: Text(
+                        "Ten targ nie posiada produktów",
+                        textAlign: TextAlign.center,
+                        style: StyleProvider.of(context).font.normal,
+                      ),
+                    )
+                  : SquareSlider(
+                      itemBuilder: (context, index) {
+                        final product = market.products[index];
+                        return ProductCard(product: product);
+                      },
+                      itemCount: market.products.length,
+                    ))
         ],
+      ),
+    );
+  }
+}
+
+class ProductCard extends StatelessWidget {
+  final ProductModel product;
+  const ProductCard({
+    @required this.product,
+    Key key,
+  })  : assert(product != null),
+        super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        height: 150,
+        width: 150,
+        color: StyleProvider.of(context).colors.primaryAccent,
+        child: Stack(
+          children: <Widget>[
+            if (null != null)
+              CachedNetworkImage(
+                width: 150,
+                height: 150,
+                fit: BoxFit.cover,
+                imageUrl: product.picture,
+              )
+            else
+              Align(
+                alignment: Alignment(0.0, -0.5),
+                child: Image.asset(
+                  StyleProvider.of(context).asset.productIcon,
+                  fit: BoxFit.contain,
+                  height: 100,
+                  width: 100,
+                ),
+              ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(6, 0, 6, 5),
+              alignment: Alignment.bottomCenter,
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.transparent,
+                    Colors.black45,
+                  ],
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                ),
+              ),
+              child: AutoSizeText(
+                "Jabłko",
+                textAlign: TextAlign.center,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
+                style: StyleProvider.of(context)
+                    .font
+                    .pacificoPrimary
+                    .copyWith(fontSize: 20),
+              ),
+            ),
+            Material(
+              color: Colors.transparent,
+              child: InkWell(onTap: () {}),
+            )
+          ],
+        ),
       ),
     );
   }
