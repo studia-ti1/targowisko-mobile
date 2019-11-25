@@ -38,12 +38,17 @@ class _CardsSliderState extends State<CardsSlider> {
                     ((index * cardWidth - _controller.offset).abs() / cardWidth)
                         .clamp(0.0, 1.0);
 
-                final scale =
-                    Tween(begin: 1.0, end: .85).transform(cardFocusFactor);
-                final opacity =
-                    Tween(begin: .25, end: .15).transform(cardFocusFactor);
-                final shadowOffset =
-                    Tween(begin: 4.0, end: 0.0).transform(cardFocusFactor);
+                final curveTween = CurveTween(curve: Curves.easeInOut);
+
+                final scale = Tween(begin: 1.0, end: .85)
+                    .chain(curveTween)
+                    .transform(cardFocusFactor);
+                final opacity = Tween(begin: .25, end: .15)
+                    .chain(curveTween)
+                    .transform(cardFocusFactor);
+                final shadowOffset = Tween(begin: 4.0, end: 0.0)
+                    .chain(curveTween)
+                    .transform(cardFocusFactor);
 
                 return Center(
                   child: Transform.scale(
