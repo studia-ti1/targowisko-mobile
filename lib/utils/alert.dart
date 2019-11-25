@@ -23,12 +23,16 @@ class Alert {
               style: StyleProvider.of(context).font.bold.copyWith(fontSize: 16),
             ),
             content: content != null
-                ? Text(
-                    content,
-                    style: StyleProvider.of(context)
-                        .font
-                        .normal
-                        .copyWith(fontSize: 13),
+                ? Scrollbar(
+                    child: SingleChildScrollView(
+                      child: Text(
+                        content,
+                        style: StyleProvider.of(context)
+                            .font
+                            .normal
+                            .copyWith(fontSize: 13),
+                      ),
+                    ),
                   )
                 : null,
             actions: <Widget>[
