@@ -20,6 +20,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   int _currentPage = _initialPageNumber;
   bool _canFetch = true;
   bool _loading = false;
+  bool _isFetchingNext = false;
 
   List<ProductModel> _products = [];
   final TextEditingController _controller = TextEditingController();
@@ -45,6 +46,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
     try {
       setState(() {
         _loading = true;
+        if (pageNumber != _initialPageNumber) _isFetchingNext = true;
       });
       final products = await Api.product.fetch(
         pageNumber: pageNumber,
@@ -53,6 +55,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       );
       setState(() {
         _loading = false;
+        _isFetchingNext = false;
         _currentPage = pageNumber;
         _canFetch = perPage == products.length;
         if (pageNumber == _initialPageNumber) {
@@ -117,7 +120,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                 (BuildContext context, int index) {
                   if (index == _products.length) {
                     _fetchNext();
-                    return _loading
+                    return _loading && _isFetchingNext
                         ? Container(
                             alignment: Alignment.center,
                             margin: const EdgeInsets.only(top: 15),
@@ -126,14 +129,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   }
 
                   final product = _products[index];
-                  return ListItem(
-                    title: product.name,
-                    description: product.description,
-                    averageRating: product.averageRating,
-                    // TODO:
-                    onTap: () {},
-                    child: ListItemPicture(
-                      imageUrl: product.picture,
+                  return AnimatedOpacity(
+                    duration: const Duration(milliseconds: 300),
+                    opacity: !_isFetchingNext && _loading ? 0.5 : 1,
+                    child: ListItem(
+                      title: product.name,
+                      description: product.description,
+                      averageRating: product.averageRating,
+                      // TODO:
+                      onTap: () {},
+                      child: ListItemPicture(
+                        imageUrl: product.picture,
+                      ),
                     ),
                   );
                 },
