@@ -71,7 +71,10 @@ class _AppShadows {
 
 class _AppBorders {
   final _AppInputBorders input;
-  _AppBorders(AppColors colors) : input = _AppInputBorders(colors);
+  final _AppBoxBorders box;
+  _AppBorders(AppColors colors)
+      : input = _AppInputBorders(colors),
+        box = _AppBoxBorders(colors);
 }
 
 class _AppInputBorders {
@@ -86,6 +89,15 @@ class _AppInputBorders {
           ),
         ),
         noBorder = OutlineInputBorder(borderSide: BorderSide.none);
+}
+
+class _AppBoxBorders {
+  final BoxBorder primary;
+  _AppBoxBorders(AppColors colors)
+      : primary = Border.all(
+          color: colors.content,
+          width: 1,
+        );
 }
 
 class _AppFonts {
