@@ -33,13 +33,13 @@ class _AddProductScreenState extends State<AddProductScreen> {
         price: (price * 100).toInt(),
       );
     } on FormatException catch (err) {
-      await Alert.open(
+      Alert.open(
         context,
         title: "Podaj poprawną kwotę",
         content: "Podano: ${_price.text}",
       );
     } on ApiException catch (err) {
-      await Alert.open(
+      Alert.open(
         context,
         title: "Wystąpił błąd zapytania",
         content: err.message,
