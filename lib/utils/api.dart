@@ -127,15 +127,21 @@ class _Product {
     int category,
     String description, // ?
   }) async {
+    final params = <String, String>{};
+    if (name != null) params["name"] = name.toString();
+    if (description != null) params["description"] = description.toString();
+    if (picture != null) params["picture"] = picture.toString();
+    if (category != null) params["category"] = category.toString();
+    if (price != null) params["price"] = price.toString();
+
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/products.json",
+      params,
+    );
+
     final result = await http.post(
-      'https://targowisko.herokuapp.com/api/v1/products',
-      body: <String, dynamic>{
-        "name": name,
-        "description": description,
-        "picture": picture,
-        "price": price,
-        "category": category,
-      },
+      url,
       headers: {
         'access-token': Api.accesToken,
       },
@@ -188,7 +194,6 @@ class _Product {
     if (pageNumber != null) params["page"] = pageNumber.toString();
     if (marketId != null) params["market_id"] = marketId.toString();
 
-    print("Params");
     print(params);
 
     final url = Uri.https(
