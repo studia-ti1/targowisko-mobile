@@ -10,6 +10,18 @@ import 'owner_model.dart';
 
 import 'package:http/http.dart' as http;
 
+class ProductCategories {
+  ProductCategories._();
+
+  static const int vegetables = 0,
+      fruits = 1,
+      automotive = 2,
+      animals = 3,
+      antiques = 4,
+      real_estate = 5,
+      food = 6;
+}
+
 class ProductModel {
   final int id;
   final String name;
