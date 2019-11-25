@@ -65,7 +65,7 @@ class _ExtentListScaffoldState extends State<ExtentListScaffold>
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     // margin: EdgeInsets.only(top: topPadding + 50),
-                    children: [widget.navChild],
+                    children: [if (widget.navChild != null) widget.navChild],
                   ),
                   builder: (context, child) {
                     return Transform.scale(

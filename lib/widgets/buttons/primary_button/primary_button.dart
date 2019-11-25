@@ -13,7 +13,7 @@ class PrimaryButton extends StatelessWidget {
     this.icon,
     @required this.label,
     @required this.onPressed,
-    this.loading,
+    this.loading = false,
   }) : assert(label != null);
 
   @override
@@ -34,7 +34,8 @@ class PrimaryButton extends StatelessWidget {
             child: loading
                 ? CircularProgressIndicator(
                     valueColor: AlwaysStoppedAnimation(
-                        StyleProvider.of(context).colors.primaryContent),
+                      StyleProvider.of(context).colors.primaryContent,
+                    ),
                   )
                 : Stack(
                     children: [
