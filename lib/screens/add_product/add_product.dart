@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
+import 'package:targowisko/utils/image_picker_util.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/buttons/primary_button/primary_button.dart';
 import 'package:targowisko/widgets/input/input.dart';
@@ -16,6 +19,8 @@ class _AddProductScreenState extends State<AddProductScreen> {
   final TextEditingController _description = TextEditingController();
   final TextEditingController _name = TextEditingController();
   final TextEditingController _price = TextEditingController();
+  File _image;
+  bool _hasImage = false;
 
   void _addProduct() async {
     try {
@@ -29,7 +34,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
         description: _description.text,
         name: _name.text,
         category: 1,
-        picture: null,
+        picture: _hasImage ? _image : null,
         price: (price * 100).toInt(),
       );
     } on FormatException catch (err) {
@@ -57,6 +62,26 @@ class _AddProductScreenState extends State<AddProductScreen> {
     }
   }
 
+  void _pickOrRemoveImage() async {
+    if (_hasImage) {
+      setState(() {
+        _hasImage = false;
+      });
+      return;
+    }
+
+    File image = await ImagePickerUtil.pickImage(
+      context,
+    );
+
+    if (image == null) return;
+    await Future<void>.delayed(const Duration(milliseconds: 300));
+    setState(() {
+      _hasImage = true;
+      _image = image;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -77,16 +102,60 @@ class _AddProductScreenState extends State<AddProductScreen> {
                 ),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(20)),
-                  child: Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      onTap: () {},
-                      child: Icon(
-                        Icons.add_photo_alternate,
-                        color: StyleProvider.of(context).colors.primaryContent,
-                        size: 40,
+                  child: Stack(
+                    children: <Widget>[
+                      Positioned.fill(
+                        child: AnimatedSwitcher(
+                          duration: const Duration(milliseconds: 300),
+                          child: _hasImage
+                              ? Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: FileImage(_image),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  ),
+                                )
+                              : null,
+                        ),
                       ),
-                    ),
+                      Positioned.fill(
+                        child: Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: _pickOrRemoveImage,
+                            child: Padding(
+                              padding: const EdgeInsets.all(5),
+                              child: AnimatedAlign(
+                                curve: Curves.easeOut,
+                                alignment: _hasImage
+                                    ? Alignment.topLeft
+                                    : Alignment.center,
+                                duration: const Duration(milliseconds: 300),
+                                child: AnimatedSwitcher(
+                                  duration: const Duration(milliseconds: 300),
+                                  child: _hasImage
+                                      ? Icon(
+                                          Icons.delete_forever,
+                                          color: StyleProvider.of(context)
+                                              .colors
+                                              .primaryContent,
+                                          size: 40,
+                                        )
+                                      : Icon(
+                                          Icons.add_photo_alternate,
+                                          color: StyleProvider.of(context)
+                                              .colors
+                                              .primaryContent,
+                                          size: 40,
+                                        ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
