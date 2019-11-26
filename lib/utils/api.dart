@@ -129,29 +129,35 @@ class _Product {
   }) async {
     assert(category != null);
 
-    final params = <String, String>{};
-    params["category"] = category.toString();
-
-    if (name != null) params["name"] = name.toString();
-    if (description != null) params["description"] = description.toString();
-    if (picture != null) params["picture"] = picture.toString();
-    if (price != null) params["price"] = price.toString();
-
     final url = Uri.https(
       "targowisko.herokuapp.com",
       "api/v1/products.json",
-      params,
     );
+    final request = http.MultipartRequest("POST", url);
+    print(category);
 
-    final result = await http.post(
-      url,
-      headers: {
-        'access-token': Api.accesToken,
-      },
-    );
+    request.fields["category"] = category.toString();
 
-    if (result.statusCode >= 300) throw ApiException(message: result.body);
-    return ProductModel.fromJson(json.decode(result.body));
+    if (name != null) request.fields["name"] = name.toString();
+    if (description != null)
+      request.fields["description"] = description.toString();
+    if (price != null) request.fields["price"] = price.toString();
+
+    if (picture != null) {
+      final file = await http.MultipartFile.fromPath("picture", picture.path);
+      request.files.add(file);
+    }
+
+    request.headers["access-token"] = Api.accesToken;
+
+    http.StreamedResponse response = await request.send();
+
+    final body = await response.stream.bytesToString();
+
+    print(body);
+
+    if (response.statusCode >= 300) throw ApiException(message: body);
+    return ProductModel.fromJson(json.decode(body));
   }
 
   Future<List<ProductModel>> getMyProducts() async {
