@@ -124,14 +124,17 @@ class _Product {
     String name,
     File picture,
     int price,
-    int category,
     String description, // ?
+    @required int category,
   }) async {
+    assert(category != null);
+
     final params = <String, String>{};
+    params["category"] = category.toString();
+
     if (name != null) params["name"] = name.toString();
     if (description != null) params["description"] = description.toString();
     if (picture != null) params["picture"] = picture.toString();
-    if (category != null) params["category"] = category.toString();
     if (price != null) params["price"] = price.toString();
 
     final url = Uri.https(
