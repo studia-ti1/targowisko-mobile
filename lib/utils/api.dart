@@ -125,7 +125,7 @@ class _Product {
     File picture,
     int price,
     String description, // ?
-    @required int category,
+    @required ProductCategory category,
   }) async {
     assert(category != null);
 
@@ -136,7 +136,7 @@ class _Product {
     final request = http.MultipartRequest("POST", url);
     print(category);
 
-    request.fields["category"] = category.toString();
+    request.fields["category"] = category.value;
 
     if (name != null) request.fields["name"] = name.toString();
     if (description != null)
