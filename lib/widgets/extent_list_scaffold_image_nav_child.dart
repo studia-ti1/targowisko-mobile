@@ -14,20 +14,25 @@ class ExtentListScaffoldImageNavChild extends StatelessWidget {
     return Expanded(
       child: Transform.scale(
         scale: 1.2,
-        child: Stack(
-          children: <Widget>[
-            CachedNetworkImage(
-              fit: BoxFit.cover,
-              width: MediaQuery.of(context).size.width,
-              imageUrl: imageUrl,
-            ),
-            Container(
-              constraints: BoxConstraints.expand(),
-              decoration: BoxDecoration(
-                color: Colors.black38,
+        child: LayoutBuilder(
+          builder: (context, constraints) => Stack(
+            children: <Widget>[
+              CachedNetworkImage(
+                fit: BoxFit.cover,
+                imageUrl: imageUrl,
+                height: constraints.maxHeight,
+                width: constraints.maxWidth,
               ),
-            )
-          ],
+              Positioned.fill(
+                child: Container(
+                  constraints: BoxConstraints.expand(),
+                  decoration: BoxDecoration(
+                    color: Colors.black38,
+                  ),
+                ),
+              )
+            ],
+          ),
         ),
       ),
     );

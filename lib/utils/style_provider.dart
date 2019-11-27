@@ -176,7 +176,7 @@ class _AppGradients {
           end: Alignment.bottomRight,
           colors: [colors.primaryAccent, colors.secondaryAccent],
         ),
-        cardGradient3 = LinearGradient(
+        cardGradient3 = const LinearGradient(
           begin: Alignment.bottomRight,
           end: Alignment.topLeft,
           colors: [
