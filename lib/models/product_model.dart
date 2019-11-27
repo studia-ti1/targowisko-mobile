@@ -4,22 +4,83 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/rating_model.dart';
 import 'package:targowisko/utils/api.dart';
+import 'package:targowisko/utils/style_provider.dart';
 
 import 'market_model.dart';
 import 'owner_model.dart';
 
 import 'package:http/http.dart' as http;
 
-class ProductCategories {
-  ProductCategories._();
+class ProductCategory {
+  const ProductCategory._(this._value, this._name, this._assetName);
 
-  static const int vegetables = 0,
-      fruits = 1,
-      automotive = 2,
-      animals = 3,
-      antiques = 4,
-      real_estate = 5,
-      food = 6;
+  final String _value;
+  final String _name;
+  final String _assetName;
+
+  String get value => _value;
+  String get name => _name;
+  String get assetName => _assetName;
+
+  static const ProductCategory electronics = ProductCategory._(
+    "electronics",
+    "Elektronika",
+    CategoriesAssets.electronics,
+  );
+  static const ProductCategory clothing = ProductCategory._(
+    "clothing",
+    "Odziez",
+    CategoriesAssets.clothing,
+  );
+  static const ProductCategory cosmetics = ProductCategory._(
+    "cosmetics",
+    "Kosmetyki",
+    CategoriesAssets.cosmetics,
+  );
+  static const ProductCategory other = ProductCategory._(
+    "others",
+    "Inne",
+    CategoriesAssets.other,
+  );
+  static const ProductCategory automotive = ProductCategory._(
+    "automotive",
+    "Motoryzacja",
+    CategoriesAssets.automotive,
+  );
+  static const ProductCategory animals = ProductCategory._(
+    "animals",
+    "Zwierzęta",
+    CategoriesAssets.animals,
+  );
+  static const ProductCategory antiques = ProductCategory._(
+    "antiques",
+    "Antyki",
+    CategoriesAssets.antiques,
+  );
+  static const ProductCategory realEstate = ProductCategory._(
+    "real_estate",
+    "Nieruchomości",
+    CategoriesAssets.realEstate,
+  );
+  static const ProductCategory food = ProductCategory._(
+    "food",
+    "Żywność",
+    CategoriesAssets.food,
+  );
+
+  static const allCategories = [
+    // vegetables,
+    // fruits,
+    food,
+    clothing,
+    cosmetics,
+    automotive,
+    animals,
+    antiques,
+    realEstate,
+    electronics,
+    other,
+  ];
 }
 
 class ProductModel {
