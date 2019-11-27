@@ -93,7 +93,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
     if (image == null) return;
 
-    await Future<void>.delayed(const Duration(milliseconds: 300));
+    // await Future<void>.delayed(const Duration(milliseconds: 300));
     setState(() {
       _hasImage = true;
       _image = image;
