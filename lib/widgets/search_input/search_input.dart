@@ -103,7 +103,7 @@ class __SearchInputState extends State<_SearchInput> {
     return ClipRRect(
       borderRadius: BorderRadius.circular(50),
       child: Container(
-        height: 50,
+        height: 51,
         decoration: BoxDecoration(
           color: StyleProvider.of(context).colors.searchBackground,
         ),
