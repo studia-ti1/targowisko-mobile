@@ -110,7 +110,7 @@ class _ExtentListScaffoldState extends State<ExtentListScaffold>
                 ),
                 if (widget.onLikePress != null)
                   Transform.translate(
-                    offset: Offset(0, 75),
+                    offset: Offset(0, 51 + topPadding),
                     child: Container(
                       margin: const EdgeInsets.only(right: 40),
                       alignment: Alignment.topRight,
