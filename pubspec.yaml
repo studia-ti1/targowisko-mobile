@@ -41,6 +41,17 @@ flutter:
     - assets/product_icon.png
     - assets/seller_icon.png
     - assets/coin.png
+    - assets/animals.jpg
+    - assets/antiques.jpg
+    - assets/automotive.jpg
+    - assets/food.jpg
+    - assets/fruits.jpg
+    - assets/real_estate.jpg
+    - assets/vegetables.jpg
+    - assets/clothing.jpg
+    - assets/cosmetics.jpg
+    - assets/other.jpg
+    - assets/electronics.jpg
 
   fonts:
     - family: pacifico

@@ -195,3 +195,19 @@ class _AppAssets {
   final sellerIcon = 'assets/seller_icon.png';
   final coin = 'assets/coin.png';
 }
+
+class CategoriesAssets {
+  CategoriesAssets._();
+
+  static const animals = 'assets/animals.jpg';
+  static const antiques = 'assets/antiques.jpg';
+  static const automotive = 'assets/automotive.jpg';
+  static const food = 'assets/food.jpg';
+  static const fruits = 'assets/fruits.jpg';
+  static const realEstate = 'assets/real_estate.jpg';
+  static const vegetables = 'assets/vegetables.jpg';
+  static const electronics = 'assets/electronics.jpg';
+  static const clothing = 'assets/clothing.jpg';
+  static const cosmetics = 'assets/cosmetics.jpg';
+  static const other = 'assets/other.jpg';
+}
