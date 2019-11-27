@@ -1,7 +1,10 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
+import 'package:targowisko/screens/market/market_screen.dart';
 import 'package:targowisko/utils/style_provider.dart';
+
+import '../../../routes.dart';
 
 class MarketCard extends StatelessWidget {
   const MarketCard({
@@ -14,14 +17,11 @@ class MarketCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Stack(
       children: <Widget>[
-        FadeInImage(
+        CachedNetworkImage(
           width: double.infinity,
           height: double.infinity,
           fit: BoxFit.cover,
-          image: CachedNetworkImageProvider(market.imageUrl),
-          placeholder: AssetImage(
-            StyleProvider.of(context).asset.marketDefaultBackground,
-          ),
+          imageUrl: market.imageUrl,
         ),
         Container(
           width: double.infinity,
@@ -47,6 +47,18 @@ class MarketCard extends StatelessWidget {
             ],
           ),
         ),
+        Material(
+          color: Colors.transparent,
+          child: InkWell(
+            onTap: () {
+              Navigator.pushNamed(
+                context,
+                Routes.market,
+                arguments: MarketScreenArgs(market: market),
+              );
+            },
+          ),
+        )
       ],
     );
   }
