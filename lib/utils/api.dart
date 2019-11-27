@@ -134,7 +134,6 @@ class _Product {
       "api/v1/products.json",
     );
     final request = http.MultipartRequest("POST", url);
-    print(category);
 
     request.fields["category"] = category.value;
 
@@ -154,7 +153,6 @@ class _Product {
 
     final body = await response.stream.bytesToString();
 
-    print(body);
 
     if (response.statusCode >= 300) throw ApiException(message: body);
     return ProductModel.fromJson(json.decode(body));
@@ -203,7 +201,6 @@ class _Product {
     if (pageNumber != null) params["page"] = pageNumber.toString();
     if (marketId != null) params["market_id"] = marketId.toString();
 
-    print(params);
 
     final url = Uri.https(
       "targowisko.herokuapp.com",
