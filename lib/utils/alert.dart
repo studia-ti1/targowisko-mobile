@@ -11,8 +11,10 @@ class Alert {
     VoidCallback onCancel,
     String confirmLabel = "akceptuj",
     String cancelLabel = "anuluj",
+    bool withStackTrace = true,
   }) {
     assert(title != null);
+    final stackTrace =  StackTrace.current.toString();
     return showDialog<void>(
         context: context,
         barrierDismissible: true,
@@ -26,7 +28,9 @@ class Alert {
                 ? Scrollbar(
                     child: SingleChildScrollView(
                       child: Text(
-                        content,
+                        withStackTrace
+                            ? "${content}\n\n${stackTrace}"
+                            : content,
                         style: StyleProvider.of(context)
                             .font
                             .normal
