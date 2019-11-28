@@ -55,6 +55,14 @@ class AppMenu extends StatelessWidget {
                 },
               ),
               _AppMenuElement(
+                title: "Dodaj market",
+                icon: Icons.add,
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.addMarket);
+                  closeMenu();
+                },
+              ),
+              _AppMenuElement(
                 title: "Ja",
                 icon: Icons.person,
                 onTap: () {
