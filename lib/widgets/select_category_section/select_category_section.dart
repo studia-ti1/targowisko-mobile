@@ -38,12 +38,12 @@ class _SelectCateogryWidgetState extends State<SelectCateogryWidget>
         key: _keyRed,
         alignment: Alignment.center,
         vsync: this,
-        duration: const Duration(milliseconds: 300),
+        duration: const Duration(milliseconds: 200),
         child: AnimatedSwitcher(
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 0),
           child: _hasCategory
               ? _AnimatedCategory(
-                  delay: const Duration(milliseconds: 600),
+                  delay: const Duration(milliseconds: 0),
                   initialHeight: animatedSizeSize.height,
                   onRemove: widget.onRemove,
                   selected: widget.selected,

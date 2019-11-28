@@ -59,15 +59,25 @@ class Api {
     return ProductModel.fromJson(json.decode(result.body));
   }
 
-  static Future<http.Response> getAllEventsFromFb() async {
+  static Future<List<MarketModel>> getAllEventsFromFb() async {
     final result = await http.post(
       'https://targowisko.herokuapp.com/api/v1/markets/fetch_from_api.json',
       headers: {
         'access-token': Api.accesToken,
       },
     );
+
+    print(result.body);
+
     if (result.statusCode >= 300) throw ApiException(message: result.body);
-    return result;
+
+    final List jsonEventList = jsonDecode(result.body);
+
+    final markets = jsonEventList.map((dynamic market) {
+      return MarketModel.fromJson(market);
+    }).toList();
+
+    return markets;
   }
 }
 
@@ -82,7 +92,7 @@ class _Market {
 
   Future<List<MarketModel>> fetch() async {
     final result = await http.get(
-      'https://targowisko.herokuapp.com/api/v1/markets/',
+      'https://targowisko.herokuapp.com/api/v1/markets.json',
       headers: {
         'access-token': Api.accesToken,
       },
@@ -153,14 +163,13 @@ class _Product {
 
     final body = await response.stream.bytesToString();
 
-
     if (response.statusCode >= 300) throw ApiException(message: body);
     return ProductModel.fromJson(json.decode(body));
   }
 
   Future<List<ProductModel>> getMyProducts() async {
     final result = await http.get(
-      'https://targowisko.herokuapp.com/api/v1/products',
+      'https://targowisko.herokuapp.com/api/v1/products.json',
       headers: {
         'access-token': Api.accesToken,
       },
@@ -201,10 +210,9 @@ class _Product {
     if (pageNumber != null) params["page"] = pageNumber.toString();
     if (marketId != null) params["market_id"] = marketId.toString();
 
-
     final url = Uri.https(
       "targowisko.herokuapp.com",
-      "api/v1/products",
+      "api/v1/products.json",
       params,
     );
 
