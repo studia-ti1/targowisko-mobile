@@ -14,7 +14,7 @@ class Alert {
     bool withStackTrace = true,
   }) {
     assert(title != null);
-    final stackTrace =  StackTrace.current.toString();
+    final stackTrace = StackTrace.current.toString();
     return showDialog<void>(
         context: context,
         barrierDismissible: true,
