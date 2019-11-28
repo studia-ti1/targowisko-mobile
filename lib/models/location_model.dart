@@ -25,7 +25,7 @@ class LocationDetails {
         street = json["street"],
         country = json["country"],
         latitude = json["latitude"],
-        longitude = json["longitude"];
+        longitude = (json["longitude"] as dynamic).toDouble();
 
   String get locationString => "${street}, ${zip} ${city}";
 }

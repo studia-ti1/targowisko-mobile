@@ -24,7 +24,7 @@ class MarketModel {
   final double averageRating;
 
   MarketModel.fromJson(dynamic json)
-      : id = json["id"],
+      : id = int.tryParse(json["id"].toString()),
         name = json["name"],
         averageRating = json["average_rating"],
         description = json["description"],
@@ -46,7 +46,6 @@ class MarketModel {
             : (json["market_ratings"] as List)
                 .map((dynamic rating) => RatingModel.fromJson(rating))
                 .toList();
-
 
   Future<MarketModel> update({
     String name,
