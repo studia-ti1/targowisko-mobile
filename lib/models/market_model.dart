@@ -35,7 +35,8 @@ class MarketModel {
         owner =
             json["owner"] != null ? OwnerModel.fromJson(json["owner"]) : null,
         userId = json["user"] != null ? json["user"]["id"] : null,
-        imageUrl = json["image"] != null ? json["image"]["url"] : null,
+        imageUrl = json["photo"] ??
+            (json["image"] != null ? json["image"]["url"] : null),
         products = json["products"] == null
             ? null
             : (json["products"] as List)
@@ -45,7 +46,11 @@ class MarketModel {
             ? null
             : (json["market_ratings"] as List)
                 .map((dynamic rating) => RatingModel.fromJson(rating))
-                .toList();
+                .toList() {
+    print(json["photo"]);
+  }
+
+  static String _getPhotoFromJson(dynamic json) {}
 
   Future<MarketModel> update({
     String name,

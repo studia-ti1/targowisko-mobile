@@ -67,7 +67,7 @@ class Api {
       },
     );
 
-    print(result.body);
+    // print(result.body);
 
     if (result.statusCode >= 300) throw ApiException(message: result.body);
 
@@ -116,7 +116,9 @@ class _Market {
   Future<bool> create(List<String> facebookEventIds) async {
     final result = await http.post(
       'https://targowisko.herokuapp.com/api/v1/create_markets',
-      body: <String, dynamic>{"facebook_event_ids": facebookEventIds},
+      body: <String, dynamic>{
+        "facebook_event_ids": json.encode(facebookEventIds)
+      },
       headers: {
         'access-token': Api.accesToken,
       },
