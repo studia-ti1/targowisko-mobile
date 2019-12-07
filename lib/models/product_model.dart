@@ -38,7 +38,7 @@ class ProductCategory {
     CategoriesAssets.cosmetics,
   );
   static const ProductCategory other = ProductCategory._(
-    "others",
+    "other",
     "Inne",
     CategoriesAssets.other,
   );
