@@ -6,6 +6,8 @@ import 'package:targowisko/models/product_model.dart';
 import 'package:targowisko/screens/market/widgets/icon_section.dart';
 import 'package:targowisko/screens/market/widgets/organiser_section.dart';
 import 'package:targowisko/screens/market/widgets/section.dart';
+import 'package:targowisko/utils/alert.dart';
+import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/animated/animated_rating_coins.dart';
 import 'package:targowisko/widgets/avatar.dart';
@@ -36,9 +38,51 @@ class MarketScreen extends StatefulWidget {
 class _MarketScreenState extends State<MarketScreen> {
   // TODO;
   bool _isLiked = false;
+  bool _canLike = false;
 
-  void _likeMarket() {
-    // TODO:
+  @override
+  void initState() {
+    _getMarket();
+    super.initState();
+  }
+
+  Future<MarketModel> _getMarket() async {
+    MarketModel market;
+    try {
+      market = await Api.market.getOne(widget.args.market.id);
+    } on ApiException catch (err) {
+      await Alert.open(
+        context,
+        title: "Wystąpił nieoczekiwany błąd",
+        content: err.message,
+      );
+      return null;
+    } catch (err) {
+      await Alert.open(
+        context,
+        title: "Wystąpił nieoczekiwany błąd",
+        content: err.toString(),
+      );
+      return null;
+    }
+    if (market.going == false) {
+      setState(() {
+        _canLike = true;
+      });
+    }
+    return market;
+  }
+
+  void _likeMarket() async {
+    try {
+      await Api.attendMarket(widget.args.market.id);
+    } on ApiException catch (err) {
+      Alert.open(
+        context,
+        title: "Wystąpił nieoczekiwany błąd",
+        content: err.message,
+      );
+    }
   }
 
   void _openSellerScreen() {
@@ -50,7 +94,7 @@ class _MarketScreenState extends State<MarketScreen> {
     final market = widget.args.market;
     return ExtentListScaffold(
       liked: _isLiked,
-      onLikePress: _likeMarket,
+      onLikePress: _canLike ? _likeMarket : null,
       title: market?.name ?? "-",
       navChild: ExtentListScaffoldImageNavChild(
         imageUrl: market.imageUrl,
@@ -201,7 +245,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               child: AutoSizeText(
-                "Jabłko",
+                "Jab��ko",
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

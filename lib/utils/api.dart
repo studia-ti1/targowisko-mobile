@@ -30,6 +30,20 @@ class Api {
     if (result.statusCode >= 300) throw ApiException(message: result.body);
   }
 
+  static Future<void> attendMarket(int marketId) async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/markets/${marketId}/attend.json",
+    );
+    final result = await http.post(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+  }
+
   static Future<OwnerModel> getAboutMe() async {
     final url = Uri.https(
       "targowisko.herokuapp.com",
@@ -153,6 +167,18 @@ class _Market {
 
     if (result.statusCode >= 300) throw ApiException(message: result.body);
     return json.decode(result.body)["success"] == true;
+  }
+
+  Future<MarketModel> getOne(int marektId) async {
+    final result = await http.get(
+      'https://targowisko.herokuapp.com/api/v1/markets/$marektId',
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return MarketModel.fromJson(json.decode(result.body));
   }
 }
 

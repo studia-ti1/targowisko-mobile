@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:targowisko/utils/alert.dart';
+import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 
 import 'nav_bar.dart';
@@ -108,7 +110,7 @@ class _ExtentListScaffoldState extends State<ExtentListScaffold>
                     ),
                   ),
                 ),
-                if (widget.onLikePress != null)
+                if (widget.onLikePress != null && !widget.liked)
                   Transform.translate(
                     offset: Offset(0, 51 + topPadding),
                     child: Container(
@@ -159,6 +161,34 @@ class _LikeButton extends StatefulWidget {
 class __LikeButtonState extends State<_LikeButton>
     with SingleTickerProviderStateMixin {
   AnimationController _controller;
+  bool _loading = false;
+  bool _done = false;
+
+  void _like() async {
+    if (_done) return;
+
+    setState(() {
+      _loading = true;
+    });
+
+    try {
+      await widget.onLikePress();
+    } on ApiException catch (err) {
+      await Alert.open(
+        context,
+        title: "Wystąpił nieoczekiwany błąd",
+        content: err.message,
+      );
+
+      return;
+    } finally {
+      setState(() {
+        _loading = false;
+      });
+    }
+
+    await _doneAnim();
+  }
 
   @override
   void initState() {
@@ -174,6 +204,18 @@ class __LikeButtonState extends State<_LikeButton>
       curve: Curves.easeOut,
       duration: const Duration(milliseconds: 300),
     );
+  }
+
+  Future<void> _doneAnim() async {
+    await _controller.animateTo(
+      0.0,
+      curve: Curves.easeIn,
+      duration: const Duration(milliseconds: 150),
+    );
+    await Future<void>.delayed(const Duration(milliseconds: 100));
+    setState(() {
+      _done = true;
+    });
   }
 
   @override
@@ -193,16 +235,25 @@ class __LikeButtonState extends State<_LikeButton>
               color: widget.liked
                   ? StyleProvider.of(context).colors.primaryAccent
                   : StyleProvider.of(context).colors.primaryBackground,
-              child: InkWell(
-                child: widget.liked
-                    ? Icon(
-                        Icons.directions_walk,
-                        color:
-                            StyleProvider.of(context).colors.primaryBackground,
-                      )
-                    : const Icon(Icons.directions_walk),
-                onTap: widget.onLikePress,
-              ),
+              child: _loading
+                  ? Center(
+                      child: CircularProgressIndicator(
+                        valueColor: AlwaysStoppedAnimation(
+                          StyleProvider.of(context).colors.primaryAccent,
+                        ),
+                      ),
+                    )
+                  : InkWell(
+                      child: widget.liked
+                          ? Icon(
+                              Icons.directions_walk,
+                              color: StyleProvider.of(context)
+                                  .colors
+                                  .primaryBackground,
+                            )
+                          : const Icon(Icons.directions_walk),
+                      onTap: _like,
+                    ),
             ),
           ),
         ),
