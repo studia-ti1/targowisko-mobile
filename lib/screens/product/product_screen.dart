@@ -24,9 +24,15 @@ class _ProductScreenState extends State<ProductScreen> {
   @override
   Widget build(BuildContext context) {
     return ExtentListScaffold(
-      navChild: ExtentListScaffoldImageNavChild(
-        imageUrl: widget.product.picture,
-      ),
+      navChild: widget.product.picture == null
+          ? Image.asset(
+              StyleProvider.of(context).asset.productIcon,
+              width: 100,
+              height: 100,
+            )
+          : ExtentListScaffoldImageNavChild(
+              imageUrl: widget.product.picture,
+            ),
       title: widget.product.name,
       child: ListView(
         children: <Widget>[
