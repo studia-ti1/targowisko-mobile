@@ -19,7 +19,7 @@ class Api {
   static Future<void> setFbAvatar() async {
     final url = Uri.https(
       "targowisko.herokuapp.com",
-      "api/v1/api_update_avatar",
+      "api/v1/users/api_update_avatar.json",
     );
     final result = await http.post(
       url,

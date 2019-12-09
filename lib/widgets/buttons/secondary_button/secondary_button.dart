@@ -3,10 +3,12 @@ import 'package:targowisko/utils/style_provider.dart';
 
 class SecondaryButton extends StatelessWidget {
   final bool loading;
+  final VoidCallback onTap;
 
   const SecondaryButton({
     Key key,
     @required this.loading,
+    @required this.onTap,
   }) : super(key: key);
 
   @override
@@ -39,9 +41,7 @@ class SecondaryButton extends StatelessWidget {
             Material(
               color: Colors.transparent,
               child: InkWell(
-                onTap: () {
-                  print("PREDD");
-                },
+                onTap: onTap,
               ),
             )
           ],

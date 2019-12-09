@@ -1,9 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:targowisko/utils/alert.dart';
+import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/buttons/secondary_button/secondary_button.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 
-class UserScreen extends StatelessWidget {
+class UserScreen extends StatefulWidget {
+  @override
+  _UserScreenState createState() => _UserScreenState();
+}
+
+class _UserScreenState extends State<UserScreen> {
+  bool _setFbAvatarLoading = false;
+
+  Future<void> _setFbAvatar() async {
+    setState(() {
+      _setFbAvatarLoading = true;
+    });
+    try {
+      await Api.setFbAvatar();
+    } on ApiException catch (err) {
+      await Alert.open(
+        context,
+        title: "Wystąpił nieoczekiwany bład",
+        content: err.message,
+      );
+    }
+    setState(() {
+      _setFbAvatarLoading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExtentListScaffold(
@@ -17,7 +44,8 @@ class UserScreen extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(15, 30, 15, 15),
         children: <Widget>[
           SecondaryButton(
-            loading: true,
+            onTap: _setFbAvatar,
+            loading: _setFbAvatarLoading,
           ),
         ],
       ),
