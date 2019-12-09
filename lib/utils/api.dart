@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:targowisko/models/market_model.dart';
+import 'package:targowisko/models/owner_model.dart';
 import 'package:targowisko/models/product_model.dart';
 
 class Api {
@@ -14,6 +15,25 @@ class Api {
 
   static _Market market = _Market._();
   static _Product product = _Product._();
+
+  static Future<OwnerModel> getAboutMe(
+    int productId,
+    int marketId,
+  ) async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/about_me",
+    );
+    final result = await http.get(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+    print(result.body);
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return OwnerModel.fromJson(json.decode(result.body));
+  }
 
   static Future<ProductModel> addProductToMarket(
     int productId,

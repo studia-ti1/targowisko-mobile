@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
+import 'package:targowisko/models/owner_model.dart';
 import 'package:targowisko/screens/home/widgets/market_card.dart';
 import 'package:targowisko/screens/home/widgets/scaffold_with_menu.dart';
 import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
+import 'package:targowisko/utils/style_provider.dart';
+import 'package:targowisko/widgets/avatar.dart';
 import 'package:targowisko/widgets/sliders/element_slider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   List<MarketModel> _markets = [];
   bool _loading = true;
+  OwnerModel user;
 
   @override
   void didChangeDependencies() {
@@ -25,6 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _loading = true;
     });
+    user = await Api.getAboutMe(1, 1);
     List<MarketModel> result;
     try {
       result = await Api.market.fetch();
@@ -43,6 +48,43 @@ class _HomeScreenState extends State<HomeScreen> {
     return ScaffoldWithMenu(
       builder: ({openMenu, closeMenu}) => ListView(
         children: <Widget>[
+          if (user != null)
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: Row(
+                children: <Widget>[
+                  Avatar(
+                    nickname: user.firstName,
+                    imageUrl: user.avatar,
+                    size: 60,
+                  ),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: <Widget>[
+                      Text(
+                        "Witaj ${user.firstName}!",
+                        style: StyleProvider.of(context)
+                            .font
+                            .pacifico
+                            .copyWith(fontSize: 25),
+                      ),
+                      Text(
+                        "Dzisiaj jest dobry dzień na zakupy!",
+                        style: StyleProvider.of(context).font.normal.copyWith(
+                            color: StyleProvider.of(context)
+                                .colors
+                                .content
+                                .withOpacity(0.5)),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
           ElementSlider<MarketModel>(
             title: "Dostępne targi",
             elementBuilder: (context, market) => MarketCard(market: market),

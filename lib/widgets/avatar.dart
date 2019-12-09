@@ -4,11 +4,13 @@ import 'package:targowisko/utils/style_provider.dart';
 
 class Avatar extends StatelessWidget {
   final String imageUrl;
+  final String nickname;
   final double size;
 
   Avatar({
     @required this.imageUrl,
     @required this.size,
+    this.nickname,
   }) : assert(size != null);
 
   @override
@@ -25,7 +27,15 @@ class Avatar extends StatelessWidget {
           child: AnimatedSwitcher(
             duration: const Duration(milliseconds: 300),
             child: imageUrl == null
-                ? null
+                ? Center(
+                    child: Text(
+                      nickname != null ? nickname[0] : "",
+                      style: StyleProvider.of(context)
+                          .font
+                          .pacificoPrimary
+                          .copyWith(fontSize: size * 0.5),
+                    ),
+                  )
                 : CachedNetworkImage(
                     imageUrl: imageUrl,
                     height: size,
