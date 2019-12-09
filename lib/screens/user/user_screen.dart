@@ -25,10 +25,19 @@ class _UserScreenState extends State<UserScreen> {
         title: "Wystąpił nieoczekiwany bład",
         content: err.message,
       );
+      return;
+    } finally {
+      setState(() {
+        _setFbAvatarLoading = false;
+      });
     }
-    setState(() {
-      _setFbAvatarLoading = false;
-    });
+    await Alert.open(
+      context,
+      title: "Sukces",
+      content: "Zdjęcie zostało pomyślnie zaktualizowane",
+      confirmLabel: "Zrozumiano!",
+      withStackTrace: false,
+    );
   }
 
   @override

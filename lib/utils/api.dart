@@ -27,7 +27,6 @@ class Api {
         'access-token': Api.accesToken,
       },
     );
-    print(result.body);
     if (result.statusCode >= 300) throw ApiException(message: result.body);
   }
 
@@ -42,7 +41,6 @@ class Api {
         'access-token': Api.accesToken,
       },
     );
-    print(result.body);
     if (result.statusCode >= 300) throw ApiException(message: result.body);
     return OwnerModel.fromJson(json.decode(result.body));
   }
