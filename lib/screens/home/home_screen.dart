@@ -29,7 +29,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _loading = true;
     });
-    user = await Api.getAboutMe(1, 1);
+    user = await Api.getAboutMe();
     List<MarketModel> result;
     try {
       result = await Api.market.fetch();

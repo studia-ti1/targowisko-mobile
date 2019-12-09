@@ -16,10 +16,22 @@ class Api {
   static _Market market = _Market._();
   static _Product product = _Product._();
 
-  static Future<OwnerModel> getAboutMe(
-    int productId,
-    int marketId,
-  ) async {
+  static Future<void> setFbAvatar() async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/api_update_avatar",
+    );
+    final result = await http.post(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+    print(result.body);
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+  }
+
+  static Future<OwnerModel> getAboutMe() async {
     final url = Uri.https(
       "targowisko.herokuapp.com",
       "api/v1/about_me",
