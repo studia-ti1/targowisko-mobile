@@ -124,27 +124,28 @@ class _MarketScreenState extends State<MarketScreen> {
             ),
           ),
           Section(
-              titlePadding:
-                  const EdgeInsets.only(bottom: 15, left: 15, right: 15),
-              title: "Produkty",
-              // TODO:
-              onMorePress: () {},
-              // TODO:
-              child: market.products.isEmpty
-                  ? Center(
-                      child: Text(
-                        "Ten targ nie posiada produktów",
-                        textAlign: TextAlign.center,
-                        style: StyleProvider.of(context).font.normal,
-                      ),
-                    )
-                  : SquareSlider(
-                      itemBuilder: (context, index) {
-                        final product = market.products[index];
-                        return ProductCard(product: product);
-                      },
-                      itemCount: market.products.length,
-                    ))
+            titlePadding:
+                const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+            title: "Produkty",
+            // TODO:
+            onMorePress: () {},
+            // TODO:
+            child: market.products.isEmpty
+                ? Center(
+                    child: Text(
+                      "Ten targ nie posiada produktów",
+                      textAlign: TextAlign.center,
+                      style: StyleProvider.of(context).font.normal,
+                    ),
+                  )
+                : SquareSlider(
+                    itemBuilder: (context, index) {
+                      final product = market.products[index];
+                      return ProductCard(product: product);
+                    },
+                    itemCount: market.products.length,
+                  ),
+          )
         ],
       ),
     );
