@@ -193,6 +193,7 @@ class _AppAssets {
   final marketIcon = 'assets/market_icon.png';
   final productIcon = 'assets/product_icon.png';
   final sellerIcon = 'assets/seller_icon.png';
+  final user = 'assets/user.png';
   final coin = 'assets/coin.png';
 }
 
