@@ -1,15 +1,17 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
-import 'package:targowisko/models/market_model.dart';
+import 'package:targowisko/models/owner_model.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/avatar.dart';
 
 class OrganiserSection extends StatelessWidget {
-  final MarketModel market;
+  final OwnerModel owner;
+  final String role;
 
   OrganiserSection({
-    @required this.market,
-  }) : assert(market != null);
+    @required this.owner,
+    this.role,
+  }) : assert(owner != null);
 
   @override
   Widget build(BuildContext context) {
@@ -20,8 +22,8 @@ class OrganiserSection extends StatelessWidget {
             child: Padding(
               padding: const EdgeInsets.only(top: 10),
               child: Avatar(
-                // TODO:
-                imageUrl: null,
+                imageUrl: owner.avatar,
+                nickname: owner.firstName,
                 size: 60,
               ),
             ),
@@ -33,7 +35,7 @@ class OrganiserSection extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
                 AutoSizeText(
-                  market.owner?.fullName ?? "Nieznany",
+                  owner?.fullName ?? "Nieznany",
                   style: StyleProvider.of(context)
                       .font
                       .pacifico
@@ -44,7 +46,7 @@ class OrganiserSection extends StatelessWidget {
                 ),
                 SizedBox(height: 5),
                 Text(
-                  "Organizator",
+                  role ?? "Organizator",
                   style: StyleProvider.of(context)
                       .font
                       .normal

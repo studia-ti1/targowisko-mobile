@@ -46,9 +46,7 @@ class MarketModel {
             ? null
             : (json["market_ratings"] as List)
                 .map((dynamic rating) => RatingModel.fromJson(rating))
-                .toList() {
-    print(json["photo"]);
-  }
+                .toList();
 
   static String _getPhotoFromJson(dynamic json) {}
 

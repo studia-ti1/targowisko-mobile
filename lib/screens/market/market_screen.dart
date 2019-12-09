@@ -61,7 +61,7 @@ class _MarketScreenState extends State<MarketScreen> {
           Padding(
             padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
             child: OrganiserSection(
-              market: market,
+              owner: market.owner,
             ),
           ),
           Padding(

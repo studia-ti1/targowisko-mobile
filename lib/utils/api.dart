@@ -33,7 +33,7 @@ class Api {
   static Future<OwnerModel> getAboutMe() async {
     final url = Uri.https(
       "targowisko.herokuapp.com",
-      "api/v1/about_me",
+      "api/v1/about_me.json",
     );
     final result = await http.get(
       url,
@@ -97,8 +97,6 @@ class Api {
       },
     );
 
-    // print(result.body);
-
     if (result.statusCode >= 300) throw ApiException(message: result.body);
 
     final List jsonEventList = jsonDecode(result.body);
@@ -135,7 +133,6 @@ class _Market {
     jsonEventList.first["owner"] = null;
     jsonEventList.first["market_ratings"] = null;
 
-    debugPrint(jsonEventList.first.toString());
     final markets = jsonEventList.map((dynamic market) {
       return MarketModel.fromJson(market);
     }).toList();
@@ -147,7 +144,7 @@ class _Market {
     final result = await http.post(
       'https://targowisko.herokuapp.com/api/v1/create_markets',
       body: <String, dynamic>{
-        "facebook_event_ids": json.encode(facebookEventIds)
+        "facebook_events_ids": json.encode(facebookEventIds)
       },
       headers: {
         'access-token': Api.accesToken,

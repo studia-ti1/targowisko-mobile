@@ -12,7 +12,7 @@ class SectionTitle extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Text(
         title,
-        style: StyleProvider.of(context).font.pacifico.copyWith(fontSize: 16),
+        style: StyleProvider.of(context).font.pacifico.copyWith(fontSize: 18),
       ),
     );
   }

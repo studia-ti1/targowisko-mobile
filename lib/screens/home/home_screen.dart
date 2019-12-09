@@ -22,16 +22,24 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _fetchMarkets();
+    try {
+      _fetchMarkets();
+    } on ApiException catch (err) {
+      Alert.open(
+        context,
+        title: "Wystąpił nieoczekiwany bład",
+        content: err.message,
+      );
+    }
   }
 
   Future<void> _fetchMarkets() async {
     setState(() {
       _loading = true;
     });
-    user = await Api.getAboutMe();
     List<MarketModel> result;
     try {
+      user = await Api.getAboutMe();
       result = await Api.market.fetch();
     } on ApiException catch (err) {
       Alert.open(context, title: "Wystąpił błąd", content: err.message);
