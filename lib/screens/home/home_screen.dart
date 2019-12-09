@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ElementSlider<MarketModel>(
-            title: "Dostępne targi",
+            title: "Najpopularniejsze targi",
             elementBuilder: (context, market) => MarketCard(market: market),
             items: _markets,
           ),
