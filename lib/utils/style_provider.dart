@@ -195,6 +195,7 @@ class _AppAssets {
   final sellerIcon = 'assets/seller_icon.png';
   final user = 'assets/user.png';
   final coin = 'assets/coin.png';
+  final spinner = 'assets/food_spinner.gif';
 }
 
 class CategoriesAssets {

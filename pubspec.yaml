@@ -51,6 +51,7 @@ flutter:
     - assets/other.jpg
     - assets/electronics.jpg
     - assets/user.png
+    - assets/food_spinner.gif
 
   fonts:
     - family: pacifico

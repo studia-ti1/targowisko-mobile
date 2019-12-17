@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/models/owner_model.dart';
@@ -24,10 +25,10 @@ class _HomeScreenState extends State<HomeScreen> {
   List<OwnerModel> _sellers = [];
   bool _loading = true;
   OwnerModel user;
+  String _loadingText = "";
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void initState() {
     try {
       _fetchMarkets();
     } on ApiException catch (err) {
@@ -36,107 +37,164 @@ class _HomeScreenState extends State<HomeScreen> {
         title: "Wystąpił nieoczekiwany bład",
         content: err.message,
       );
+      super.initState();
     }
   }
 
   Future<void> _fetchMarkets() async {
     setState(() {
       _loading = true;
+      _loadingText = "Sprawdzamy kim jesteś...";
     });
-    List<MarketModel> result;
     try {
-      user = await Api.getAboutMe();
-      result = await Api.market.fetch(pageNumber: 1, perPage: 5);
-      _products = await Api.product.fetch(pageNumber: 2, perPage: 10);
-      _sellers = await Api.fetchUsers();
+      // user = await Api.getAboutMe();
+      setState(() {
+        _loadingText = "Poszukujemy najlpeszych marketów...";
+      });
+      // _markets = await Api.market.fetch(pageNumber: 1, perPage: 5);
+      setState(() {
+        _loadingText = "Testujemy jakość produktów...";
+      });
+      // _products = await Api.product.fetch(pageNumber: 2, perPage: 10);
+      setState(() {
+        _loadingText = "Weryfikujemy najlepszych sprzedawców...";
+      });
+      // _sellers = await Api.fetchUsers();
+      await Future<void>.delayed(Duration(milliseconds: 3000));
     } on ApiException catch (err) {
       Alert.open(context, title: "Wystąpił błąd", content: err.message);
       return;
     }
     setState(() {
-      _markets = result;
       _loading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return ScaffoldWithMenu(
-      builder: ({openMenu, closeMenu}) => ListView(
-        children: <Widget>[
-          if (user != null)
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: Row(
-                children: <Widget>[
-                  Avatar(
-                    nickname: user.firstName,
-                    imageUrl: user.avatar,
-                    size: 60,
+    return Scaffold(
+      body: AnimatedSwitcher(
+        child: _loading
+            ? Scaffold(
+                backgroundColor: Colors.white,
+                body: Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Image.asset(
+                          StyleProvider.of(context).asset.spinner,
+                          width: 100,
+                          fit: BoxFit.contain,
+                          color: Colors.black,
+                          colorBlendMode: BlendMode.color,
+                          repeat: ImageRepeat.noRepeat,
+                          filterQuality: FilterQuality.medium,
+                          height: 100,
+                        ),
+                        SizedBox(height: 15),
+                        AutoSizeText(
+                          _loadingText,
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: StyleProvider.of(context)
+                              .font
+                              .pacifico
+                              .copyWith(fontSize: 17),
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(
-                    width: 10,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Text(
-                        "Witaj ${user.firstName}!",
-                        style: StyleProvider.of(context)
-                            .font
-                            .pacifico
-                            .copyWith(fontSize: 25),
+                ),
+              )
+            : ScaffoldWithMenu(
+                builder: ({openMenu, closeMenu}) => ListView(
+                  children: <Widget>[
+                    if (user != null)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Row(
+                          children: <Widget>[
+                            Avatar(
+                              nickname: user.firstName,
+                              imageUrl: user.avatar,
+                              size: 60,
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisSize: MainAxisSize.min,
+                              children: <Widget>[
+                                Text(
+                                  "Witaj ${user.firstName}!",
+                                  style: StyleProvider.of(context)
+                                      .font
+                                      .pacifico
+                                      .copyWith(fontSize: 25),
+                                ),
+                                Text(
+                                  "Dzisiaj jest dobry dzień na zakupy!",
+                                  style: StyleProvider.of(context)
+                                      .font
+                                      .normal
+                                      .copyWith(
+                                          color: StyleProvider.of(context)
+                                              .colors
+                                              .content
+                                              .withOpacity(0.5)),
+                                ),
+                              ],
+                            )
+                          ],
+                        ),
                       ),
-                      Text(
-                        "Dzisiaj jest dobry dzień na zakupy!",
-                        style: StyleProvider.of(context).font.normal.copyWith(
-                            color: StyleProvider.of(context)
-                                .colors
-                                .content
-                                .withOpacity(0.5)),
+                    ElementSlider<ProductModel>(
+                      cardWidth: 130,
+                      title: "Najpopularniejsze produkty",
+                      elementBuilder: (context, product) => ProductCard(
+                        product: product,
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          Routes.product,
+                          arguments: product,
+                        ),
                       ),
-                    ],
-                  )
-                ],
+                      items: _products,
+                    ),
+                    ElementSlider<MarketModel>(
+                      title: "Najpopularniejsze targi",
+                      elementBuilder: (context, market) =>
+                          MarketCard(market: market),
+                      items: _markets,
+                    ),
+                    ElementSlider<OwnerModel>(
+                      cardWidth: 350,
+                      title: "Najpopularniejsi sprzedawcy",
+                      elementBuilder: (context, seller) => Container(
+                        decoration: BoxDecoration(
+                          gradient:
+                              StyleProvider.of(context).gradient.cardGradient3,
+                        ),
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: SellerCardContent(
+                          avatarUrl: seller.avatar,
+                          productsCount: seller.products.length,
+                          rating: seller.averageRating,
+                          sellerName: "${seller.firstName} ${seller.lastName}",
+                        ),
+                      ),
+                      items: _sellers,
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ElementSlider<ProductModel>(
-            cardWidth: 130,
-            title: "Najpopularniejsze produkty",
-            elementBuilder: (context, product) => ProductCard(
-              product: product,
-              onTap: () => Navigator.pushNamed(
-                context,
-                Routes.product,
-                arguments: product,
-              ),
-            ),
-            items: _products,
-          ),
-          ElementSlider<MarketModel>(
-            title: "Najpopularniejsze targi",
-            elementBuilder: (context, market) => MarketCard(market: market),
-            items: _markets,
-          ),
-          ElementSlider<OwnerModel>(
-            cardWidth: 350,
-            title: "Najpopularniejsi sprzedawcy",
-            elementBuilder: (context, seller) => Container(
-              decoration: BoxDecoration(
-                gradient: StyleProvider.of(context).gradient.cardGradient3,
-              ),
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              child: SellerCardContent(
-                avatarUrl: seller.avatar,
-                productsCount: seller.products.length,
-                rating: seller.averageRating,
-                sellerName: "${seller.firstName} ${seller.lastName}",
-              ),
-            ),
-            items: _sellers,
-          ),
-        ],
+        duration: const Duration(seconds: 1),
+        switchInCurve: Curves.easeIn,
       ),
     );
   }
