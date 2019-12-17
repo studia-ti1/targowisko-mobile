@@ -18,6 +18,8 @@ import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/widgets/extent_list_scaffold_image_nav_child.dart';
 import 'package:targowisko/widgets/sliders/square_slider.dart';
 
+import '../../routes.dart';
+
 class MarketScreenArgs {
   MarketModel market;
 
@@ -36,9 +38,8 @@ class MarketScreen extends StatefulWidget {
 }
 
 class _MarketScreenState extends State<MarketScreen> {
-  // TODO;
   bool _isLiked = false;
-  bool _canLike = false;
+  bool _showLikeButton = true;
 
   @override
   void initState() {
@@ -65,15 +66,15 @@ class _MarketScreenState extends State<MarketScreen> {
       );
       return null;
     }
-    if (market.going == false) {
-      setState(() {
-        _canLike = true;
-      });
-    }
+    setState(() {
+      _showLikeButton = true;
+      _isLiked = market.going;
+    });
     return market;
   }
 
   void _likeMarket() async {
+    if (_isLiked) return;
     try {
       await Api.attendMarket(widget.args.market.id);
     } on ApiException catch (err) {
@@ -83,10 +84,17 @@ class _MarketScreenState extends State<MarketScreen> {
         content: err.message,
       );
     }
+    setState(() {
+      _isLiked = true;
+    });
   }
 
   void _openSellerScreen() {
     // TODO;
+  }
+
+  void _sellProducts() {
+    Navigator.pushNamed(context, Routes.choose);
   }
 
   @override
@@ -94,7 +102,7 @@ class _MarketScreenState extends State<MarketScreen> {
     final market = widget.args.market;
     return ExtentListScaffold(
       liked: _isLiked,
-      onLikePress: _canLike ? _likeMarket : null,
+      onLikePress: _showLikeButton ? _likeMarket : null,
       title: market?.name ?? "-",
       navChild: ExtentListScaffoldImageNavChild(
         imageUrl: market.imageUrl,
@@ -130,6 +138,28 @@ class _MarketScreenState extends State<MarketScreen> {
               icon: Icons.location_on,
               title: market.place?.name ?? "Brak informacji o lokalizacji",
               content: market.place?.location?.locationString ?? "-",
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: <Widget>[
+                FlatButton(
+                  color: StyleProvider.of(context).colors.primaryAccent,
+                  child: Text(
+                    "Wystaw produkty",
+                    style: StyleProvider.of(context).font.normal.copyWith(
+                          fontSize: 13,
+                          height: 1,
+                          color:
+                              StyleProvider.of(context).colors.primaryContent,
+                        ),
+                  ),
+                  onPressed: _sellProducts,
+                ),
+              ],
             ),
           ),
           Padding(
@@ -245,7 +275,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               child: AutoSizeText(
-                "Jab��ko",
+                "Jab���ko",
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,

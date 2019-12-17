@@ -177,6 +177,8 @@ class _Market {
       },
     );
 
+    print(result.body);
+
     if (result.statusCode >= 300) throw ApiException(message: result.body);
     return MarketModel.fromJson(json.decode(result.body));
   }

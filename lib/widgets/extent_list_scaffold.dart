@@ -110,7 +110,7 @@ class _ExtentListScaffoldState extends State<ExtentListScaffold>
                     ),
                   ),
                 ),
-                if (widget.onLikePress != null && !widget.liked)
+                if (widget.onLikePress != null)
                   Transform.translate(
                     offset: Offset(0, 51 + topPadding),
                     child: Container(
@@ -186,8 +186,6 @@ class __LikeButtonState extends State<_LikeButton>
         _loading = false;
       });
     }
-
-    await _doneAnim();
   }
 
   @override
