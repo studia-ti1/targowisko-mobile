@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
+typedef SliderBuilder = Widget Function(BuildContext context, int index);
+
 class CardsSlider extends StatefulWidget {
-  final Widget child;
+  final SliderBuilder builder;
+  final int itemsCount;
 
   CardsSlider({
-    @required this.child,
-  }) : assert(child != null);
+    @required this.builder,
+    @required this.itemsCount,
+  })  : assert(builder != null),
+        assert(itemsCount != null && itemsCount >= 0);
 
   @override
   _CardsSliderState createState() => _CardsSliderState();
@@ -27,7 +32,7 @@ class _CardsSliderState extends State<CardsSlider> {
         return PageView.builder(
           controller: _controller,
           physics: PageScrollPhysics(parent: BouncingScrollPhysics()),
-          itemCount: 10,
+          itemCount: widget.itemsCount,
           scrollDirection: Axis.horizontal,
           itemBuilder: (BuildContext context, int index) {
             return AnimatedBuilder(
@@ -72,7 +77,7 @@ class _CardsSliderState extends State<CardsSlider> {
                 borderRadius: const BorderRadius.all(Radius.circular(10)),
                 child: SizedBox(
                   height: 150,
-                  child: widget.child,
+                  child: widget.builder(context, index),
                 ),
               ),
             );

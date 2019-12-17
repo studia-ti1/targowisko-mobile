@@ -22,13 +22,21 @@ class MarketModel {
   final List<ProductModel> products;
   final List<RatingModel> marketRaitings;
   final double averageRating;
+  final int participants;
+  final List<OwnerModel> sellers;
 
   MarketModel.fromJson(dynamic json)
       : id = int.tryParse(json["id"].toString()),
         name = json["name"],
         averageRating = json["average_rating"],
         description = json["description"],
+        participants = json["participants"],
         facebookEventId = json["facebook_event_id"],
+        sellers = json["sellers"] == null
+            ? []
+            : (json["sellers"] as List)
+                .map((dynamic product) => OwnerModel.fromJson(product))
+                .toList(),
         place = json["place"] != null
             ? LocationModel.fromJson(json["place"])
             : null,
@@ -47,10 +55,8 @@ class MarketModel {
             : (json["market_ratings"] as List)
                 .map((dynamic rating) => RatingModel.fromJson(rating))
                 .toList() {
-    print(json["photo"]);
+    print(json);
   }
-
-  static String _getPhotoFromJson(dynamic json) {}
 
   Future<MarketModel> update({
     String name,
