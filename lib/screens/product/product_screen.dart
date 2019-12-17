@@ -1,3 +1,4 @@
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/models/product_model.dart';
@@ -61,6 +62,50 @@ class _ProductScreenState extends State<ProductScreen> {
                   onPressed: () {},
                 ),
               ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: Text(
+              "Kategoria:",
+              style: StyleProvider.of(context)
+                  .font
+                  .pacifico
+                  .copyWith(fontSize: 18),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(5),
+              child: Container(
+                height: 50,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage(widget.product.getCateogry().assetName),
+                  ),
+                ),
+                child: Stack(
+                  children: <Widget>[
+                    SizedBox.expand(
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(color: Colors.black26),
+                      ),
+                    ),
+                    Center(
+                      child: AutoSizeText(
+                        widget.product.getCateogry().name,
+                        maxLines: 1,
+                        style: StyleProvider.of(context)
+                            .font
+                            .pacificoPrimary
+                            .copyWith(fontSize: 26),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
           Padding(

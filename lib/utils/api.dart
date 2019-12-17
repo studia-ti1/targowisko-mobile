@@ -214,8 +214,6 @@ class _Market {
   }
 
   Future<bool> create(List<String> facebookEventIds) async {
-    print("facebook_events_ids");
-    debugPrint(json.encode(facebookEventIds));
     final result = await http.post(
       'https://targowisko.herokuapp.com/api/v1/create_markets',
       body: json
@@ -333,12 +331,14 @@ class _Product {
       params,
     );
 
+
     final result = await http.get(
       url,
       headers: {
         'access-token': Api.accesToken,
       },
     );
+    printWrapped(result.body);
 
     if (result.statusCode >= 300) throw ApiException(message: result.body);
     return (json.decode(result.body) as List)

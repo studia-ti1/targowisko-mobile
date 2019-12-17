@@ -94,10 +94,12 @@ class ProductModel {
   final List<MarketModel> markets;
   final List<RatingModel> productRatings;
   final double averageRating;
+  final String category;
 
   ProductModel.fromJson(dynamic json)
       : id = json["id"],
         name = json["name"],
+        category = json["category"],
         description = json["description"],
         // TODO: Backend for some reason returns int instead of double
         price = double.tryParse(json["price"]?.toString() ?? ""),
@@ -116,6 +118,9 @@ class ProductModel {
                 .toList()
             : null,
         averageRating = json["average_rating"];
+
+  ProductCategory getCateogry() => ProductCategory.allCategories
+      .firstWhere((cat) => cat.value == category, orElse: () => null);
 
   Future<ProductModel> update({
     String name,
