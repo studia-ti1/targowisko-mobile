@@ -3,6 +3,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:targowisko/models/product_model.dart';
+import 'package:targowisko/routes.dart';
 import 'package:targowisko/screens/market/widgets/icon_section.dart';
 import 'package:targowisko/screens/market/widgets/organiser_section.dart';
 import 'package:targowisko/screens/market/widgets/section.dart';
@@ -179,18 +180,17 @@ class _MarketScreenState extends State<MarketScreen> {
             titlePadding:
                 const EdgeInsets.only(bottom: 15, left: 15, right: 15),
             title: "Wystawcy",
-            // TODO:
-            onMorePress: () {},
+            onMorePress: () => Navigator.of(context).pushNamed(Routes.sellers),
             // TODO:
             child: CardsSlider(
-              child: CardsSliderCard(
+              itemsCount: market.sellers.length,
+              builder: (context, index) => CardsSliderCard(
                 onCardPress: _openSellerScreen,
                 padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                 child: SellerCardContent(
-                  // TODO:
-                  avatarUrl:
-                      "https://images.unsplash.com/photo-1524593689594-aae2f26b75ab?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1300&q=80",
-                  sellerName: "Monika Nowak",
+                  avatarUrl: market.sellers[index].avatar,
+                  sellerName: "${market.sellers[index].firstName} "
+                      "${market.sellers[index].lastName}",
                   productsCount: 16,
                   rating: 3.4,
                 ),
