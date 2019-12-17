@@ -38,7 +38,7 @@ class ProductCategory {
     CategoriesAssets.cosmetics,
   );
   static const ProductCategory other = ProductCategory._(
-    "others",
+    "other",
     "Inne",
     CategoriesAssets.other,
   );
@@ -115,9 +115,7 @@ class ProductModel {
                 .map((dynamic jsonRating) => RatingModel.fromJson(jsonRating))
                 .toList()
             : null,
-        averageRating = json["average_rating"] {
-    debugPrint(json.toString());
-  }
+        averageRating = json["average_rating"];
 
   Future<ProductModel> update({
     String name,

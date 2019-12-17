@@ -4,6 +4,7 @@ import 'dart:io';
 import 'package:flutter/widgets.dart';
 import 'package:http/http.dart' as http;
 import 'package:targowisko/models/market_model.dart';
+import 'package:targowisko/models/owner_model.dart';
 import 'package:targowisko/models/product_model.dart';
 
 class Api {
@@ -14,6 +15,49 @@ class Api {
 
   static _Market market = _Market._();
   static _Product product = _Product._();
+
+  static Future<void> setFbAvatar() async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/users/api_update_avatar.json",
+    );
+    final result = await http.post(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+  }
+
+  static Future<void> attendMarket(int marketId) async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/markets/${marketId}/attend.json",
+    );
+    final result = await http.post(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+  }
+
+  static Future<OwnerModel> getAboutMe() async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/about_me.json",
+    );
+    final result = await http.get(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return OwnerModel.fromJson(json.decode(result.body));
+  }
 
   static Future<ProductModel> addProductToMarket(
     int productId,
@@ -67,8 +111,6 @@ class Api {
       },
     );
 
-    // print(result.body);
-
     if (result.statusCode >= 300) throw ApiException(message: result.body);
 
     final List jsonEventList = jsonDecode(result.body);
@@ -105,7 +147,6 @@ class _Market {
     jsonEventList.first["owner"] = null;
     jsonEventList.first["market_ratings"] = null;
 
-    debugPrint(jsonEventList.first.toString());
     final markets = jsonEventList.map((dynamic market) {
       return MarketModel.fromJson(market);
     }).toList();
@@ -117,7 +158,7 @@ class _Market {
     final result = await http.post(
       'https://targowisko.herokuapp.com/api/v1/create_markets',
       body: <String, dynamic>{
-        "facebook_event_ids": json.encode(facebookEventIds)
+        "facebook_events_ids": json.encode(facebookEventIds)
       },
       headers: {
         'access-token': Api.accesToken,
@@ -126,6 +167,18 @@ class _Market {
 
     if (result.statusCode >= 300) throw ApiException(message: result.body);
     return json.decode(result.body)["success"] == true;
+  }
+
+  Future<MarketModel> getOne(int marektId) async {
+    final result = await http.get(
+      'https://targowisko.herokuapp.com/api/v1/markets/$marektId',
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return MarketModel.fromJson(json.decode(result.body));
   }
 }
 

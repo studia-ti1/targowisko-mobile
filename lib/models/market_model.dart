@@ -13,6 +13,7 @@ import 'package:http/http.dart' as http;
 class MarketModel {
   final int id;
   final String name;
+  final bool going;
   final String description;
   final String facebookEventId;
   final LocationModel place;
@@ -28,6 +29,7 @@ class MarketModel {
   MarketModel.fromJson(dynamic json)
       : id = int.tryParse(json["id"].toString()),
         name = json["name"],
+        going = json["going"],
         averageRating = json["average_rating"],
         description = json["description"],
         participants = json["participants"],
@@ -54,9 +56,7 @@ class MarketModel {
             ? null
             : (json["market_ratings"] as List)
                 .map((dynamic rating) => RatingModel.fromJson(rating))
-                .toList() {
-    print(json);
-  }
+                .toList();
 
   Future<MarketModel> update({
     String name,

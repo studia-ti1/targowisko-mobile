@@ -50,6 +50,7 @@ flutter:
     - assets/cosmetics.jpg
     - assets/other.jpg
     - assets/electronics.jpg
+    - assets/user.png
 
   fonts:
     - family: pacifico

@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:targowisko/models/product_model.dart';
 import 'package:targowisko/screens/add_market/add_market_screen.dart';
 import 'package:targowisko/screens/add_product/add_product.dart';
+import 'package:targowisko/screens/product/product_screen.dart';
+import 'package:targowisko/screens/user/user_screen.dart';
 
 import 'screens/home/home_screen.dart';
 import 'screens/login/login_screen.dart';
@@ -14,10 +17,12 @@ class Routes {
   static const String home = '/home';
   static const String markets = '/markets';
   static const String market = '/market';
+  static const String product = '/product';
   static const String products = '/products';
   static const String sellers = '/sellers';
   static const String addProduct = '/product/add';
   static const String addMarket = '/market/add';
+  static const String me = '/me';
 
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -42,6 +47,14 @@ class Routes {
         return MaterialPageRoute<void>(builder: (_) => AddProductScreen());
       case addMarket:
         return MaterialPageRoute<void>(builder: (_) => AddMarketScreen());
+      case me:
+        return MaterialPageRoute<void>(builder: (_) => UserScreen());
+      case product:
+        assert(
+            settings.arguments != null && settings.arguments is ProductModel);
+        ProductModel product = settings.arguments;
+        return MaterialPageRoute<void>(
+            builder: (_) => ProductScreen(product: product));
       default:
         return MaterialPageRoute<void>(builder: (_) => LoginScreen());
     }

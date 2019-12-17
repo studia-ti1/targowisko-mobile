@@ -9,6 +9,8 @@ import 'package:targowisko/widgets/list_item/list_item.dart';
 import 'package:targowisko/widgets/list_item/widgets/list_item_picture.dart';
 import 'package:targowisko/widgets/search_input/search_input.dart';
 
+import '../../routes.dart';
+
 class ProductsScreen extends StatefulWidget {
   @override
   _ProductsScreenState createState() => _ProductsScreenState();
@@ -93,6 +95,10 @@ class _ProductsScreenState extends State<ProductsScreen> {
   double _getTopPadding(BuildContext context) =>
       MediaQuery.of(context).padding?.top ?? 0;
 
+  void _openProductScreen(ProductModel product) {
+    Navigator.pushNamed(context, Routes.product, arguments: product);
+  }
+
   @override
   Widget build(BuildContext context) {
     return ExtentListScaffold(
@@ -137,7 +143,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
                       description: product.description,
                       averageRating: product.averageRating,
                       // TODO:
-                      onTap: () {},
+                      onTap: () => _openProductScreen(product),
                       child: ListItemPicture(
                         imageUrl: product.picture,
                       ),

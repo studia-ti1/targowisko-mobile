@@ -66,6 +66,7 @@ class AppMenu extends StatelessWidget {
                 title: "Ja",
                 icon: Icons.person,
                 onTap: () {
+                  Navigator.pushNamed(context, Routes.me);
                   closeMenu();
                 },
               ),
