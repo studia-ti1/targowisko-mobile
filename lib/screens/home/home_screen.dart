@@ -60,7 +60,6 @@ class _HomeScreenState extends State<HomeScreen> {
         _loadingText = "Weryfikujemy najlepszych sprzedawców...";
       });
       // _sellers = await Api.fetchUsers();
-      await Future<void>.delayed(Duration(milliseconds: 3000));
     } on ApiException catch (err) {
       Alert.open(context, title: "Wystąpił błąd", content: err.message);
       return;

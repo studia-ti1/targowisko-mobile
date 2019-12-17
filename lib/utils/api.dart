@@ -7,6 +7,11 @@ import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/models/owner_model.dart';
 import 'package:targowisko/models/product_model.dart';
 
+void printWrapped(String text) {
+  final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
+  pattern.allMatches(text).forEach((match) => print(match.group(0)));
+}
+
 class Api {
   /// private constructor
   Api._();
@@ -209,12 +214,15 @@ class _Market {
   }
 
   Future<bool> create(List<String> facebookEventIds) async {
+    print("facebook_events_ids");
+    debugPrint(json.encode(facebookEventIds));
     final result = await http.post(
       'https://targowisko.herokuapp.com/api/v1/create_markets',
-      body: <String, dynamic>{
-        "facebook_events_ids": json.encode(facebookEventIds)
-      },
+      body: json
+          .encode(<String, dynamic>{"facebook_events_ids": facebookEventIds}),
       headers: {
+        'Content-type': 'application/json',
+        'Accept': 'application/json',
         'access-token': Api.accesToken,
       },
     );
