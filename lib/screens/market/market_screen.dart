@@ -215,7 +215,14 @@ class _MarketScreenState extends State<MarketScreen> {
                 : SquareSlider(
                     itemBuilder: (context, index) {
                       final product = market.products[index];
-                      return ProductCard(product: product);
+                      return ProductCard(
+                        product: product,
+                        onTap: () => Navigator.pushNamed(
+                          context,
+                          Routes.product,
+                          arguments: product,
+                        ),
+                      );
                     },
                     itemCount: market.products.length,
                   ),
@@ -228,10 +235,14 @@ class _MarketScreenState extends State<MarketScreen> {
 
 class ProductCard extends StatelessWidget {
   final ProductModel product;
+  final VoidCallback onTap;
+
   const ProductCard({
     @required this.product,
+    @required this.onTap,
     Key key,
   })  : assert(product != null),
+        assert(onTap != null),
         super(key: key);
 
   @override
@@ -287,7 +298,7 @@ class ProductCard extends StatelessWidget {
             ),
             Material(
               color: Colors.transparent,
-              child: InkWell(onTap: () {}),
+              child: InkWell(onTap: onTap),
             )
           ],
         ),

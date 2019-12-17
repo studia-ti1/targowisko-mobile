@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:targowisko/models/product_model.dart';
 import 'package:targowisko/models/rating_model.dart';
 import 'package:targowisko/utils/api.dart';
@@ -56,7 +57,9 @@ class MarketModel {
             ? null
             : (json["market_ratings"] as List)
                 .map((dynamic rating) => RatingModel.fromJson(rating))
-                .toList();
+                .toList() {
+    debugPrint(json["owner"].toString());
+  }
 
   Future<MarketModel> update({
     String name,

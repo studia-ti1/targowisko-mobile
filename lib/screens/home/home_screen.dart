@@ -11,6 +11,8 @@ import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/avatar.dart';
 import 'package:targowisko/widgets/sliders/element_slider.dart';
 
+import '../../routes.dart';
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -102,7 +104,14 @@ class _HomeScreenState extends State<HomeScreen> {
           ElementSlider<ProductModel>(
             cardWidth: 130,
             title: "Najpopularniejsze produkty",
-            elementBuilder: (context, product) => ProductCard(product: product),
+            elementBuilder: (context, product) => ProductCard(
+              product: product,
+              onTap: () => Navigator.pushNamed(
+                context,
+                Routes.product,
+                arguments: product,
+              ),
+            ),
             items: _products,
           ),
           ElementSlider<MarketModel>(
@@ -115,12 +124,10 @@ class _HomeScreenState extends State<HomeScreen> {
             title: "Najpopularniejsi sprzedawcy",
             elementBuilder: (context, seller) => Container(
               decoration: BoxDecoration(
-
                 gradient: StyleProvider.of(context).gradient.cardGradient3,
               ),
               padding: const EdgeInsets.symmetric(horizontal: 15),
               child: SellerCardContent(
-                
                 avatarUrl: seller.avatar,
                 productsCount: seller.products.length,
                 rating: seller.averageRating,
