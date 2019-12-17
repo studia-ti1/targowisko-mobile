@@ -200,9 +200,6 @@ class _Market {
     if (result.statusCode >= 300) throw ApiException(message: result.body);
 
     final List jsonEventList = jsonDecode(result.body);
-    jsonEventList.first["place"] = null;
-    jsonEventList.first["owner"] = null;
-    jsonEventList.first["market_ratings"] = null;
 
     final markets = jsonEventList.map((dynamic market) {
       return MarketModel.fromJson(market);

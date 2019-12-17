@@ -66,8 +66,9 @@ class _AddMarketScreenState extends State<AddMarketScreen> {
     }
     final selectedMarkets =
         selectedMarketsData.map((marketData) => marketData.market);
-    final facebookEventIds =
-        selectedMarkets.map((markets) => markets.id.toString()).toList();
+    final facebookEventIds = selectedMarkets
+        .map((markets) => markets.facebookEventId.toString())
+        .toList();
     final success = await Api.market.create(facebookEventIds);
     if (success) {
       Navigator.pop(context);

@@ -57,9 +57,7 @@ class MarketModel {
             ? null
             : (json["market_ratings"] as List)
                 .map((dynamic rating) => RatingModel.fromJson(rating))
-                .toList() {
-    debugPrint(json["owner"].toString());
-  }
+                .toList();
 
   Future<MarketModel> update({
     String name,
