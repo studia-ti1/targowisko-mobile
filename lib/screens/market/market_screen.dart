@@ -158,8 +158,7 @@ class _MarketScreenState extends State<MarketScreen> {
                 onCardPress: _openSellerScreen,
                 padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                 child: SellerCardContent(
-                  avatarUrl:
-                     market.sellers[index].,
+                  avatarUrl: market.sellers[index].avatar,
                   sellerName: "${market.sellers[index].firstName} "
                       "${market.sellers[index].lastName}",
                   productsCount: 16,

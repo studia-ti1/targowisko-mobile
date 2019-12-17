@@ -29,6 +29,7 @@ class ListItemPicture extends StatelessWidget {
           ),
           child: Image.asset(
             StyleProvider.of(context).asset.appLogo,
+            fit: BoxFit.cover,
             width: 60,
             height: 60,
           ),
