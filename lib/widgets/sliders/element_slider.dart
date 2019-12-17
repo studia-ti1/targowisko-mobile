@@ -67,12 +67,18 @@ class SliderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(15),
-      child: Container(
-        width: width,
-        color: StyleProvider.of(context).colors.primaryAccent,
-        child: child,
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        boxShadow: [StyleProvider.of(context).shadow.mainShadow],
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(15),
+        child: Container(
+          width: width,
+          color: StyleProvider.of(context).colors.primaryAccent,
+          child: child,
+        ),
       ),
     );
   }

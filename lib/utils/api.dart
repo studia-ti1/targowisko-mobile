@@ -11,6 +11,44 @@ class Api {
   /// private constructor
   Api._();
 
+  static Future<List<OwnerModel>> fetchUsers() async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/users.json",
+    );
+
+    final result = await http.get(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return (json.decode(result.body) as List)
+        .map((dynamic seller) => OwnerModel.fromJson(seller))
+        .toList();
+  }
+
+  static Future<List<OwnerModel>> fetchBestUsers() async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/top_users.json",
+    );
+
+    final result = await http.get(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return (json.decode(result.body) as List)
+        .map((dynamic sellet) => OwnerModel.fromJson(sellet))
+        .toList();
+  }
+
   static String accesToken;
 
   static _Market market = _Market._();
@@ -132,9 +170,28 @@ class ApiException implements Exception {
 class _Market {
   const _Market._();
 
-  Future<List<MarketModel>> fetch() async {
+  Future<List<MarketModel>> fetch({
+    int userId,
+    String searchValue,
+    int perPage,
+    int pageNumber,
+    int marketId,
+  }) async {
+    final params = <String, String>{};
+    if (userId != null) params["user_id"] = userId.toString();
+    if (searchValue != null) params["search_value"] = searchValue.toString();
+    if (perPage != null) params["items"] = perPage.toString();
+    if (pageNumber != null) params["page"] = pageNumber.toString();
+    if (marketId != null) params["market_id"] = marketId.toString();
+
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/markets.json",
+      params,
+    );
+
     final result = await http.get(
-      'https://targowisko.herokuapp.com/api/v1/markets.json',
+      url,
       headers: {
         'access-token': Api.accesToken,
       },
@@ -176,8 +233,6 @@ class _Market {
         'access-token': Api.accesToken,
       },
     );
-
-    print(result.body);
 
     if (result.statusCode >= 300) throw ApiException(message: result.body);
     return MarketModel.fromJson(json.decode(result.body));

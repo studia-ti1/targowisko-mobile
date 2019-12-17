@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/models/owner_model.dart';
+import 'package:targowisko/models/product_model.dart';
 import 'package:targowisko/screens/home/widgets/market_card.dart';
 import 'package:targowisko/screens/home/widgets/scaffold_with_menu.dart';
+import 'package:targowisko/screens/market/market_screen.dart';
 import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
@@ -16,6 +18,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List<MarketModel> _markets = [];
+  List<ProductModel> _products = [];
+  List<OwnerModel> _sellers = [];
   bool _loading = true;
   OwnerModel user;
 
@@ -40,7 +44,9 @@ class _HomeScreenState extends State<HomeScreen> {
     List<MarketModel> result;
     try {
       user = await Api.getAboutMe();
-      result = await Api.market.fetch();
+      result = await Api.market.fetch(pageNumber: 1, perPage: 5);
+      _products = await Api.product.fetch(pageNumber: 2, perPage: 10);
+      _sellers = await Api.fetchUsers();
     } on ApiException catch (err) {
       Alert.open(context, title: "Wystąpił błąd", content: err.message);
       return;
@@ -93,10 +99,35 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
+          ElementSlider<ProductModel>(
+            cardWidth: 130,
+            title: "Najpopularniejsze produkty",
+            elementBuilder: (context, product) => ProductCard(product: product),
+            items: _products,
+          ),
           ElementSlider<MarketModel>(
             title: "Najpopularniejsze targi",
             elementBuilder: (context, market) => MarketCard(market: market),
             items: _markets,
+          ),
+          ElementSlider<OwnerModel>(
+            cardWidth: 350,
+            title: "Najpopularniejsi sprzedawcy",
+            elementBuilder: (context, seller) => Container(
+              decoration: BoxDecoration(
+
+                gradient: StyleProvider.of(context).gradient.cardGradient3,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 15),
+              child: SellerCardContent(
+                
+                avatarUrl: seller.avatar,
+                productsCount: seller.products.length,
+                rating: seller.averageRating,
+                sellerName: "${seller.firstName} ${seller.lastName}",
+              ),
+            ),
+            items: _sellers,
           ),
         ],
       ),

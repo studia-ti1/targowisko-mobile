@@ -244,10 +244,10 @@ class ProductCard extends StatelessWidget {
         color: StyleProvider.of(context).colors.primaryAccent,
         child: Stack(
           children: <Widget>[
-            if (null != null)
+            if (product.picture != null)
               CachedNetworkImage(
-                width: 150,
-                height: 150,
+                width: double.infinity,
+                height: double.infinity,
                 fit: BoxFit.cover,
                 imageUrl: product.picture,
               )
@@ -275,7 +275,7 @@ class ProductCard extends StatelessWidget {
                 ),
               ),
               child: AutoSizeText(
-                "Jab���ko",
+                product.name,
                 textAlign: TextAlign.center,
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
