@@ -101,7 +101,6 @@ class ProductModel {
         name = json["name"],
         category = json["category"],
         description = json["description"],
-        // TODO: Backend for some reason returns int instead of double
         price = double.tryParse(json["price"]?.toString() ?? ""),
         owner =
             json["owner"] != null ? OwnerModel.fromJson(json["owner"]) : null,
