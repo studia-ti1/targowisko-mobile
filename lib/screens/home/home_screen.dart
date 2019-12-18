@@ -79,109 +79,112 @@ class _HomeScreenState extends State<HomeScreen> {
                 body: CustomLoader(loadingText: _loadingText),
               )
             : ScaffoldWithMenu(
-                builder: ({openMenu, closeMenu}) => ListView(
-                  children: <Widget>[
-                    if (user != null)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: Row(
-                          children: <Widget>[
-                            Avatar(
-                              nickname: user.firstName,
-                              imageUrl: user.avatar,
-                              size: 60,
-                            ),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: <Widget>[
-                                Text(
-                                  "Witaj ${user.firstName}!",
-                                  style: StyleProvider.of(context)
-                                      .font
-                                      .pacifico
-                                      .copyWith(fontSize: 25),
+                builder: ({openMenu, closeMenu}) => RefreshIndicator(
+                  onRefresh: _fetchMarkets,
+                  child: ListView(
+                    children: <Widget>[
+                      if (user != null)
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 15),
+                          child: Row(
+                            children: <Widget>[
+                              Avatar(
+                                nickname: user.firstName,
+                                imageUrl: user.avatar,
+                                size: 60,
+                              ),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: <Widget>[
+                                  Text(
+                                    "Witaj ${user.firstName}!",
+                                    style: StyleProvider.of(context)
+                                        .font
+                                        .pacifico
+                                        .copyWith(fontSize: 25),
+                                  ),
+                                  Text(
+                                    "Dzisiaj jest dobry dzień na zakupy!",
+                                    style: StyleProvider.of(context)
+                                        .font
+                                        .normal
+                                        .copyWith(
+                                            color: StyleProvider.of(context)
+                                                .colors
+                                                .content
+                                                .withOpacity(0.5)),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ElementSlider<ProductModel>(
+                        cardWidth: 130,
+                        title: "Najpopularniejsze produkty",
+                        elementBuilder: (context, product) => ProductCard(
+                          product: product,
+                          onTap: () => Navigator.pushNamed(
+                            context,
+                            Routes.product,
+                            arguments: product,
+                          ),
+                        ),
+                        items: _products,
+                      ),
+                      ElementSlider<MarketModel>(
+                        title: "Najpopularniejsze targi",
+                        elementBuilder: (context, market) =>
+                            MarketCard(market: market),
+                        items: _markets,
+                      ),
+                      ElementSlider<OwnerModel>(
+                        cardWidth: 350,
+                        title: "Najpopularniejsi sprzedawcy",
+                        elementBuilder: (context, seller) => Material(
+                          color: Colors.transparent,
+                          child: Stack(
+                            children: <Widget>[
+                              Container(
+                                decoration: BoxDecoration(
+                                  gradient: StyleProvider.of(context)
+                                      .gradient
+                                      .cardGradient3,
                                 ),
-                                Text(
-                                  "Dzisiaj jest dobry dzień na zakupy!",
-                                  style: StyleProvider.of(context)
-                                      .font
-                                      .normal
-                                      .copyWith(
-                                          color: StyleProvider.of(context)
-                                              .colors
-                                              .content
-                                              .withOpacity(0.5)),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: SellerCardContent(
+                                  avatarUrl: seller.avatar,
+                                  productsCount: seller.products.length,
+                                  rating: seller.averageRating,
+                                  sellerName:
+                                      "${seller.firstName} ${seller.lastName}",
                                 ),
-                              ],
-                            )
-                          ],
-                        ),
-                      ),
-                    ElementSlider<ProductModel>(
-                      cardWidth: 130,
-                      title: "Najpopularniejsze produkty",
-                      elementBuilder: (context, product) => ProductCard(
-                        product: product,
-                        onTap: () => Navigator.pushNamed(
-                          context,
-                          Routes.product,
-                          arguments: product,
-                        ),
-                      ),
-                      items: _products,
-                    ),
-                    ElementSlider<MarketModel>(
-                      title: "Najpopularniejsze targi",
-                      elementBuilder: (context, market) =>
-                          MarketCard(market: market),
-                      items: _markets,
-                    ),
-                    ElementSlider<OwnerModel>(
-                      cardWidth: 350,
-                      title: "Najpopularniejsi sprzedawcy",
-                      elementBuilder: (context, seller) => Material(
-                        color: Colors.transparent,
-                        child: Stack(
-                          children: <Widget>[
-                            Container(
-                              decoration: BoxDecoration(
-                                gradient: StyleProvider.of(context)
-                                    .gradient
-                                    .cardGradient3,
                               ),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: SellerCardContent(
-                                avatarUrl: seller.avatar,
-                                productsCount: seller.products.length,
-                                rating: seller.averageRating,
-                                sellerName:
-                                    "${seller.firstName} ${seller.lastName}",
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  splashColor: Colors.white24,
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                      context,
+                                      Routes.seller,
+                                      arguments: seller,
+                                    );
+                                  },
+                                ),
                               ),
-                            ),
-                            Material(
-                              color: Colors.transparent,
-                              child: InkWell(
-                                splashColor: Colors.white24,
-                                onTap: () {
-                                  Navigator.pushNamed(
-                                    context,
-                                    Routes.seller,
-                                    arguments: seller,
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
+                        items: _sellers,
                       ),
-                      items: _sellers,
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
         duration: const Duration(seconds: 1),
