@@ -16,7 +16,7 @@ dependencies:
   url_launcher: 5.1.1
   file_picker: 1.4.0+1
   auto_size_text: 2.1.0
-  cached_network_image: 2.0.0-rc
+  cached_network_image: 2.0.0-rc.1
   bloc: 0.15.0
   intl: 0.16.0
   flutter_bloc: 0.21.0

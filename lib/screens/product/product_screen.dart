@@ -142,30 +142,42 @@ class _ProductScreenState extends State<ProductScreen> {
               style: StyleProvider.of(context).font.normal,
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Text(
-              "Dostępność na targach:",
-              style: StyleProvider.of(context)
-                  .font
-                  .pacifico
-                  .copyWith(fontSize: 18),
-            ),
-          ),
-          widget.product.markets.isNotEmpty
-              ? ElementSlider<MarketModel>(
-                  title: "",
-                  elementBuilder: (context, market) =>
-                      MarketCard(market: market),
-                  items: widget.product.markets,
-                )
-              : Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  child: Text(
-                    "Produkt aktualnie nie dostępny na żadnym targu",
-                    style: StyleProvider.of(context).font.normal,
+          if (widget.product.markets != null)
+            widget.product.markets.isNotEmpty
+                ? ElementSlider<MarketModel>(
+                    title: "Dostępność na targach:",
+                    elementBuilder: (context, market) => MarketCard(
+                      market: market,
+                      enabled: false,
+                    ),
+                    items: widget.product.markets,
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          "Dostępność na targach:",
+                          style: StyleProvider.of(context)
+                              .font
+                              .pacifico
+                              .copyWith(fontSize: 18),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        child: Text(
+                          "Produkt aktualnie nie dostępny na żadnym targu",
+                          style: StyleProvider.of(context).font.normal,
+                        ),
+                      ),
+                    ],
                   ),
-                ),
         ],
       ),
     );

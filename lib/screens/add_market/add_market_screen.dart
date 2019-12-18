@@ -22,6 +22,7 @@ class AddMarketScreen extends StatefulWidget {
 class _AddMarketScreenState extends State<AddMarketScreen> {
   List<MarketData> _markets = [];
   bool _loading = false;
+  bool _fetching = true;
 
   @override
   void initState() {
@@ -34,8 +35,12 @@ class _AddMarketScreenState extends State<AddMarketScreen> {
 
     try {
       markets = await Api.getAllEventsFromFb();
+      setState(() {
+        _fetching = false;
+      });
     } on ApiException catch (err) {
       Alert.open(context, title: "Wystąpił błąd", content: err.message);
+      Navigator.pop(context);
       return;
     }
     setState(() {
@@ -66,9 +71,8 @@ class _AddMarketScreenState extends State<AddMarketScreen> {
     }
     final selectedMarkets =
         selectedMarketsData.map((marketData) => marketData.market);
-    final facebookEventIds = selectedMarkets
-        .map((markets) => markets.id.toString())
-        .toList();
+    final facebookEventIds =
+        selectedMarkets.map((markets) => markets.id.toString()).toList();
     final success = await Api.market.create(facebookEventIds);
     if (success) {
       Navigator.pop(context);
@@ -86,38 +90,63 @@ class _AddMarketScreenState extends State<AddMarketScreen> {
       title: "Dodawanie marketów",
       child: Stack(
         children: <Widget>[
-          ListView.separated(
-            padding: const EdgeInsets.fromLTRB(15, 15, 15, 65),
-            itemBuilder: (BuildContext context, int index) {
-              if (index == 0)
-                return Padding(
-                  padding: const EdgeInsets.only(bottom: 15),
-                  child: Text(
-                      "Wybierz wydarzenia na podstawie"
-                      " których chcesz utworzyć market",
-                      style: StyleProvider.of(context)
-                          .font
-                          .normal
-                          .copyWith(fontSize: 16)),
-                );
-              final marketData = _markets[index - 1];
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
-                child: FbEventCard(
-                  market: marketData.market,
-                  isGoing: marketData.isGoing,
-                  onTap: () => toggleIsGoing(index - 1),
+          _fetching
+              ? Center(
+                  child: Container(
+                    alignment: Alignment.center,
+                    width: MediaQuery.of(context).size.width * 0.75,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Image.asset(
+                          StyleProvider.of(context).asset.spinner,
+                          width: 100,
+                          fit: BoxFit.contain,
+                          color: Colors.black,
+                          colorBlendMode: BlendMode.color,
+                          repeat: ImageRepeat.noRepeat,
+                          filterQuality: FilterQuality.medium,
+                          height: 100,
+                        ),
+                        SizedBox(height: 15),
+                        AutoSizeText(
+                          "Sprawdzamy czym się interesujesz...",
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                          overflow: TextOverflow.ellipsis,
+                          style: StyleProvider.of(context)
+                              .font
+                              .pacifico
+                              .copyWith(fontSize: 17),
+                        ),
+                      ],
+                    ),
+                  ),
+                )
+              : ListView.separated(
+                  padding: const EdgeInsets.fromLTRB(15, 15, 15, 65),
+                  itemBuilder: (BuildContext context, int index) {
+                    if (index == 0) return SizedBox();
+                    final marketData = _markets[index - 1];
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 15.0),
+                      child: FbEventCard(
+                        market: marketData.market,
+                        isGoing: marketData.isGoing,
+                        onTap: () => toggleIsGoing(index - 1),
+                      ),
+                    );
+                  },
+                  itemCount: _markets.length + 1,
+                  separatorBuilder: (BuildContext context, int index) {
+                    return Container(
+                      height: 1,
+                      color: index > 0
+                          ? StyleProvider.of(context).colors.secondaryAccent
+                          : null,
+                    );
+                  },
                 ),
-              );
-            },
-            itemCount: _markets.length + 1,
-            separatorBuilder: (BuildContext context, int index) {
-              return Container(
-                height: 1,
-                // color: StyleProvider.of(context).colors.secondaryAccent,
-              );
-            },
-          ),
           Container(
             padding: EdgeInsets.all(15),
             alignment: Alignment.bottomCenter,

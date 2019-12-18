@@ -9,9 +9,11 @@ import '../../../routes.dart';
 class MarketCard extends StatelessWidget {
   const MarketCard({
     @required this.market,
+    this.enabled = true,
   });
 
   final MarketModel market;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +52,15 @@ class MarketCard extends StatelessWidget {
         Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {
-              Navigator.pushNamed(
-                context,
-                Routes.market,
-                arguments: MarketScreenArgs(market: market),
-              );
-            },
+            onTap: enabled
+                ? () {
+                    Navigator.pushNamed(
+                      context,
+                      Routes.market,
+                      arguments: MarketScreenArgs(market: market),
+                    );
+                  }
+                : null,
           ),
         )
       ],
