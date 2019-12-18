@@ -184,8 +184,8 @@ Future<bool> rateUser({
       headers: {
         'access-token': Api.accesToken,
       },
-      body: <String, dynamic>{
-        "rating": rating,
+      body: <String, String>{
+        "rating": rating.toString(),
         "comment": comment,
       });
 
@@ -206,8 +206,8 @@ class _Market {
         headers: {
           'access-token': Api.accesToken,
         },
-        body: <String, dynamic>{
-          "rating": rating,
+        body: <String, String>{
+          "rating": rating.toString(),
           "comment": comment,
         });
 

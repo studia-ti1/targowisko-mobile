@@ -24,12 +24,6 @@ class SellerScreen extends StatefulWidget {
 
 class _SellerScreenState extends State<SellerScreen> {
   @override
-  void initState() {
-    print(widget.seller.id);
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return ExtentListScaffold(
       navChild: Padding(

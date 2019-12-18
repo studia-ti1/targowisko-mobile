@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:targowisko/models/product_model.dart';
+import 'package:targowisko/models/rating_model.dart';
 import 'package:targowisko/routes.dart';
 import 'package:targowisko/screens/market/widgets/icon_section.dart';
 import 'package:targowisko/screens/market/widgets/organiser_section.dart';
@@ -150,7 +153,31 @@ class _MarketScreenState extends State<MarketScreen> {
                   height: 30,
                   fontSize: 14,
                   onTap: () {
-                    Alert.openRateModal(context, title: "Oceń market");
+                    Alert.openRateModal(context, title: "Oceń market",
+                        onRate: (Rate rate) async {
+                      final result = await Api.market.rate(
+                        marketId: widget.args.market.id,
+                        comment: rate.comment,
+                        rating: rate.rate,
+                      );
+                      if (result == true) {
+                        widget.args.market.marketRaitings.add(RatingModel(
+                          comment: rate.comment,
+                          createdAt: DateTime.now(),
+                          id: Random().nextInt(20000),
+                          marketId: market.id,
+                          rating: rate.rate,
+                          updatedAt: null,
+                          userId: Api.currentUser.id,
+                        ));
+                        var avg = widget.args.market.marketRaitings
+                                .map((m) => m.rating)
+                                .reduce((a, b) => a + b) /
+                            widget.args.market.marketRaitings.length;
+                        widget.args.market.averageRating = avg;
+                        setState(() {});
+                      }
+                    });
                   },
                   title: "Oceń",
                 ),

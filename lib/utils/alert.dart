@@ -238,6 +238,7 @@ class _RateDialogContentState extends State<RateDialogContent>
       });
       return;
     }
+    Navigator.of(context).pop();
   }
 
   @override

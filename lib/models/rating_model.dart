@@ -1,3 +1,5 @@
+import 'package:meta/meta.dart';
+
 class RatingModel {
   final int id;
   final int marketId;
@@ -6,6 +8,16 @@ class RatingModel {
   final String comment;
   final DateTime createdAt;
   final DateTime updatedAt;
+
+  RatingModel({
+    @required this.marketId,
+    @required this.createdAt,
+    @required this.updatedAt,
+    @required this.id,
+    @required this.comment,
+    @required this.userId,
+    @required this.rating,
+  });
 
   RatingModel.fromJson(dynamic json)
       : id = json["id"],
