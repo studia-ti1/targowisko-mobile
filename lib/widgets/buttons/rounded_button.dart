@@ -4,6 +4,7 @@ import 'package:targowisko/utils/style_provider.dart';
 class RoundedButton extends StatelessWidget {
   final String title;
   final double height;
+  final double fontSize;
   final VoidCallback onTap;
   final BorderRadius borderRadius;
   final Alignment contentAlignment;
@@ -12,6 +13,7 @@ class RoundedButton extends StatelessWidget {
     @required this.title,
     @required this.onTap,
     this.height,
+    this.fontSize,
     this.borderRadius,
     this.contentAlignment,
   }) : assert(title != null);
@@ -31,7 +33,7 @@ class RoundedButton extends StatelessWidget {
             child: Text(
               title,
               style: StyleProvider.of(context).font.pacificoPrimary.copyWith(
-                    fontSize: 12,
+                    fontSize: fontSize ?? 12,
                     color: StyleProvider.of(context).colors.primaryContent,
                   ),
             ),

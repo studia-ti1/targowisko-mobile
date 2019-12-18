@@ -13,6 +13,7 @@ import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/animated/animated_rating_coins.dart';
 import 'package:targowisko/widgets/avatar.dart';
+import 'package:targowisko/widgets/buttons/rounded_button.dart';
 import 'package:targowisko/widgets/cards_slider/cards_slider.dart';
 import 'package:targowisko/widgets/cards_slider/widget/card_slider_card.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
@@ -138,9 +139,22 @@ class _MarketScreenState extends State<MarketScreen> {
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
-            child: AnimatedRatingCoins(
-              raiting: market.averageRating,
-              delay: const Duration(milliseconds: 300),
+            child: Row(
+              children: <Widget>[
+                AnimatedRatingCoins(
+                  raiting: market.averageRating,
+                  delay: const Duration(milliseconds: 300),
+                ),
+                Spacer(),
+                RoundedButton(
+                  height: 30,
+                  fontSize: 14,
+                  onTap: () {
+                    Alert.openRateModal(context, title: "Oceń market");
+                  },
+                  title: "Oceń",
+                ),
+              ],
             ),
           ),
           Padding(
@@ -170,18 +184,11 @@ class _MarketScreenState extends State<MarketScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.end,
               children: <Widget>[
-                FlatButton(
-                  color: StyleProvider.of(context).colors.primaryAccent,
-                  child: Text(
-                    "Wystaw produkty",
-                    style: StyleProvider.of(context).font.normal.copyWith(
-                          fontSize: 13,
-                          height: 1,
-                          color:
-                              StyleProvider.of(context).colors.primaryContent,
-                        ),
-                  ),
-                  onPressed: _sellProducts,
+                RoundedButton(
+                  fontSize: 15,
+                  height: 40,
+                  title: "Wystaw produkty",
+                  onTap: _sellProducts,
                 ),
               ],
             ),

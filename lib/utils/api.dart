@@ -174,8 +174,46 @@ class ApiException implements Exception {
   ApiException({@required this.message});
 }
 
+Future<bool> rateUser({
+  @required int userId,
+  @required int rating,
+  @required String comment,
+}) async {
+  final result = await http.post(
+      'https://targowisko.herokuapp.com/api/v1/users/${userId}/rate.json',
+      headers: {
+        'access-token': Api.accesToken,
+      },
+      body: <String, dynamic>{
+        "rating": rating,
+        "comment": comment,
+      });
+
+  if (result.statusCode >= 300) throw ApiException(message: result.body);
+  return true;
+}
+
 class _Market {
   const _Market._();
+
+  Future<bool> rate({
+    @required int marketId,
+    @required int rating,
+    @required String comment,
+  }) async {
+    final result = await http.post(
+        'https://targowisko.herokuapp.com/api/v1/markets/${marketId}/rate.json',
+        headers: {
+          'access-token': Api.accesToken,
+        },
+        body: <String, dynamic>{
+          "rating": rating,
+          "comment": comment,
+        });
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return true;
+  }
 
   Future<List<MarketModel>> fetch({
     int userId,
@@ -296,6 +334,25 @@ class _Product {
     return (json.decode(result.body) as List)
         .map((dynamic product) => ProductModel.fromJson(product))
         .toList();
+  }
+
+  Future<bool> rate({
+    @required int productId,
+    @required int rating,
+    @required String comment,
+  }) async {
+    final result = await http.post(
+        'https://targowisko.herokuapp.com/api/v1/products/${productId}/rate.json',
+        headers: {
+          'access-token': Api.accesToken,
+        },
+        body: <String, dynamic>{
+          "rating": rating,
+          "comment": comment,
+        });
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return true;
   }
 
   Future<ProductModel> getOne(int productId) async {
