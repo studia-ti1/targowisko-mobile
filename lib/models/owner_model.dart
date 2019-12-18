@@ -8,7 +8,7 @@ class OwnerModel {
   final String password;
   final String phoneNumber;
   final int productsCount;
-  final double averageRating;
+  double averageRating;
   final int role;
   final String avatar;
   final DateTime createdAt;

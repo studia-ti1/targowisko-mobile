@@ -1,11 +1,16 @@
-import 'package:auto_size_text/auto_size_text.dart';
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/owner_model.dart';
 import 'package:targowisko/models/product_model.dart';
+import 'package:targowisko/models/rating_model.dart';
 import 'package:targowisko/screens/market/market_screen.dart';
+import 'package:targowisko/utils/alert.dart';
+import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/animated/animated_rating_coins.dart';
 import 'package:targowisko/widgets/avatar.dart';
+import 'package:targowisko/widgets/buttons/rounded_button.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 import 'package:targowisko/widgets/sliders/element_slider.dart';
 
@@ -46,13 +51,31 @@ class _SellerScreenState extends State<SellerScreen> {
                   delay: const Duration(milliseconds: 300),
                 ),
                 Spacer(),
-                FlatButton(
-                  color: StyleProvider.of(context).colors.primaryAccent,
-                  child: Text(
-                    "Więcej",
-                    style: StyleProvider.of(context).font.pacificoPrimary,
-                  ),
-                  onPressed: () {},
+                RoundedButton(
+                  height: 40,
+                  title: "Oceń",
+                  fontSize: 18,
+                  onTap: () {
+                    Alert.openRateModal(
+                      context,
+                      title: "Oceń produkt",
+                      onRate: (Rate rate) async {
+                        final seller = widget.seller;
+                        final result = await Api.rateUser(
+                          comment: rate.comment,
+                          rating: rate.rate,
+                          userId: seller.id,
+                        );
+
+                        if (result == true) {
+                          final newSeller = await Api.getUsers(seller.id);
+                          seller.averageRating = newSeller.averageRating;
+
+                          setState(() {});
+                        }
+                      },
+                    );
+                  },
                 ),
               ],
             ),

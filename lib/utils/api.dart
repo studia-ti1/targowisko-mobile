@@ -16,6 +16,25 @@ class Api {
   /// private constructor
   Api._();
 
+  static Future<bool> rateUser({
+    @required int userId,
+    @required int rating,
+    @required String comment,
+  }) async {
+    final result = await http.post(
+        'https://targowisko.herokuapp.com/api/v1/users/${userId}/rate.json',
+        headers: {
+          'access-token': Api.accesToken,
+        },
+        body: <String, String>{
+          "rating": rating.toString(),
+          "comment": comment,
+        });
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return true;
+  }
+
   static OwnerModel currentUser;
 
   static Future<List<OwnerModel>> fetchUsers() async {
@@ -35,6 +54,23 @@ class Api {
     return (json.decode(result.body) as List)
         .map((dynamic seller) => OwnerModel.fromJson(seller))
         .toList();
+  }
+
+  static Future<OwnerModel> getUsers(int userId) async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/users/${userId}.json",
+    );
+
+    final result = await http.get(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return OwnerModel.fromJson(json.decode(result.body));
   }
 
   static Future<List<OwnerModel>> fetchBestUsers() async {
@@ -172,25 +208,6 @@ class ApiException implements Exception {
   final String message;
 
   ApiException({@required this.message});
-}
-
-Future<bool> rateUser({
-  @required int userId,
-  @required int rating,
-  @required String comment,
-}) async {
-  final result = await http.post(
-      'https://targowisko.herokuapp.com/api/v1/users/${userId}/rate.json',
-      headers: {
-        'access-token': Api.accesToken,
-      },
-      body: <String, String>{
-        "rating": rating.toString(),
-        "comment": comment,
-      });
-
-  if (result.statusCode >= 300) throw ApiException(message: result.body);
-  return true;
 }
 
 class _Market {

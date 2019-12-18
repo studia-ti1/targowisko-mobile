@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/screens/home/home_screen.dart';
+import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/animated/rate_coins.dart';
 
@@ -226,6 +227,17 @@ class _RateDialogContentState extends State<RateDialogContent>
     final rate = Rate(comment: _comment, rate: _rate);
     try {
       await widget.onRate(rate);
+    } on ApiException catch (err) {
+      Alert.open(
+        context,
+        title: "Wystąpił błąd podczas oceniania",
+        confirmLabel: "Rozumiem",
+        content: err.message,
+      );
+      setState(() {
+        _step = 0;
+      });
+      return;
     } on Exception catch (err) {
       Alert.open(
         context,
