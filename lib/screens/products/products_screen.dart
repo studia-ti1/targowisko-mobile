@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:targowisko/models/product_model.dart';
+import 'package:targowisko/screens/home/home_screen.dart';
 import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
@@ -22,6 +23,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
   int _currentPage = _initialPageNumber;
   bool _canFetch = true;
   bool _loading = false;
+  bool _firstLoad = true;
   bool _isFetchingNext = false;
 
   List<ProductModel> _products = [];
@@ -58,6 +60,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
       setState(() {
         _loading = false;
         _isFetchingNext = false;
+        _firstLoad = false;
         _currentPage = pageNumber;
         _canFetch = perPage == products.length;
         if (pageNumber == _initialPageNumber) {
@@ -109,53 +112,72 @@ class _ProductsScreenState extends State<ProductsScreen> {
         width: 100,
         height: 100,
       ),
-      child: CustomScrollView(
-        slivers: <Widget>[
-          SliverPersistentHeader(
-            pinned: true,
-            delegate: SearchInput(
-              controller: _controller,
-              topPadding: _getTopPadding(context),
-              onSearch: _onSearch,
-            ),
-          ),
-          SliverPadding(
-            padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
-            sliver: SliverList(
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  if (index == _products.length) {
-                    _fetchNext();
-                    return _loading && _isFetchingNext
-                        ? Container(
-                            alignment: Alignment.center,
-                            margin: const EdgeInsets.only(top: 15),
-                            child: CircularProgressIndicator())
-                        : SizedBox();
-                  }
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: _firstLoad
+            ? Center(
+                child: CustomLoader(
+                  loadingText: "Sprawdzanie jakości produktów...",
+                ),
+              )
+            : CustomScrollView(
+                slivers: <Widget>[
+                  SliverPersistentHeader(
+                    pinned: true,
+                    delegate: SearchInput(
+                      controller: _controller,
+                      topPadding: _getTopPadding(context),
+                      onSearch: _onSearch,
+                    ),
+                  ),
+                  SliverPadding(
+                    padding: const EdgeInsets.fromLTRB(15, 5, 15, 10),
+                    sliver: SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                          if (index == _products.length) {
+                            _fetchNext();
+                            return _loading && _isFetchingNext
+                                ? Container(
+                                    alignment: Alignment.center,
+                                    margin: const EdgeInsets.only(top: 15),
+                                    child: Image.asset(
+                                      StyleProvider.of(context).asset.spinner,
+                                      width: 50,
+                                      fit: BoxFit.contain,
+                                      color: Colors.black,
+                                      colorBlendMode: BlendMode.color,
+                                      repeat: ImageRepeat.noRepeat,
+                                      filterQuality: FilterQuality.medium,
+                                      height: 50,
+                                    ),
+                                  )
+                                : SizedBox();
+                          }
 
-                  final product = _products[index];
-                  final rating = product.averageRating;
+                          final product = _products[index];
+                          final rating = product.averageRating;
 
-                  return AnimatedOpacity(
-                    duration: const Duration(milliseconds: 300),
-                    opacity: !_isFetchingNext && _loading ? 0.5 : 1,
-                    child: ListItem(
-                      title: product.name,
-                      description: product.description,
-                      averageRating: rating,
-                      onTap: () => _openProductScreen(product),
-                      child: ListItemPicture(
-                        imageUrl: product.picture,
+                          return AnimatedOpacity(
+                            duration: const Duration(milliseconds: 300),
+                            opacity: !_isFetchingNext && _loading ? 0.5 : 1,
+                            child: ListItem(
+                              title: product.name,
+                              description: product.description,
+                              averageRating: rating,
+                              onTap: () => _openProductScreen(product),
+                              child: ListItemPicture(
+                                imageUrl: product.picture,
+                              ),
+                            ),
+                          );
+                        },
+                        childCount: _products.length + 1,
                       ),
                     ),
-                  );
-                },
-                childCount: _products.length + 1,
+                  ),
+                ],
               ),
-            ),
-          ),
-        ],
       ),
     );
   }

@@ -117,7 +117,7 @@ class _MarketScreenState extends State<MarketScreen> {
   void _sellProducts() async {
     final shouldReload =
         await Navigator.pushNamed(context, Routes.choose, arguments: market);
-    if (shouldReload) {
+    if (shouldReload == true) {
       // await _updateMarketProductsAndSellers();
     }
   }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/models/product_model.dart';
+import 'package:targowisko/screens/home/home_screen.dart';
 import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/widgets/list_item/list_item.dart';
@@ -18,7 +19,7 @@ class ChooseProducts extends StatefulWidget {
 
 class ChooseProductsState extends State<ChooseProducts> {
   List<ProductModel> _products = [];
-  bool _loading = false;
+  bool _loading = true;
 
   @override
   void initState() {
@@ -27,7 +28,6 @@ class ChooseProductsState extends State<ChooseProducts> {
   }
 
   Future<void> _fetchProducts() async {
-    if (_loading) return;
     try {
       setState(() {
         _loading = true;
@@ -64,15 +64,14 @@ class ChooseProductsState extends State<ChooseProducts> {
     if (status) {
       Alert.loader(context, "Wystawianie produktu...");
       try {
+        await Api.addProductToMarket(product.id, widget.market.id);
 
-            await Api.addProductToMarket(product.id, widget.market.id);
-
-          widget.market.products.add(product);
-          widget.market.sellers.firstWhere(
-              (seller) => seller.id == Api.currentUser.id, orElse: () {
-            widget.market.sellers.add(Api.currentUser);
-            return null;
-          });
+        widget.market.products.add(product);
+        widget.market.sellers.firstWhere(
+            (seller) => seller.id == Api.currentUser.id, orElse: () {
+          widget.market.sellers.add(Api.currentUser);
+          return null;
+        });
       } on ApiException catch (err) {
         Navigator.pop(context);
         Alert.open(
@@ -89,23 +88,36 @@ class ChooseProductsState extends State<ChooseProducts> {
 
   @override
   Widget build(BuildContext context) {
-    return ListScaffold(
-      title: "Wystaw produkty",
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-        itemCount: _products.length,
-        itemBuilder: (BuildContext context, int index) {
-          final product = _products[index];
-          return ListItem(
-            title: product.name,
-            description: product.description,
-            averageRating: product.averageRating,
-            onTap: () => _addProductToMarket(product),
-            child: ListItemPicture(
-              imageUrl: product.picture,
-            ),
-          );
-        },
+    return Scaffold(
+      backgroundColor: Colors.white,
+      body: ListScaffold(
+        title: "Wystaw produkty",
+        child: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 300),
+          child: _loading
+              ? Center(
+                  child: CustomLoader(
+                    loadingText: "Wyszukiwanie twoich produktów",
+                  ),
+                )
+              : ListView.builder(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+                  itemCount: _products.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    final product = _products[index];
+                    return ListItem(
+                      title: product.name,
+                      description: product.description,
+                      averageRating: product.averageRating,
+                      onTap: () => _addProductToMarket(product),
+                      child: ListItemPicture(
+                        imageUrl: product.picture,
+                      ),
+                    );
+                  },
+                ),
+        ),
       ),
     );
   }

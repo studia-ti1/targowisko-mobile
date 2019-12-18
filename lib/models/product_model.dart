@@ -121,7 +121,7 @@ class ProductModel {
                 .toList()
             : null,
         productRatings = json["product_ratings"] != null
-            ? (json["markets"] as List)
+            ? (json["product_ratings"] as List)
                 .map((dynamic jsonRating) => RatingModel.fromJson(jsonRating))
                 .toList()
             : null,

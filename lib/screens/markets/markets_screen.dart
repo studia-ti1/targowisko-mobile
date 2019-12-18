@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/routes.dart';
+import 'package:targowisko/screens/home/home_screen.dart';
 import 'package:targowisko/screens/market/market_screen.dart';
 import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
@@ -16,6 +17,7 @@ class MarketsScreen extends StatefulWidget {
 
 class _MarketsScreenState extends State<MarketsScreen> {
   List<MarketModel> _markets = [];
+  bool _loading = true;
 
   @override
   void initState() {
@@ -37,6 +39,10 @@ class _MarketsScreenState extends State<MarketsScreen> {
         onConfirm: Navigator.of(context).pop,
         confirmLabel: "Rozumiem",
       );
+    } finally {
+      setState(() {
+        _loading = false;
+      });
     }
   }
 
@@ -57,21 +63,30 @@ class _MarketsScreenState extends State<MarketsScreen> {
         width: 100,
         height: 100,
       ),
-      child: ListView.builder(
-        padding: const EdgeInsets.fromLTRB(15, 40, 15, 10),
-        itemBuilder: (BuildContext context, int index) {
-          final market = _markets[index];
-          return ListItem(
-            description: market.description,
-            title: market.name,
-            averageRating: market.averageRating,
-            onTap: () => _openMarket(market),
-            child: ListItemPicture(
-              imageUrl: market.imageUrl,
-            ),
-          );
-        },
-        itemCount: _markets.length,
+      child: AnimatedSwitcher(
+        duration: const Duration(milliseconds: 300),
+        child: _loading
+            ? Center(
+                child: CustomLoader(
+                  loadingText: "Sprawdzanie naszych targów...",
+                ),
+              )
+            : ListView.builder(
+                padding: const EdgeInsets.fromLTRB(15, 40, 15, 10),
+                itemBuilder: (BuildContext context, int index) {
+                  final market = _markets[index];
+                  return ListItem(
+                    description: market.description,
+                    title: market.name,
+                    averageRating: market.averageRating,
+                    onTap: () => _openMarket(market),
+                    child: ListItemPicture(
+                      imageUrl: market.imageUrl,
+                    ),
+                  );
+                },
+                itemCount: _markets.length,
+              ),
       ),
     );
   }

@@ -7,6 +7,7 @@ class ListItem extends StatefulWidget {
   final String title;
   final String description;
   final double averageRating;
+  final bool withDescription;
   final Widget child;
   final VoidCallback onTap;
   final GlobalKey listkey;
@@ -17,6 +18,7 @@ class ListItem extends StatefulWidget {
     this.updater,
     @required this.child,
     @required this.title,
+    this.withDescription = true,
     this.description,
     this.averageRating,
     this.onTap,
@@ -72,7 +74,7 @@ class _ListItemState extends State<ListItem> with TickerProviderStateMixin {
               child: InkWell(
                 onTap: widget.onTap,
                 child: Container(
-                  height: 110,
+                  height: widget.withDescription ? 110 : null,
                   child: Row(
                     children: <Widget>[
                       ClipRRect(
@@ -101,21 +103,22 @@ class _ListItemState extends State<ListItem> with TickerProviderStateMixin {
                                   .pacifico
                                   .copyWith(fontSize: 20),
                             ),
-                            SizedBox(height: 5),
-                            Expanded(
-                              child: Text(
-                                widget.description ?? "---",
-                                maxLines: 3,
-                                overflow: TextOverflow.ellipsis,
-                                style: StyleProvider.of(context)
-                                    .font
-                                    .normal
-                                    .copyWith(fontSize: 12, height: 1.3),
+                            if (widget.withDescription) SizedBox(height: 5),
+                            if (widget.withDescription)
+                              Expanded(
+                                child: Text(
+                                  widget.description ?? "---",
+                                  maxLines: 3,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: StyleProvider.of(context)
+                                      .font
+                                      .normal
+                                      .copyWith(fontSize: 12, height: 1.3),
+                                ),
                               ),
-                            ),
                             Container(
                               margin: const EdgeInsets.only(top: 5),
-                              height: 20,
+                              height: widget.withDescription ? 20 : 30,
                               width: 200,
                               child: AnimatedBuilder(
                                   animation: _ratingController,
@@ -124,7 +127,7 @@ class _ListItemState extends State<ListItem> with TickerProviderStateMixin {
                                       value: widget.averageRating == null
                                           ? null
                                           : _ratingController.value,
-                                      size: 20,
+                                      size: widget.withDescription ? 20 : 30,
                                     );
                                   }),
                             )

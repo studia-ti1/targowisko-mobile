@@ -16,6 +16,8 @@ import 'package:targowisko/widgets/extent_list_scaffold.dart';
 import 'package:targowisko/widgets/extent_list_scaffold_image_nav_child.dart';
 import 'package:targowisko/widgets/sliders/element_slider.dart';
 
+import '../../routes.dart';
+
 class ProductScreen extends StatefulWidget {
   final ProductModel product;
 
@@ -55,6 +57,14 @@ class _ProductScreenState extends State<ProductScreen> {
             child: Row(
               children: <Widget>[
                 AnimatedRatingCoins(
+                  onTap: () {
+                    if (widget.product?.productRatings != null)
+                      Navigator.pushNamed(
+                        context,
+                        Routes.ratingsScreen,
+                        arguments: widget.product.productRatings,
+                      );
+                  },
                   raiting: widget.product.averageRating,
                   delay: const Duration(milliseconds: 300),
                 ),
@@ -85,11 +95,16 @@ class _ProductScreenState extends State<ProductScreen> {
                             updatedAt: null,
                             userId: Api.currentUser.id,
                           ));
-                          var avg = product.productRatings
-                                  .map((m) => m.rating)
-                                  .reduce((a, b) => a + b) /
-                              product.productRatings.length;
-                          product.averageRating = avg;
+                          double avg;
+                          if (product?.productRatings != null) {
+                            avg = product.productRatings
+                                    .map((m) => m.rating)
+                                    .reduce((a, b) => a + b) /
+                                product.productRatings.length;
+                          }
+                          if (avg != null && product?.averageRating != null) {
+                            product.averageRating = avg;
+                          }
                           setState(() {});
                         }
                       },

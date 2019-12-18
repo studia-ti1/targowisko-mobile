@@ -51,15 +51,15 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _loadingText = "Poszukujemy najlpeszych marketów...";
       });
-      // _markets = await Api.market.fetch(pageNumber: 1, perPage: 5);
+      _markets = await Api.market.fetch(pageNumber: 1, perPage: 5);
       setState(() {
         _loadingText = "Testujemy jakość produktów...";
       });
-      // _products = await Api.product.fetch(pageNumber: 2, perPage: 10);
+      _products = await Api.product.fetch(pageNumber: 2, perPage: 10);
       setState(() {
         _loadingText = "Weryfikujemy najlepszych sprzedawców...";
       });
-      // _sellers = await Api.fetchUsers();
+      _sellers = await Api.fetchUsers();
     } on ApiException catch (err) {
       Alert.open(context, title: "Wystąpił błąd", content: err.message);
       return;
@@ -143,17 +143,40 @@ class _HomeScreenState extends State<HomeScreen> {
                     ElementSlider<OwnerModel>(
                       cardWidth: 350,
                       title: "Najpopularniejsi sprzedawcy",
-                      elementBuilder: (context, seller) => Container(
-                        decoration: BoxDecoration(
-                          gradient:
-                              StyleProvider.of(context).gradient.cardGradient3,
-                        ),
-                        padding: const EdgeInsets.symmetric(horizontal: 15),
-                        child: SellerCardContent(
-                          avatarUrl: seller.avatar,
-                          productsCount: seller.products.length,
-                          rating: seller.averageRating,
-                          sellerName: "${seller.firstName} ${seller.lastName}",
+                      elementBuilder: (context, seller) => Material(
+                        color: Colors.transparent,
+                        child: Stack(
+                          children: <Widget>[
+                            Container(
+                              decoration: BoxDecoration(
+                                gradient: StyleProvider.of(context)
+                                    .gradient
+                                    .cardGradient3,
+                              ),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
+                              child: SellerCardContent(
+                                avatarUrl: seller.avatar,
+                                productsCount: seller.products.length,
+                                rating: seller.averageRating,
+                                sellerName:
+                                    "${seller.firstName} ${seller.lastName}",
+                              ),
+                            ),
+                            Material(
+                              color: Colors.transparent,
+                              child: InkWell(
+                                splashColor: Colors.white24,
+                                onTap: () {
+                                  Navigator.pushNamed(
+                                    context,
+                                    Routes.seller,
+                                    arguments: seller,
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       items: _sellers,

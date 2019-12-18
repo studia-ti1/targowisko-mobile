@@ -7,12 +7,14 @@ class AnimatedRatingCoins extends StatefulWidget {
     Key key,
     @required this.raiting,
     this.delay,
+    this.onTap,
     this.duration,
   }) : super(key: key);
 
   final double raiting;
   final Duration duration;
   final Duration delay;
+  final VoidCallback onTap;
 
   @override
   _AnimatedRatingCoinsState createState() => _AnimatedRatingCoinsState();
@@ -56,14 +58,17 @@ class _AnimatedRatingCoinsState extends State<AnimatedRatingCoins>
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedBuilder(
-        animation: _controller,
-        builder: (context, snapshot) {
-          return RaitingCoins(
-            size: 35,
-            value: widget.raiting == null ? null : _controller.value,
-          );
-        });
+    return InkWell(
+      onTap: widget.onTap,
+      child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, snapshot) {
+            return RaitingCoins(
+              size: 35,
+              value: widget.raiting == null ? null : _controller.value,
+            );
+          }),
+    );
   }
 
   @override

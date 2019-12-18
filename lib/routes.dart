@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/models/owner_model.dart';
 import 'package:targowisko/models/product_model.dart';
+import 'package:targowisko/models/rating_model.dart';
 import 'package:targowisko/screens/add_market/add_market_screen.dart';
 import 'package:targowisko/screens/add_product/add_product.dart';
 import 'package:targowisko/screens/choose_products/choose_products_screen.dart';
 import 'package:targowisko/screens/market_products/market_products_screen.dart';
 import 'package:targowisko/screens/product/product_screen.dart';
+import 'package:targowisko/screens/ratings_screen/ratings_screen.dart';
 import 'package:targowisko/screens/seller/seller_screen.dart';
 import 'package:targowisko/screens/user/user_screen.dart';
 
@@ -29,6 +31,7 @@ class Routes {
   static const String addProduct = '/product/add';
   static const String addMarket = '/market/add';
   static const String marketProducts = '/market/products';
+  static const String ratingsScreen = '/ratings';
   static const String me = '/me';
   static const String choose = '/choose_products';
 
@@ -76,6 +79,17 @@ class Routes {
         return MaterialPageRoute<void>(
           builder: (_) => ChooseProducts(
             market: market,
+          ),
+        );
+
+      case ratingsScreen:
+        assert(settings.arguments != null && settings.arguments is List<RatingModel>);
+
+        List<RatingModel> ratings = settings.arguments;
+
+        return MaterialPageRoute<void>(
+          builder: (_) => RatingsScreen(
+            ratings: ratings,
           ),
         );
 

@@ -1,112 +1,58 @@
 import 'package:flutter/material.dart';
-import 'package:targowisko/models/market_model.dart';
-import 'package:targowisko/models/product_model.dart';
-import 'package:targowisko/utils/alert.dart';
-import 'package:targowisko/utils/api.dart';
+import 'package:targowisko/models/rating_model.dart';
+import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/list_item/list_item.dart';
-import 'package:targowisko/widgets/list_item/widgets/list_item_picture.dart';
 import 'package:targowisko/widgets/list_scaffold.dart';
 
-class ChooseProducts extends StatefulWidget {
-  final MarketModel market;
+class RatingsScreen extends StatefulWidget {
+  final List<RatingModel> ratings;
 
-  ChooseProducts({@required this.market});
+  RatingsScreen({@required this.ratings});
 
   @override
-  ChooseProductsState createState() => ChooseProductsState();
+  RatingsScreenState createState() => RatingsScreenState();
 }
 
-class ChooseProductsState extends State<ChooseProducts> {
-  List<ProductModel> _products = [];
-  bool _loading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchProducts();
-  }
-
-  Future<void> _fetchProducts() async {
-    if (_loading) return;
-    try {
-      setState(() {
-        _loading = true;
-      });
-      _products = await Api.product.fetch(
-        userId: Api.currentUser.id,
-      );
-
-      setState(() {
-        _loading = false;
-      });
-    } on ApiException catch (err) {
-      Alert.open(
-        context,
-        title: "Wystąpił nieoczekiwany błąd",
-        content: err.message,
-        onConfirm: Navigator.of(context).pop,
-        confirmLabel: "Rozumiem",
-      );
-    }
-  }
-
-  void _addProductToMarket(ProductModel product) async {
-    final status = await Alert.open(
-      context,
-      title: "Wystawianie produktu",
-      confirmLabel: "Wystaw!",
-      cancelLabel: "Rozmyśliłem się 😒",
-      content: "Czy chcesz wystawić produkt ${product.name} "
-          "na targu ${widget.market.name}?",
-      withStackTrace: false,
-    );
-
-    if (status) {
-      Alert.loader(context, "Wystawianie produktu...");
-      try {
-
-            await Api.addProductToMarket(product.id, widget.market.id);
-
-          widget.market.products.add(product);
-          widget.market.sellers.firstWhere(
-              (seller) => seller.id == Api.currentUser.id, orElse: () {
-            widget.market.sellers.add(Api.currentUser);
-            return null;
-          });
-      } on ApiException catch (err) {
-        Navigator.pop(context);
-        Alert.open(
-          context,
-          title: "Wystąpił nieoczekiwany błąd",
-          content: err.message,
-        );
-        return;
-      }
-      Navigator.pop(context);
-      Navigator.pop(context, true);
-    }
-  }
-
+class RatingsScreenState extends State<RatingsScreen> {
   @override
   Widget build(BuildContext context) {
+    print(widget.ratings.length);
     return ListScaffold(
-      title: "Wystaw produkty",
-      child: ListView.builder(
-        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
-        itemCount: _products.length,
-        itemBuilder: (BuildContext context, int index) {
-          final product = _products[index];
-          return ListItem(
-            title: product.name,
-            description: product.description,
-            averageRating: product.averageRating,
-            onTap: () => _addProductToMarket(product),
-            child: ListItemPicture(
-              imageUrl: product.picture,
+      title: "Oceny",
+      child: widget.ratings.isEmpty
+          ? Center(
+              child: Text(
+                "Brak ocen",
+                style: StyleProvider.of(context)
+                    .font
+                    .pacifico
+                    .copyWith(fontSize: 20, color: Colors.black38),
+              ),
+            )
+          : ListView.separated(
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
+              itemCount: widget.ratings.length,
+              itemBuilder: (BuildContext context, int index) {
+                final rating = widget.ratings[index];
+                return Container(
+                  child: ListItem(
+                    withDescription: false,
+                    title: rating.comment,
+                    averageRating: rating.rating.toDouble(),
+                    child: Container(),
+                  ),
+                );
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return Container(
+                  height: 1,
+                  margin: const EdgeInsets.only(bottom: 10),
+                  decoration: BoxDecoration(
+                    gradient: StyleProvider.of(context).gradient.cardGradient2,
+                  ),
+                );
+              },
             ),
-          );
-        },
-      ),
     );
   }
 }

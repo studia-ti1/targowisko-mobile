@@ -47,6 +47,9 @@ class _SellerScreenState extends State<SellerScreen> {
             child: Row(
               children: <Widget>[
                 AnimatedRatingCoins(
+                  onTap: () {
+                    return;
+                  },
                   raiting: widget.seller.averageRating,
                   delay: const Duration(milliseconds: 300),
                 ),
