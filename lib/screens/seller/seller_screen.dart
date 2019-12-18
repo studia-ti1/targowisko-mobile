@@ -117,19 +117,20 @@ class _SellerScreenState extends State<SellerScreen> {
               style: StyleProvider.of(context).font.normal,
             ),
           ),
-          ElementSlider<ProductModel>(
-            cardWidth: 130,
-            title: "Produkty",
-            elementBuilder: (context, product) => ProductCard(
-              product: product,
-              onTap: () => Navigator.pushNamed(
-                context,
-                Routes.product,
-                arguments: product,
+          if (widget.seller.products != null)
+            ElementSlider<ProductModel>(
+              cardWidth: 130,
+              title: "Produkty",
+              elementBuilder: (context, product) => ProductCard(
+                product: product,
+                onTap: () => Navigator.pushNamed(
+                  context,
+                  Routes.product,
+                  arguments: product,
+                ),
               ),
+              items: widget.seller.products,
             ),
-            items: widget.seller.products,
-          ),
         ],
       ),
     );

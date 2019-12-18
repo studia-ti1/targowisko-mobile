@@ -5,6 +5,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
+import 'package:targowisko/models/owner_model.dart';
 import 'package:targowisko/models/product_model.dart';
 import 'package:targowisko/models/rating_model.dart';
 import 'package:targowisko/routes.dart';
@@ -110,8 +111,12 @@ class _MarketScreenState extends State<MarketScreen> {
     });
   }
 
-  void _openSellerScreen() {
-    // TODO;
+  void _openSellerScreen(OwnerModel seller) {
+    Navigator.pushNamed(
+      context,
+      Routes.seller,
+      arguments: seller,
+    );
   }
 
   void _sellProducts() async {
@@ -256,7 +261,7 @@ class _MarketScreenState extends State<MarketScreen> {
                     builder: (context, index) {
                       final seller = market.sellers[index];
                       return CardsSliderCard(
-                        onCardPress: _openSellerScreen,
+                        onCardPress: () => _openSellerScreen(seller),
                         padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
                         child: SellerCardContent(
                           avatarUrl: seller.avatar,

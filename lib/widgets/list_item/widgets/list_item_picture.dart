@@ -11,14 +11,11 @@ class ListItemPicture extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => imageUrl != null
-      ? Hero(
-          tag: imageUrl,
-          child: CachedNetworkImage(
-            fit: BoxFit.cover,
-            width: 110,
-            height: 110,
-            imageUrl: imageUrl,
-          ),
+      ? CachedNetworkImage(
+          fit: BoxFit.cover,
+          width: 110,
+          height: 110,
+          imageUrl: imageUrl,
         )
       : Container(
           alignment: Alignment.center,
