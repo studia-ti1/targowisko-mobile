@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
       _loadingText = "Sprawdzamy kim jesteś...";
     });
     try {
-      // user = await Api.getAboutMe();
+      user = await Api.getAboutMe();
       setState(() {
         _loadingText = "Poszukujemy najlpeszych marketów...";
       });

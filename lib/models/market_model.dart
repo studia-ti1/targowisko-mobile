@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:flutter/material.dart';
 import 'package:targowisko/models/product_model.dart';
 import 'package:targowisko/models/rating_model.dart';
 import 'package:targowisko/utils/api.dart';
@@ -13,19 +12,39 @@ import 'package:http/http.dart' as http;
 
 class MarketModel {
   final int id;
-  final String name;
-  final bool going;
-  final String description;
-  final String facebookEventId;
-  final LocationModel place;
-  final OwnerModel owner;
-  final String imageUrl;
-  final int userId;
-  final List<ProductModel> products;
-  final List<RatingModel> marketRaitings;
-  final double averageRating;
-  final int participants;
-  final List<OwnerModel> sellers;
+  String name;
+  bool going;
+  String description;
+  String facebookEventId;
+  LocationModel place;
+  OwnerModel owner;
+  String imageUrl;
+  int userId;
+  List<ProductModel> products;
+  List<RatingModel> marketRaitings;
+  double averageRating;
+  int participants;
+  List<OwnerModel> sellers;
+
+  void setWith(MarketModel marketModel) {
+    if (marketModel.owner != null) owner = marketModel.owner;
+    if (marketModel.name != null) name = marketModel.name;
+    if (marketModel.going != null) going = marketModel.going;
+    if (marketModel.description != null) description = marketModel.description;
+    if (marketModel.facebookEventId != null)
+      facebookEventId = marketModel.facebookEventId;
+    if (marketModel.place != null) place = marketModel.place;
+    if (marketModel.userId != null) userId = marketModel.userId;
+    if (marketModel.sellers != null) sellers = marketModel.sellers;
+    if (marketModel.participants != null)
+      participants = marketModel.participants;
+    if (marketModel.averageRating != null)
+      averageRating = marketModel.averageRating;
+    if (marketModel.marketRaitings != null)
+      marketRaitings = marketModel.marketRaitings;
+    if (marketModel.products != null) products = marketModel.products;
+    if (marketModel.imageUrl != null) imageUrl = marketModel.imageUrl;
+  }
 
   MarketModel.fromJson(dynamic json)
       : id = int.tryParse(json["id"].toString()),
@@ -36,7 +55,7 @@ class MarketModel {
         participants = json["participants"],
         facebookEventId = json["facebook_event_id"],
         sellers = json["sellers"] == null
-            ? []
+            ? null
             : (json["sellers"] as List)
                 .map((dynamic product) => OwnerModel.fromJson(product))
                 .toList(),

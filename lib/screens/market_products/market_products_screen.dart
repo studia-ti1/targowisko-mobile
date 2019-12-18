@@ -7,16 +7,18 @@ import 'package:targowisko/widgets/list_item/list_item.dart';
 import 'package:targowisko/widgets/list_item/widgets/list_item_picture.dart';
 import 'package:targowisko/widgets/list_scaffold.dart';
 
-class ChooseProducts extends StatefulWidget {
+import '../../routes.dart';
+
+class MarketProductsScreen extends StatefulWidget {
   final MarketModel market;
 
-  ChooseProducts({@required this.market});
+  MarketProductsScreen({@required this.market});
 
   @override
-  ChooseProductsState createState() => ChooseProductsState();
+  MarketProductsScreenState createState() => MarketProductsScreenState();
 }
 
-class ChooseProductsState extends State<ChooseProducts> {
+class MarketProductsScreenState extends State<MarketProductsScreen> {
   List<ProductModel> _products = [];
   bool _loading = false;
 
@@ -32,9 +34,7 @@ class ChooseProductsState extends State<ChooseProducts> {
       setState(() {
         _loading = true;
       });
-      _products = await Api.product.fetch(
-        userId: Api.currentUser.id,
-      );
+      _products = await Api.product.fetch(marketId: widget.market.id);
 
       setState(() {
         _loading = false;
@@ -50,47 +50,14 @@ class ChooseProductsState extends State<ChooseProducts> {
     }
   }
 
-  void _addProductToMarket(ProductModel product) async {
-    final status = await Alert.open(
-      context,
-      title: "Wystawianie produktu",
-      confirmLabel: "Wystaw!",
-      cancelLabel: "Rozmyśliłem się 😒",
-      content: "Czy chcesz wystawić produkt ${product.name} "
-          "na targu ${widget.market.name}?",
-      withStackTrace: false,
-    );
-
-    if (status) {
-      Alert.loader(context, "Wystawianie produktu...");
-      try {
-
-            await Api.addProductToMarket(product.id, widget.market.id);
-
-          widget.market.products.add(product);
-          widget.market.sellers.firstWhere(
-              (seller) => seller.id == Api.currentUser.id, orElse: () {
-            widget.market.sellers.add(Api.currentUser);
-            return null;
-          });
-      } on ApiException catch (err) {
-        Navigator.pop(context);
-        Alert.open(
-          context,
-          title: "Wystąpił nieoczekiwany błąd",
-          content: err.message,
-        );
-        return;
-      }
-      Navigator.pop(context);
-      Navigator.pop(context, true);
-    }
+  void _openProductScreen(ProductModel product) async {
+    Navigator.pushNamed(context, Routes.product, arguments: product);
   }
 
   @override
   Widget build(BuildContext context) {
     return ListScaffold(
-      title: "Wystaw produkty",
+      title: widget.market.name,
       child: ListView.builder(
         padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 30),
         itemCount: _products.length,
@@ -100,7 +67,7 @@ class ChooseProductsState extends State<ChooseProducts> {
             title: product.name,
             description: product.description,
             averageRating: product.averageRating,
-            onTap: () => _addProductToMarket(product),
+            onTap: () => _openProductScreen(product),
             child: ListItemPicture(
               imageUrl: product.picture,
             ),

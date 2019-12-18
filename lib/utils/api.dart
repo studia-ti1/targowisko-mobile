@@ -16,6 +16,8 @@ class Api {
   /// private constructor
   Api._();
 
+  static OwnerModel currentUser;
+
   static Future<List<OwnerModel>> fetchUsers() async {
     final url = Uri.https(
       "targowisko.herokuapp.com",
@@ -99,7 +101,7 @@ class Api {
       },
     );
     if (result.statusCode >= 300) throw ApiException(message: result.body);
-    return OwnerModel.fromJson(json.decode(result.body));
+    return Api.currentUser = OwnerModel.fromJson(json.decode(result.body));
   }
 
   static Future<ProductModel> addProductToMarket(
@@ -237,6 +239,8 @@ class _Market {
       },
     );
 
+    printWrapped(result.body);
+
     if (result.statusCode >= 300) throw ApiException(message: result.body);
     return MarketModel.fromJson(json.decode(result.body));
   }
@@ -331,14 +335,12 @@ class _Product {
       params,
     );
 
-
     final result = await http.get(
       url,
       headers: {
         'access-token': Api.accesToken,
       },
     );
-    printWrapped(result.body);
 
     if (result.statusCode >= 300) throw ApiException(message: result.body);
     return (json.decode(result.body) as List)

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/models/product_model.dart';
 import 'package:targowisko/screens/add_market/add_market_screen.dart';
 import 'package:targowisko/screens/add_product/add_product.dart';
 import 'package:targowisko/screens/choose_products/choose_products_screen.dart';
+import 'package:targowisko/screens/market_products/market_products_screen.dart';
 import 'package:targowisko/screens/product/product_screen.dart';
 import 'package:targowisko/screens/user/user_screen.dart';
 
@@ -23,6 +25,7 @@ class Routes {
   static const String sellers = '/sellers';
   static const String addProduct = '/product/add';
   static const String addMarket = '/market/add';
+  static const String marketProducts = '/market/products';
   static const String me = '/me';
   static const String choose = '/choose_products';
 
@@ -30,37 +33,74 @@ class Routes {
     switch (settings.name) {
       case home:
         return MaterialPageRoute<void>(builder: (_) => HomeScreen());
+
       case login:
         return MaterialPageRoute<void>(builder: (_) => LoginScreen());
+
       case markets:
         return MaterialPageRoute<void>(builder: (_) => MarketsScreen());
+
       case market:
         assert(settings.arguments != null &&
             settings.arguments is MarketScreenArgs);
+
         MarketScreenArgs args = settings.arguments;
+
         return MaterialPageRoute<void>(
           builder: (_) => MarketScreen(args: args),
         );
+
       case products:
         return MaterialPageRoute<void>(builder: (_) => ProductsScreen());
+
       case sellers:
         return MaterialPageRoute<void>(builder: (_) => SellersScreen());
+
       case addProduct:
         return MaterialPageRoute<void>(builder: (_) => AddProductScreen());
+
       case addMarket:
         return MaterialPageRoute<void>(builder: (_) => AddMarketScreen());
+
       case me:
         return MaterialPageRoute<void>(builder: (_) => UserScreen());
+
       case choose:
-        return MaterialPageRoute<void>(builder: (_) => ChooseProducts());
+        assert(settings.arguments != null && settings.arguments is MarketModel);
+
+        MarketModel market = settings.arguments;
+
+        return MaterialPageRoute<void>(
+          builder: (_) => ChooseProducts(
+            market: market,
+          ),
+        );
+
+      case marketProducts:
+        assert(settings.arguments != null && settings.arguments is MarketModel);
+
+        MarketModel market = settings.arguments;
+
+        return MaterialPageRoute<void>(
+          builder: (_) => MarketProductsScreen(
+            market: market,
+          ),
+        );
+
       case product:
         assert(
             settings.arguments != null && settings.arguments is ProductModel);
+
         ProductModel product = settings.arguments;
+
         return MaterialPageRoute<void>(
-            builder: (_) => ProductScreen(product: product));
+          builder: (_) => ProductScreen(product: product),
+        );
+
       default:
-        return MaterialPageRoute<void>(builder: (_) => LoginScreen());
+        return MaterialPageRoute<void>(
+          builder: (_) => LoginScreen(),
+        );
     }
   }
 }

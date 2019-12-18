@@ -35,12 +35,15 @@ class MarketScreen extends StatefulWidget {
   MarketScreen({@required this.args});
 
   @override
-  _MarketScreenState createState() => _MarketScreenState();
+  _MarketScreenState createState() => _MarketScreenState(market: args.market);
 }
 
 class _MarketScreenState extends State<MarketScreen> {
   bool _isLiked = false;
   bool _showLikeButton = true;
+  MarketModel market;
+
+  _MarketScreenState({@required this.market}) : assert(market != null);
 
   @override
   void initState() {
@@ -51,7 +54,7 @@ class _MarketScreenState extends State<MarketScreen> {
   Future<MarketModel> _getMarket() async {
     MarketModel market;
     try {
-      market = await Api.market.getOne(widget.args.market.id);
+      market = await Api.market.getOne(this.market.id);
     } on ApiException catch (err) {
       await Alert.open(
         context,
@@ -70,14 +73,26 @@ class _MarketScreenState extends State<MarketScreen> {
     setState(() {
       _showLikeButton = true;
       _isLiked = market.going;
+      this.market.setWith(market);
     });
     return market;
   }
 
+  // void _updateMarketProductsAndSellers() async {
+  //   final markets = await Api.market.fetch();
+  //   final newMarket = markets.firstWhere(
+  //     (newMarket) => newMarket.id == market.id,
+  //     orElse: () => null,
+  //   );
+  //   if (newMarket != null) {
+  //     market.setWith(newMarket);
+  //   }
+  // }
+
   void _likeMarket() async {
     if (_isLiked) return;
     try {
-      await Api.attendMarket(widget.args.market.id);
+      await Api.attendMarket(market.id);
     } on ApiException catch (err) {
       Alert.open(
         context,
@@ -94,13 +109,16 @@ class _MarketScreenState extends State<MarketScreen> {
     // TODO;
   }
 
-  void _sellProducts() {
-    Navigator.pushNamed(context, Routes.choose);
+  void _sellProducts() async {
+    final shouldReload =
+        await Navigator.pushNamed(context, Routes.choose, arguments: market);
+    if (shouldReload) {
+      // await _updateMarketProductsAndSellers();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final market = widget.args.market;
     return ExtentListScaffold(
       liked: _isLiked,
       onLikePress: _showLikeButton ? _likeMarket : null,
@@ -181,29 +199,45 @@ class _MarketScreenState extends State<MarketScreen> {
                 const EdgeInsets.only(bottom: 15, left: 15, right: 15),
             title: "Wystawcy",
             onMorePress: () => Navigator.of(context).pushNamed(Routes.sellers),
-            // TODO:
-            child: CardsSlider(
-              itemsCount: market.sellers.length,
-              builder: (context, index) => CardsSliderCard(
-                onCardPress: _openSellerScreen,
-                padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
-                child: SellerCardContent(
-                  avatarUrl: market.sellers[index].avatar,
-                  sellerName: "${market.sellers[index].firstName} "
-                      "${market.sellers[index].lastName}",
-                  productsCount: 16,
-                  rating: 3.4,
-                ),
-              ),
-            ),
+            child: market.sellers.isEmpty
+                ? Center(
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        "Brak zgłoszonych wystawców",
+                        textAlign: TextAlign.center,
+                        style: StyleProvider.of(context).font.normal,
+                      ),
+                    ),
+                  )
+                : CardsSlider(
+                    itemsCount: market.sellers.length,
+                    builder: (context, index) {
+                      final seller = market.sellers[index];
+                      return CardsSliderCard(
+                        onCardPress: _openSellerScreen,
+                        padding: const EdgeInsets.fromLTRB(10, 5, 10, 10),
+                        child: SellerCardContent(
+                          avatarUrl: seller.avatar,
+                          sellerName: "${seller.firstName} ${seller.lastName}",
+                          productsCount: seller.productsCount,
+                          rating: seller.averageRating,
+                        ),
+                      );
+                    },
+                  ),
           ),
           Section(
             titlePadding:
                 const EdgeInsets.only(bottom: 15, left: 15, right: 15),
             title: "Produkty",
-            // TODO:
-            onMorePress: () {},
-            // TODO:
+            onMorePress: () {
+              Navigator.pushNamed(
+                context,
+                Routes.marketProducts,
+                arguments: market,
+              );
+            },
             child: market.products.isEmpty
                 ? Center(
                     child: Text(
