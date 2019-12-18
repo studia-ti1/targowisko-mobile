@@ -346,8 +346,8 @@ class _Product {
         headers: {
           'access-token': Api.accesToken,
         },
-        body: <String, dynamic>{
-          "rating": rating,
+        body: <String, String>{
+          "rating": rating.toString(),
           "comment": comment,
         });
 

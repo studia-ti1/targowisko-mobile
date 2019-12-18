@@ -9,8 +9,12 @@ class ListItem extends StatefulWidget {
   final double averageRating;
   final Widget child;
   final VoidCallback onTap;
+  final GlobalKey listkey;
+  final ValueNotifier updater;
 
   ListItem({
+    this.listkey,
+    this.updater,
     @required this.child,
     @required this.title,
     this.description,
@@ -33,8 +37,12 @@ class _ListItemState extends State<ListItem> with TickerProviderStateMixin {
         vsync: this, value: 0.0, lowerBound: 0.0, upperBound: 1.0);
     _ratingController = AnimationController(
         vsync: this, value: 0.0, lowerBound: 0.0, upperBound: 5.0);
-
+    widget.updater?.addListener(_update);
     _beginAnimation();
+  }
+
+  void _update() {
+    widget.listkey?.currentState.setState(() {});
   }
 
   Future<void> _beginAnimation() async {
@@ -149,6 +157,7 @@ class _ListItemState extends State<ListItem> with TickerProviderStateMixin {
   void dispose() {
     _controller.dispose();
     _ratingController.dispose();
+    widget.updater?.removeListener(_update);
     super.dispose();
   }
 }

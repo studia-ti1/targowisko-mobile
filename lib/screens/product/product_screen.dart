@@ -1,11 +1,17 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:targowisko/models/market_model.dart';
 import 'package:targowisko/models/product_model.dart';
+import 'package:targowisko/models/rating_model.dart';
 import 'package:targowisko/screens/home/widgets/market_card.dart';
 import 'package:targowisko/screens/market/widgets/organiser_section.dart';
+import 'package:targowisko/utils/alert.dart';
+import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/animated/animated_rating_coins.dart';
+import 'package:targowisko/widgets/buttons/rounded_button.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 import 'package:targowisko/widgets/extent_list_scaffold_image_nav_child.dart';
 import 'package:targowisko/widgets/sliders/element_slider.dart';
@@ -53,13 +59,42 @@ class _ProductScreenState extends State<ProductScreen> {
                   delay: const Duration(milliseconds: 300),
                 ),
                 Spacer(),
-                FlatButton(
-                  color: StyleProvider.of(context).colors.primaryAccent,
-                  child: Text(
-                    "Więcej",
-                    style: StyleProvider.of(context).font.pacificoPrimary,
-                  ),
-                  onPressed: () {},
+                RoundedButton(
+                  height: 40,
+                  title: "Oceń",
+                  fontSize: 18,
+                  onTap: () {
+                    Alert.openRateModal(
+                      context,
+                      title: "Oceń produkt",
+                      onRate: (Rate rate) async {
+                        final product = widget.product;
+                        final result = await Api.product.rate(
+                          comment: rate.comment,
+                          rating: rate.rate,
+                          productId: product.id,
+                        );
+
+                        if (result == true) {
+                          product.productRatings.add(RatingModel(
+                            comment: rate.comment,
+                            createdAt: DateTime.now(),
+                            id: Random().nextInt(20000),
+                            marketId: null,
+                            rating: rate.rate,
+                            updatedAt: null,
+                            userId: Api.currentUser.id,
+                          ));
+                          var avg = product.productRatings
+                                  .map((m) => m.rating)
+                                  .reduce((a, b) => a + b) /
+                              product.productRatings.length;
+                          product.averageRating = avg;
+                          setState(() {});
+                        }
+                      },
+                    );
+                  },
                 ),
               ],
             ),

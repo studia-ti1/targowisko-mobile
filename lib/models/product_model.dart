@@ -99,8 +99,11 @@ class ProductModel {
   final OwnerModel owner;
   final List<MarketModel> markets;
   final List<RatingModel> productRatings;
-  final double averageRating;
+  double averageRating;
   final String category;
+
+  ValueNotifier<double> updater = ValueNotifier<double>(null);
+
 
   ProductModel.fromJson(dynamic json)
       : id = json["id"],

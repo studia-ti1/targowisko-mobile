@@ -95,8 +95,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
   double _getTopPadding(BuildContext context) =>
       MediaQuery.of(context).padding?.top ?? 0;
 
-  void _openProductScreen(ProductModel product) {
-    Navigator.pushNamed(context, Routes.product, arguments: product);
+  void _openProductScreen(ProductModel product) async {
+    await Navigator.pushNamed(context, Routes.product, arguments: product);
+    setState(() {});
   }
 
   @override
@@ -115,7 +116,6 @@ class _ProductsScreenState extends State<ProductsScreen> {
             delegate: SearchInput(
               controller: _controller,
               topPadding: _getTopPadding(context),
-              // TODO:
               onSearch: _onSearch,
             ),
           ),
@@ -135,14 +135,15 @@ class _ProductsScreenState extends State<ProductsScreen> {
                   }
 
                   final product = _products[index];
+                  final rating = product.averageRating;
+
                   return AnimatedOpacity(
                     duration: const Duration(milliseconds: 300),
                     opacity: !_isFetchingNext && _loading ? 0.5 : 1,
                     child: ListItem(
                       title: product.name,
                       description: product.description,
-                      averageRating: product.averageRating,
-                      // TODO:
+                      averageRating: rating,
                       onTap: () => _openProductScreen(product),
                       child: ListItemPicture(
                         imageUrl: product.picture,
