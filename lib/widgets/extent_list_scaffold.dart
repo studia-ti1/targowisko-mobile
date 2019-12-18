@@ -229,29 +229,33 @@ class __LikeButtonState extends State<_LikeButton>
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(50),
-            child: Material(
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 300),
               color: widget.liked
                   ? StyleProvider.of(context).colors.primaryAccent
                   : StyleProvider.of(context).colors.primaryBackground,
-              child: _loading
-                  ? Center(
-                      child: CircularProgressIndicator(
-                        valueColor: AlwaysStoppedAnimation(
-                          StyleProvider.of(context).colors.primaryAccent,
+              child: Material(
+                color: Colors.transparent,
+                child: _loading
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          valueColor: AlwaysStoppedAnimation(
+                            StyleProvider.of(context).colors.primaryAccent,
+                          ),
                         ),
+                      )
+                    : InkWell(
+                        child: widget.liked
+                            ? Icon(
+                                Icons.directions_walk,
+                                color: StyleProvider.of(context)
+                                    .colors
+                                    .primaryBackground,
+                              )
+                            : const Icon(Icons.directions_walk),
+                        onTap: _like,
                       ),
-                    )
-                  : InkWell(
-                      child: widget.liked
-                          ? Icon(
-                              Icons.directions_walk,
-                              color: StyleProvider.of(context)
-                                  .colors
-                                  .primaryBackground,
-                            )
-                          : const Icon(Icons.directions_walk),
-                      onTap: _like,
-                    ),
+              ),
             ),
           ),
         ),
