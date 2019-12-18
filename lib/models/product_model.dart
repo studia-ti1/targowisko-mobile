@@ -68,6 +68,12 @@ class ProductCategory {
     CategoriesAssets.food,
   );
 
+  static const ProductCategory without = ProductCategory._(
+    "__________",
+    "Bez kategorii",
+    CategoriesAssets.other,
+  );
+
   static const allCategories = [
     // vegetables,
     // fruits,
@@ -118,8 +124,10 @@ class ProductModel {
             : null,
         averageRating = json["average_rating"];
 
-  ProductCategory getCateogry() => ProductCategory.allCategories
-      .firstWhere((cat) => cat.value == category, orElse: () => null);
+  ProductCategory getCateogry() => ProductCategory.allCategories.firstWhere(
+        (cat) => cat.value == category,
+        orElse: () => ProductCategory.other,
+      );
 
   Future<ProductModel> update({
     String name,

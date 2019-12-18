@@ -7,6 +7,8 @@ import 'package:targowisko/utils/api.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 
+import '../../routes.dart';
+
 class SellersScreen extends StatefulWidget {
   @override
   _SellersScreenState createState() => _SellersScreenState();
@@ -94,8 +96,13 @@ class _SellersScreenState extends State<SellersScreen> {
                         child: InkWell(
                           borderRadius: BorderRadius.circular(20),
                           splashColor: Colors.white10,
-                          // TODO:
-                          onTap: () {},
+                          onTap: () {
+                            Navigator.pushNamed(
+                              context,
+                              Routes.seller,
+                              arguments: seller,
+                            );
+                          },
                         ),
                       )
                     ],
