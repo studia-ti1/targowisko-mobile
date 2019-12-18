@@ -100,7 +100,7 @@ class _LoginScreenState extends State<LoginScreen>
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             decoration: BoxDecoration(
-              gradient: StyleProvider.of(context).gradient.primary,
+              gradient: StyleProvider.of(context).gradient.cardGradient3,
             ),
           ),
           Column(

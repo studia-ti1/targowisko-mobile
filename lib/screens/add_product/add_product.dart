@@ -51,8 +51,7 @@ class _AddProductScreenState extends State<AddProductScreen> {
 
       // TODO: Products storage?
 
-      Navigator.pushNamedAndRemoveUntil(
-          context, Routes.home, ModalRoute.withName(Routes.home));
+      Navigator.pop(context);
     } on FormatException catch (err) {
       Alert.open(
         context,
