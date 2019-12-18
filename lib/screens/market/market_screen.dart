@@ -150,6 +150,14 @@ class _MarketScreenState extends State<MarketScreen> {
             child: Row(
               children: <Widget>[
                 AnimatedRatingCoins(
+                  onTap: () {
+                    if (market?.marketRaitings != null)
+                      Navigator.pushNamed(
+                        context,
+                        Routes.ratingsScreen,
+                        arguments: market.marketRaitings,
+                      );
+                  },
                   raiting: market.averageRating,
                   delay: const Duration(milliseconds: 300),
                 ),

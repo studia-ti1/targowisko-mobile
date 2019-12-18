@@ -83,7 +83,8 @@ class Routes {
         );
 
       case ratingsScreen:
-        assert(settings.arguments != null && settings.arguments is List<RatingModel>);
+        assert(settings.arguments != null &&
+            settings.arguments is List<RatingModel>);
 
         List<RatingModel> ratings = settings.arguments;
 
