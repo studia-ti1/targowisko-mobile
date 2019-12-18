@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:meta/meta.dart';
 import 'package:targowisko/models/product_model.dart';
 import 'package:targowisko/routes.dart';
@@ -146,9 +147,13 @@ class _MarketScreenState extends State<MarketScreen> {
             padding: const EdgeInsets.only(bottom: 15, left: 15, right: 15),
             child: IconSection(
               icon: Icons.calendar_today,
-              // TODO: missing data from /market endpoint
-              title: "14 Stycznia 2019",
-              content: "2h",
+              title:
+                  DateFormat.yMMMMd().format(market.startsAt ?? DateTime.now()),
+              content: (market.endsAt ?? DateTime.now())
+                      .difference(market.startsAt ?? DateTime.now())
+                      .inHours
+                      .toString() +
+                  "h",
             ),
           ),
           Padding(
@@ -198,7 +203,9 @@ class _MarketScreenState extends State<MarketScreen> {
             titlePadding:
                 const EdgeInsets.only(bottom: 15, left: 15, right: 15),
             title: "Wystawcy",
-            onMorePress: () => Navigator.of(context).pushNamed(Routes.sellers),
+            onMorePress: market.sellers.isEmpty
+                ? null
+                : () => Navigator.of(context).pushNamed(Routes.sellers),
             child: market.sellers.isEmpty
                 ? Center(
                     child: Padding(
@@ -231,13 +238,15 @@ class _MarketScreenState extends State<MarketScreen> {
             titlePadding:
                 const EdgeInsets.only(bottom: 15, left: 15, right: 15),
             title: "Produkty",
-            onMorePress: () {
-              Navigator.pushNamed(
-                context,
-                Routes.marketProducts,
-                arguments: market,
-              );
-            },
+            onMorePress: market.products.isEmpty
+                ? null
+                : () {
+                    Navigator.pushNamed(
+                      context,
+                      Routes.marketProducts,
+                      arguments: market,
+                    );
+                  },
             child: market.products.isEmpty
                 ? Center(
                     child: Text(
