@@ -355,10 +355,12 @@ class SellerCardContent extends StatelessWidget {
   final double rating;
   final int productsCount;
   final String avatarUrl;
+  final Color color;
 
   SellerCardContent({
     @required this.sellerName,
     @required this.rating,
+    this.color = Colors.white,
     @required this.productsCount,
     @required this.avatarUrl,
   }) : assert(sellerName != null);
@@ -393,7 +395,7 @@ class SellerCardContent extends StatelessWidget {
                     style: StyleProvider.of(context)
                         .font
                         .pacificoPrimary
-                        .copyWith(fontSize: 25),
+                        .copyWith(fontSize: 25, color: color),
                   ),
                   Text(
                     "Wystawca",
@@ -401,7 +403,7 @@ class SellerCardContent extends StatelessWidget {
                     style: StyleProvider.of(context)
                         .font
                         .primaryNormal
-                        .copyWith(fontSize: 15),
+                        .copyWith(fontSize: 15, color: color),
                   )
                 ],
               ),
@@ -414,13 +416,15 @@ class SellerCardContent extends StatelessWidget {
             Icon(
               Icons.shopping_basket,
               size: 24,
-              color: StyleProvider.of(context).colors.primaryContent,
+              color: color ?? StyleProvider.of(context).colors.primaryContent,
             ),
             SizedBox(width: 10),
             Text(
               "${productsCount == null ? '0' : productsCount} Produktów",
               maxLines: 1,
-              style: StyleProvider.of(context).font.primaryNormal,
+              style: StyleProvider.of(context).font.primaryNormal.copyWith(
+                    color: color,
+                  ),
             ),
           ],
         ),
@@ -428,7 +432,9 @@ class SellerCardContent extends StatelessWidget {
         Row(
           children: <Widget>[
             Image.asset(
-              StyleProvider.of(context).asset.appLogo,
+              Colors.black == color
+                  ? StyleProvider.of(context).asset.coin
+                  : StyleProvider.of(context).asset.appLogo,
               width: 24,
               height: 24,
               fit: BoxFit.contain,
@@ -437,7 +443,10 @@ class SellerCardContent extends StatelessWidget {
             Text(
               "Ocena ${rating == null ? '-/-' : rating.toString() + '/5'}",
               maxLines: 1,
-              style: StyleProvider.of(context).font.primaryNormal,
+              style: StyleProvider.of(context)
+                  .font
+                  .primaryNormal
+                  .copyWith(color: color),
             ),
           ],
         )

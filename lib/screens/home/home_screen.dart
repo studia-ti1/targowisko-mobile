@@ -76,38 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
         child: _loading
             ? Scaffold(
                 backgroundColor: Colors.white,
-                body: Center(
-                  child: Container(
-                    alignment: Alignment.center,
-                    width: MediaQuery.of(context).size.width * 0.75,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: <Widget>[
-                        Image.asset(
-                          StyleProvider.of(context).asset.spinner,
-                          width: 100,
-                          fit: BoxFit.contain,
-                          color: Colors.black,
-                          colorBlendMode: BlendMode.color,
-                          repeat: ImageRepeat.noRepeat,
-                          filterQuality: FilterQuality.medium,
-                          height: 100,
-                        ),
-                        SizedBox(height: 15),
-                        AutoSizeText(
-                          _loadingText,
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                          style: StyleProvider.of(context)
-                              .font
-                              .pacifico
-                              .copyWith(fontSize: 17),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
+                body: CustomLoader(loadingText: _loadingText),
               )
             : ScaffoldWithMenu(
                 builder: ({openMenu, closeMenu}) => ListView(
@@ -194,6 +163,52 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
         duration: const Duration(seconds: 1),
         switchInCurve: Curves.easeIn,
+      ),
+    );
+  }
+}
+
+class CustomLoader extends StatelessWidget {
+  const CustomLoader({
+    Key key,
+    @required String loadingText,
+  })  : _loadingText = loadingText,
+        super(key: key);
+
+  final String _loadingText;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        alignment: Alignment.center,
+        width: MediaQuery.of(context).size.width * 0.75,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Image.asset(
+              StyleProvider.of(context).asset.spinner,
+              width: 100,
+              fit: BoxFit.contain,
+              color: Colors.black,
+              colorBlendMode: BlendMode.color,
+              repeat: ImageRepeat.noRepeat,
+              filterQuality: FilterQuality.medium,
+              height: 100,
+            ),
+            SizedBox(height: 15),
+            AutoSizeText(
+              _loadingText,
+              maxLines: 1,
+              textAlign: TextAlign.center,
+              overflow: TextOverflow.ellipsis,
+              style: StyleProvider.of(context)
+                  .font
+                  .pacifico
+                  .copyWith(fontSize: 17),
+            ),
+          ],
+        ),
       ),
     );
   }
