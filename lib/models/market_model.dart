@@ -19,6 +19,8 @@ class MarketModel {
   LocationModel place;
   OwnerModel owner;
   String imageUrl;
+  DateTime startsAt;
+  DateTime endsAt;
   int userId;
   List<ProductModel> products;
   List<RatingModel> marketRaitings;
@@ -52,6 +54,8 @@ class MarketModel {
         going = json["going"],
         averageRating = json["average_rating"],
         description = json["description"],
+        startsAt = DateTime.tryParse(json["starts_at"] ?? ""),
+        endsAt = DateTime.tryParse(json["ends_at"] ?? ""),
         participants = json["participants"],
         facebookEventId = json["facebook_event_id"],
         sellers = json["sellers"] == null
