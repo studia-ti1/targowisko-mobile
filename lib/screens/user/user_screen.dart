@@ -1,10 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:targowisko/models/owner_model.dart';
 import 'package:targowisko/utils/alert.dart';
 import 'package:targowisko/utils/api.dart';
+import 'package:targowisko/utils/image_picker_util.dart';
 import 'package:targowisko/utils/style_provider.dart';
 import 'package:targowisko/widgets/animated/animated_rating_coins.dart';
 import 'package:targowisko/widgets/avatar.dart';
+import 'package:targowisko/widgets/buttons/rounded_button.dart';
 import 'package:targowisko/widgets/buttons/secondary_button/secondary_button.dart';
 import 'package:targowisko/widgets/extent_list_scaffold.dart';
 
@@ -17,12 +22,13 @@ class _UserScreenState extends State<UserScreen> {
   bool _setFbAvatarLoading = false;
 
   Future<void> _setFbAvatar() async {
+    OwnerModel result;
     setState(() {
       _setFbAvatarLoading = true;
     });
     try {
       Alert.loader(context, "Pobieranie nowego awataru");
-      await Api.setFbAvatar();
+      result = await Api.setFbAvatar();
     } on ApiException catch (err) {
       Navigator.pop(context);
       await Alert.open(
@@ -35,6 +41,7 @@ class _UserScreenState extends State<UserScreen> {
       Navigator.pop(context);
       setState(() {
         _setFbAvatarLoading = false;
+        Api.currentUser.avatar = result.avatar;
       });
     }
     await Alert.open(
@@ -90,6 +97,40 @@ class _UserScreenState extends State<UserScreen> {
           SecondaryButton(
             onTap: _setFbAvatar,
             loading: _setFbAvatarLoading,
+          ),
+          SizedBox(
+            height: 10,
+          ),
+          RoundedButton(
+            title: "Dodaj własne zdjęcie",
+            fontSize: 20,
+            height: 50,
+            onTap: () async {
+              File image = await ImagePickerUtil.pickImage(
+                context,
+              );
+              Alert.loader(context, "Wysyłanie nowego avataru");
+              OwnerModel user;
+              try {
+                user = await Api.setAvatar(image);
+              } on Exception catch (err) {
+                Navigator.pop(context);
+                Alert.open(
+                  context,
+                  title: "Błąd podczas ustawiania avataru",
+                  confirmLabel: "Zrozumiano",
+                );
+                return;
+              }
+              Navigator.pop(context);
+              Alert.open(
+                context,
+                title: "Zdjęcie zostało pomyślnie ustawione",
+              );
+
+              Api.currentUser.avatar = user.avatar;
+              setState(() {});
+            },
           ),
           SizedBox(
             height: 20,

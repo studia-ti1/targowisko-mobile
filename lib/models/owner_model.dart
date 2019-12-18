@@ -10,7 +10,7 @@ class OwnerModel {
   final int productsCount;
   double averageRating;
   final int role;
-  final String avatar;
+  String avatar;
   final DateTime createdAt;
   final DateTime updatedAt;
   final List<ProductModel> products;

@@ -16,7 +16,6 @@ class RatingsScreen extends StatefulWidget {
 class RatingsScreenState extends State<RatingsScreen> {
   @override
   Widget build(BuildContext context) {
-    print(widget.ratings.length);
     return ListScaffold(
       title: "Oceny",
       child: widget.ratings.isEmpty

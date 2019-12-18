@@ -97,7 +97,7 @@ class Api {
   static _Market market = _Market._();
   static _Product product = _Product._();
 
-  static Future<void> setFbAvatar() async {
+  static Future<OwnerModel> setFbAvatar() async {
     final url = Uri.https(
       "targowisko.herokuapp.com",
       "api/v1/users/api_update_avatar.json",
@@ -109,6 +109,7 @@ class Api {
       },
     );
     if (result.statusCode >= 300) throw ApiException(message: result.body);
+    return OwnerModel.fromJson(json.decode(result.body));
   }
 
   static Future<void> attendMarket(int marketId) async {
@@ -184,6 +185,30 @@ class Api {
     return ProductModel.fromJson(json.decode(result.body));
   }
 
+  static Future<OwnerModel> setAvatar(
+    File avatar,
+  ) async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/users/update_avatar.json",
+    );
+    final request = http.MultipartRequest("POST", url);
+
+    final file = await http.MultipartFile.fromPath("avatar", avatar.path);
+    request.files.add(file);
+
+    request.headers["access-token"] = Api.accesToken;
+
+    http.StreamedResponse response = await request.send();
+
+    final body = await response.stream.bytesToString();
+
+    print(body);
+
+    if (response.statusCode >= 300) throw ApiException(message: body);
+    return OwnerModel.fromJson(json.decode(body));
+  }
+
   static Future<List<MarketModel>> getAllEventsFromFb() async {
     final result = await http.post(
       'https://targowisko.herokuapp.com/api/v1/markets/fetch_from_api.json',
@@ -230,6 +255,30 @@ class _Market {
 
     if (result.statusCode >= 300) throw ApiException(message: result.body);
     return true;
+  }
+
+  Future<List<MarketModel>> fetchAttending() async {
+    final url = Uri.https(
+      "targowisko.herokuapp.com",
+      "api/v1/attending_markets.json",
+    );
+
+    final result = await http.get(
+      url,
+      headers: {
+        'access-token': Api.accesToken,
+      },
+    );
+
+    if (result.statusCode >= 300) throw ApiException(message: result.body);
+
+    final List jsonEventList = jsonDecode(result.body);
+
+    final markets = jsonEventList.map((dynamic market) {
+      return MarketModel.fromJson(market);
+    }).toList();
+
+    return markets;
   }
 
   Future<List<MarketModel>> fetch({

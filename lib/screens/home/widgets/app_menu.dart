@@ -63,6 +63,14 @@ class AppMenu extends StatelessWidget {
                 },
               ),
               _AppMenuElement(
+                title: "Wybieram się na",
+                icon: Icons.directions_walk,
+                onTap: () {
+                  Navigator.pushNamed(context, Routes.attending);
+                  closeMenu();
+                },
+              ),
+              _AppMenuElement(
                 title: "Ja",
                 icon: Icons.person,
                 onTap: () {
